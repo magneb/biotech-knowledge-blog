@@ -3,13 +3,22 @@ import { notFound } from "next/navigation";
 import Link from "next/link";
 import { client } from "@/sanity/client";
 
+const ARTICLES_SLUGS_QUERY = defineQuery(
+  `*[_type == "article" && defined(slug.current)]{ "slug": slug.current }`
+);
+
 const ARTICLE_QUERY = defineQuery(
   `*[_type == "article" && slug.current == $slug][0]{
     _id, title, body, category, publishedAt
   }`
 );
 
-const options = { next: { revalidate: 30 } };
+export async function generateStaticParams() {
+  const articles = await client.fetch<{ slug: string }[]>(ARTICLES_SLUGS_QUERY);
+  // Static export requires at least one param. Use a placeholder that 404s via notFound().
+  if (articles.length === 0) return [{ slug: "_" }];
+  return articles.map((article) => ({ slug: article.slug }));
+}
 
 export default async function ArticlePage({
   params,
@@ -17,11 +26,9 @@ export default async function ArticlePage({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
-  const article = await client.fetch<SanityDocument | null>(
-    ARTICLE_QUERY,
-    { slug },
-    options
-  );
+  const article = await client.fetch<SanityDocument | null>(ARTICLE_QUERY, {
+    slug,
+  });
 
   if (!article) return notFound();
 

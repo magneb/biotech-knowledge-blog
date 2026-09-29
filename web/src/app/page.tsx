@@ -10,12 +10,10 @@ const ARTICLES_QUERY = defineQuery(
   }`
 );
 
-const options = { next: { revalidate: 30 } };
-
 export default async function HomePage() {
   const [home, articles] = await Promise.all([
-    client.fetch<SanityDocument | null>(HOME_QUERY, {}, options),
-    client.fetch<SanityDocument[]>(ARTICLES_QUERY, {}, options),
+    client.fetch<SanityDocument | null>(HOME_QUERY),
+    client.fetch<SanityDocument[]>(ARTICLES_QUERY),
   ]);
 
   return (
