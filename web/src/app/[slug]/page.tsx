@@ -14,10 +14,19 @@ const ARTICLE_QUERY = defineQuery(
 );
 
 export async function generateStaticParams() {
-  const articles = await client.fetch<{ slug: string }[]>(ARTICLES_SLUGS_QUERY);
+  const articles = await client.fetch<{ slug: string }[]>(
+    ARTICLES_SLUGS_QUERY
+  );
   // Static export requires at least one param. Use a placeholder that 404s via notFound().
   if (articles.length === 0) return [{ slug: "_" }];
   return articles.map((article) => ({ slug: article.slug }));
+}
+
+function formatCategory(cat: string) {
+  return cat
+    .split("-")
+    .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
+    .join(" ");
 }
 
 export default async function ArticlePage({
@@ -33,46 +42,50 @@ export default async function ArticlePage({
   if (!article) return notFound();
 
   return (
-    <div className="min-h-screen bg-zinc-50 font-sans dark:bg-zinc-950">
-      <header className="border-b border-zinc-200 dark:border-zinc-800">
-        <div className="mx-auto max-w-3xl px-6 py-4">
-          <Link
-            href="/"
-            className="text-sm text-zinc-500 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-100"
-          >
-            ← Back
-          </Link>
+    <>
+      {/* ── Back navigation ── */}
+      <nav className="back-nav">
+        <Link href="/" className="back-link">
+          ← Back to index
+        </Link>
+      </nav>
+
+      {/* ── Paper ── */}
+      <article className="paper">
+        <header className="paper-header">
+          {article.category && (
+            <span className="paper-category">
+              {formatCategory(article.category as string)}
+            </span>
+          )}
+
+          <h1 className="paper-title">{article.title as string}</h1>
+
+          {article.publishedAt && (
+            <time className="paper-date">
+              {new Date(article.publishedAt as string).toLocaleDateString(
+                "en-US",
+                { year: "numeric", month: "long", day: "numeric" }
+              )}
+            </time>
+          )}
+        </header>
+
+        <div className="paper-body">
+          {Array.isArray(article.body) && (
+            <PortableText value={article.body} />
+          )}
         </div>
-      </header>
+      </article>
 
-      <main className="mx-auto max-w-3xl px-6 py-12">
-        <article>
-          <div className="mb-8">
-            {article.category && (
-              <span className="mb-2 inline-block rounded-full bg-zinc-200 px-2 py-0.5 text-xs text-zinc-600 dark:bg-zinc-800 dark:text-zinc-400">
-                {article.category as string}
-              </span>
-            )}
-            <h1 className="text-3xl font-bold tracking-tight text-zinc-900 dark:text-zinc-100">
-              {article.title as string}
-            </h1>
-            {article.publishedAt && (
-              <time className="mt-2 block text-sm text-zinc-500 dark:text-zinc-400">
-                {new Date(article.publishedAt as string).toLocaleDateString(
-                  "en-US",
-                  { year: "numeric", month: "long", day: "numeric" }
-                )}
-              </time>
-            )}
-          </div>
+      {/* ── Ornamental end ── */}
+      <div className="ornament" aria-hidden="true">
+        ✦
+      </div>
 
-          <div className="prose prose-zinc dark:prose-invert max-w-none">
-            {Array.isArray(article.body) && (
-              <PortableText value={article.body} />
-            )}
-          </div>
-        </article>
-      </main>
-    </div>
+      <footer className="site-footer">
+        Oliver&rsquo;s Guide To Everything
+      </footer>
+    </>
   );
 }

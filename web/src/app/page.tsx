@@ -1,8 +1,13 @@
 import { client } from "@/sanity/client";
+import { createImageUrlBuilder } from "@sanity/image-url";
 import { PortableText, defineQuery, type SanityDocument } from "next-sanity";
 import Link from "next/link";
 
-const HOME_QUERY = defineQuery(`*[_id == "homePage"][0]{ heading, subheading, intro }`);
+const builder = createImageUrlBuilder(client);
+
+const HOME_QUERY = defineQuery(
+  `*[_id == "homePage"][0]{ heading, subheading, intro, logo }`
+);
 
 const ARTICLES_QUERY = defineQuery(
   `*[_type == "article" && defined(slug.current)] | order(publishedAt desc){
@@ -10,68 +15,137 @@ const ARTICLES_QUERY = defineQuery(
   }`
 );
 
+function formatDate(dateStr: string) {
+  return new Date(dateStr).toLocaleDateString("en-US", {
+    year: "numeric",
+    month: "short",
+    day: "numeric",
+  });
+}
+
+function formatCategory(cat: string) {
+  return cat
+    .split("-")
+    .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
+    .join(" ");
+}
+
 export default async function HomePage() {
   const [home, articles] = await Promise.all([
     client.fetch<SanityDocument | null>(HOME_QUERY),
     client.fetch<SanityDocument[]>(ARTICLES_QUERY),
   ]);
 
+  // Build logo URL if available
+  const logoUrl = home?.logo
+    ? builder
+        .image(home.logo as Record<string, unknown>)
+        .width(640)
+        .auto("format")
+        .url()
+    : null;
+
   return (
-    <div className="min-h-screen bg-zinc-50 font-sans dark:bg-zinc-950">
-      <header className="border-b border-zinc-200 dark:border-zinc-800">
-        <div className="mx-auto max-w-3xl px-6 py-8">
-          <h1 className="text-2xl font-bold tracking-tight text-zinc-900 dark:text-zinc-100">
+    <>
+      {/* ── Hero ── */}
+      <section className="landing-hero">
+        {logoUrl ? (
+          <img
+            src={logoUrl}
+            alt={
+              (home?.heading as string) || "Oliver's Guide To Everything emblem"
+            }
+            className="landing-logo"
+            width={320}
+            height={320}
+          />
+        ) : (
+          <h1
+            style={{
+              fontSize: "2.5rem",
+              fontWeight: 700,
+              color: "var(--ink)",
+              letterSpacing: "0.04em",
+            }}
+          >
             {(home?.heading as string) || "Oliver\u2019s Guide To Everything"}
           </h1>
-          {(home?.subheading || !home) && (
-            <p className="mt-1 text-zinc-500 dark:text-zinc-400">
-              {(home?.subheading as string) ||
-                "Biotech & cancer research protocols"}
-            </p>
-          )}
-        </div>
-      </header>
+        )}
 
-      <main className="mx-auto max-w-3xl px-6 py-12">
+        {(home?.subheading || !home) && (
+          <p className="landing-tagline">
+            {(home?.subheading as string) ||
+              "Biotech & cancer research protocols"}
+          </p>
+        )}
+
         {home?.intro && Array.isArray(home.intro) && (
-          <div className="prose prose-zinc dark:prose-invert mb-10 max-w-none">
+          <div
+            style={{
+              maxWidth: "32rem",
+              marginTop: "1.5rem",
+              fontSize: "0.95rem",
+              color: "var(--sepia-light)",
+              lineHeight: 1.7,
+              textAlign: "center",
+            }}
+          >
             <PortableText value={home.intro} />
           </div>
         )}
+      </section>
+
+      {/* ── Ornamental divider ── */}
+      <div className="ornament" aria-hidden="true">
+        ✦
+      </div>
+
+      {/* ── Articles ── */}
+      <section className="articles-section">
+        <h2 className="articles-heading">Articles</h2>
 
         {articles.length === 0 ? (
-          <p className="text-zinc-500 dark:text-zinc-400">
-            No articles yet. Add some in the Studio.
+          <p className="empty-state">
+            No articles yet — add some in the Studio.
           </p>
         ) : (
-          <ul className="space-y-8">
+          <nav>
             {articles.map((article) => (
-              <li key={article._id}>
-                <Link
-                  href={`/${(article.slug as { current?: string })?.current}`}
-                  className="group block"
-                >
-                  <div className="flex items-baseline gap-3">
-                    <h2 className="text-lg font-semibold text-zinc-900 group-hover:text-zinc-600 dark:text-zinc-100 dark:group-hover:text-zinc-300">
-                      {article.title as string}
-                    </h2>
-                    {article.category && (
-                      <span className="rounded-full bg-zinc-200 px-2 py-0.5 text-xs text-zinc-600 dark:bg-zinc-800 dark:text-zinc-400">
-                        {article.category as string}
-                      </span>
-                    )}
-                  </div>
-                  {article.summary && (
-                    <p className="mt-1 text-sm text-zinc-500 dark:text-zinc-400">
-                      {article.summary as string}
-                    </p>
+              <Link
+                key={article._id}
+                href={`/${(article.slug as { current?: string })?.current}`}
+                className="article-card"
+              >
+                <span className="article-card-title">
+                  {article.title as string}
+                </span>
+
+                <span className="article-card-meta">
+                  {article.category && (
+                    <span className="article-card-category">
+                      {formatCategory(article.category as string)}
+                    </span>
                   )}
-                </Link>
-              </li>
+                  {article.publishedAt && (
+                    <span>{formatDate(article.publishedAt as string)}</span>
+                  )}
+                </span>
+
+                {article.summary && (
+                  <span className="article-card-summary">
+                    {article.summary as string}
+                  </span>
+                )}
+              </Link>
             ))}
-          </ul>
+          </nav>
         )}
-      </main>
-    </div>
+      </section>
+
+      {/* ── Footer ── */}
+      <footer className="site-footer">
+        Oliver&rsquo;s Guide To Everything
+      </footer>
+    </>
   );
 }

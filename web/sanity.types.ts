@@ -180,6 +180,13 @@ export type AllSanitySchemaTypes =
   | Geopoint;
 
 // Source: ../web/src/app/[slug]/page.tsx
+// Variable: ARTICLES_SLUGS_QUERY
+// Query: *[_type == "article" && defined(slug.current)]{ "slug": slug.current }
+export type ARTICLES_SLUGS_QUERY_RESULT = Array<{
+  slug: string | null;
+}>;
+
+// Source: ../web/src/app/[slug]/page.tsx
 // Variable: ARTICLE_QUERY
 // Query: *[_type == "article" && slug.current == $slug][0]{    _id, title, body, category, publishedAt  }
 export type ARTICLE_QUERY_RESULT = {
@@ -209,6 +216,16 @@ export type ARTICLE_QUERY_RESULT = {
 } | null;
 
 // Source: ../web/src/app/page.tsx
+// Variable: HOME_QUERY
+// Query: *[_id == "homePage"][0]{ heading, subheading, intro, logo }
+export type HOME_QUERY_RESULT = {
+  heading: null;
+  subheading: null;
+  intro: null;
+  logo: null;
+} | null;
+
+// Source: ../web/src/app/page.tsx
 // Variable: ARTICLES_QUERY
 // Query: *[_type == "article" && defined(slug.current)] | order(publishedAt desc){    _id, title, slug, summary, category, publishedAt  }
 export type ARTICLES_QUERY_RESULT = Array<{
@@ -224,7 +241,9 @@ export type ARTICLES_QUERY_RESULT = Array<{
 // Query TypeMap
 declare global {
   interface SanityQueries {
+    '*[_type == "article" && defined(slug.current)]{ "slug": slug.current }': ARTICLES_SLUGS_QUERY_RESULT;
     '*[_type == "article" && slug.current == $slug][0]{\n    _id, title, body, category, publishedAt\n  }': ARTICLE_QUERY_RESULT;
+    '*[_id == "homePage"][0]{ heading, subheading, intro, logo }': HOME_QUERY_RESULT;
     '*[_type == "article" && defined(slug.current)] | order(publishedAt desc){\n    _id, title, slug, summary, category, publishedAt\n  }': ARTICLES_QUERY_RESULT;
   }
 }

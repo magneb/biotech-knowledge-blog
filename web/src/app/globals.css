@@ -1,26 +1,431 @@
 @import "tailwindcss";
 
+/* ─── Victorian Parchment Design System ─── */
+
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  /* Parchment & sepia palette */
+  --parchment:        #f4ead5;
+  --parchment-light:  #faf6ed;
+  --parchment-dark:   #e8d9b8;
+  --parchment-shadow: #d4c4a0;
+
+  /* Ink & text — high contrast against parchment */
+  --ink:              #110a04;
+  --ink-medium:       #1a0f06;
+  --ink-light:        #2c1e12;
+
+  --sepia:            #1f1208;
+  --sepia-mid:        #352214;
+  --sepia-muted:      #56402c;
+  --sepia-faint:      #8a7560;
+
+  --gold:             #8b6914;
+  --gold-muted:       #a07d2a;
+  --gold-faint:       #c4a854;
+
+  --rust:             #6e3610;
+  --burgundy:         #5c1a1a;
+
+  /* Single typeface — Cormorant Garamond everywhere */
+  --font-main: var(--font-cormorant-garamond), "Palatino Linotype", "Book Antiqua", Palatino, serif;
+
+  /* Layout */
+  --page-max:     48rem;
+  --article-max:  42rem;
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-background: var(--parchment);
+  --color-foreground: var(--sepia);
+  --font-sans: var(--font-main);
+  --font-mono: var(--font-main);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
+/* ─── Base Styles ─── */
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--parchment);
+  color: var(--sepia);
+  font-family: var(--font-main);
+  font-weight: 500;
+  font-size: 1.05rem;
+  line-height: 1.7;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Subtle parchment texture via layered radial gradients */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.35;
+  background:
+    radial-gradient(ellipse at 20% 50%, rgba(184, 149, 46, 0.06) 0%, transparent 60%),
+    radial-gradient(ellipse at 80% 20%, rgba(139, 69, 19, 0.04) 0%, transparent 50%),
+    radial-gradient(ellipse at 50% 90%, rgba(196, 168, 84, 0.05) 0%, transparent 55%);
+}
+
+/* ─── Typography ─── */
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-main);
+  color: var(--ink);
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+
+a {
+  color: var(--rust);
+  font-weight: 600;
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+a:hover {
+  color: var(--gold);
+}
+
+/* ─── Ornamental Divider ─── */
+
+.ornament {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  padding: 1.5rem 0;
+  color: var(--sepia-faint);
+  font-size: 1.25rem;
+  letter-spacing: 0.5em;
+  user-select: none;
+}
+
+.ornament::before,
+.ornament::after {
+  content: "";
+  flex: 1;
+  max-width: 6rem;
+  height: 1px;
+  background: linear-gradient(
+    to right,
+    transparent,
+    var(--sepia-faint),
+    transparent
+  );
+}
+
+/* ─── Landing Page ─── */
+
+.landing-hero {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 70vh;
+  padding: 4rem 1.5rem 2rem;
+  text-align: center;
+  position: relative;
+  z-index: 1;
+}
+
+.landing-logo {
+  width: 100%;
+  max-width: 320px;
+  height: auto;
+  filter: sepia(0.15) contrast(1.05);
+  transition: filter 0.4s ease;
+}
+
+.landing-logo:hover {
+  filter: sepia(0) contrast(1.1);
+}
+
+.landing-tagline {
+  margin-top: 1.5rem;
+  font-family: var(--font-main);
+  font-size: 1.2rem;
+  font-weight: 500;
+  font-style: italic;
+  color: var(--sepia-mid);
+  letter-spacing: 0.08em;
+}
+
+/* ─── Article Listing ─── */
+
+.articles-section {
+  max-width: var(--page-max);
+  margin: 0 auto;
+  padding: 0 1.5rem 4rem;
+  position: relative;
+  z-index: 1;
+}
+
+.articles-heading {
+  font-family: var(--font-main);
+  font-size: 1.5rem;
+  font-weight: 600;
+  text-align: center;
+  color: var(--ink-medium);
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  margin-bottom: 2rem;
+}
+
+.article-card {
+  display: block;
+  padding: 1.25rem 1.5rem;
+  margin-bottom: 1px;
+  border-top: 1px solid var(--parchment-shadow);
+  transition: background-color 0.2s ease;
+}
+
+.article-card:last-child {
+  border-bottom: 1px solid var(--parchment-shadow);
+}
+
+.article-card:hover {
+  background-color: var(--parchment-dark);
+}
+
+.article-card-title {
+  font-family: var(--font-main);
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: var(--ink);
+  line-height: 1.4;
+  transition: color 0.2s ease;
+}
+
+.article-card:hover .article-card-title {
+  color: var(--rust);
+}
+
+.article-card-meta {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-top: 0.35rem;
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: var(--sepia-mid);
+  font-family: var(--font-main);
+  letter-spacing: 0.04em;
+}
+
+.article-card-category {
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--gold);
+}
+
+.article-card-summary {
+  margin-top: 0.5rem;
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: var(--sepia-mid);
+  line-height: 1.6;
+}
+
+/* ─── Article (Research Paper) Layout ─── */
+
+.paper {
+  max-width: var(--article-max);
+  margin: 0 auto;
+  padding: 3rem 2rem 4rem;
+  position: relative;
+  z-index: 1;
+}
+
+.paper-header {
+  text-align: center;
+  padding-bottom: 2rem;
+  margin-bottom: 2rem;
+  border-bottom: 2px solid var(--sepia-faint);
+}
+
+.paper-title {
+  font-family: var(--font-main);
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--ink);
+  line-height: 1.25;
+  letter-spacing: 0.01em;
+  margin: 0;
+}
+
+.paper-category {
+  display: inline-block;
+  margin-bottom: 0.75rem;
+  font-family: var(--font-main);
+  font-size: 0.8rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  color: var(--gold);
+}
+
+.paper-date {
+  display: block;
+  margin-top: 0.75rem;
+  font-family: var(--font-main);
+  font-size: 0.9rem;
+  font-weight: 500;
+  font-style: italic;
+  color: var(--sepia-mid);
+}
+
+/* Paper body — mimics academic journal single column */
+.paper-body {
+  font-family: var(--font-main);
+  font-size: 1.1rem;
+  font-weight: 500;
+  line-height: 1.8;
+  color: var(--sepia);
+  text-align: justify;
+  hyphens: auto;
+}
+
+.paper-body h2 {
+  font-family: var(--font-main);
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: var(--ink);
+  margin: 2.5rem 0 0.75rem;
+  padding-bottom: 0.35rem;
+  border-bottom: 1px solid var(--parchment-shadow);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.paper-body h3 {
+  font-family: var(--font-main);
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: var(--ink-light);
+  margin: 2rem 0 0.5rem;
+  font-style: italic;
+}
+
+.paper-body p {
+  margin: 0 0 1rem;
+  text-indent: 1.5em;
+}
+
+.paper-body p:first-child {
+  text-indent: 0;
+}
+
+.paper-body p:first-child::first-letter {
+  font-family: var(--font-main);
+  font-size: 3.2em;
+  float: left;
+  line-height: 0.8;
+  padding-right: 0.08em;
+  padding-top: 0.08em;
+  color: var(--ink);
+  font-weight: 700;
+}
+
+.paper-body blockquote {
+  margin: 1.5rem 0;
+  padding: 1rem 1.5rem;
+  border-left: 3px solid var(--gold-muted);
+  background: var(--parchment-light);
+  font-style: italic;
+  font-weight: 500;
+  color: var(--sepia-mid);
+}
+
+.paper-body ul {
+  margin: 1rem 0;
+  padding-left: 2em;
+  list-style-type: disc;
+}
+
+.paper-body ol {
+  margin: 1rem 0;
+  padding-left: 2em;
+  list-style-type: decimal;
+}
+
+.paper-body ul ::marker,
+.paper-body ol ::marker {
+  color: var(--ink-medium);
+}
+
+.paper-body li {
+  margin-bottom: 0.35rem;
+  padding-left: 0.25em;
+}
+
+.paper-body strong {
+  color: var(--ink);
+  font-weight: 700;
+}
+
+.paper-body a {
+  color: var(--rust);
+  font-weight: 600;
+  text-decoration: underline;
+  text-decoration-color: var(--gold-faint);
+  text-underline-offset: 2px;
+  transition: text-decoration-color 0.2s ease;
+}
+
+.paper-body a:hover {
+  text-decoration-color: var(--rust);
+}
+
+/* ─── Back Navigation ─── */
+
+.back-nav {
+  max-width: var(--article-max);
+  margin: 0 auto;
+  padding: 1.5rem 2rem 0;
+  position: relative;
+  z-index: 1;
+}
+
+.back-link {
+  font-family: var(--font-main);
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--sepia-mid);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  transition: color 0.2s ease;
+}
+
+.back-link:hover {
+  color: var(--rust);
+}
+
+/* ─── Empty State ─── */
+
+.empty-state {
+  text-align: center;
+  padding: 3rem 1.5rem;
+  color: var(--sepia-mid);
+  font-family: var(--font-main);
+  font-weight: 500;
+  font-style: italic;
+  font-size: 1.05rem;
+}
+
+/* ─── Footer ─── */
+
+.site-footer {
+  text-align: center;
+  padding: 2rem 1.5rem;
+  font-family: var(--font-main);
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--sepia-faint);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  position: relative;
+  z-index: 1;
 }
