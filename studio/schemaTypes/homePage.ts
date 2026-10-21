@@ -29,6 +29,14 @@ export const homePage = defineType({
       type: 'array',
       of: [defineArrayMember({type: 'block'})],
     }),
+    defineField({
+      name: 'contactEmail',
+      title: 'Contact Email',
+      type: 'string',
+      description:
+        'Used by the "Contact" link in the site footer. Leave empty to hide the link.',
+      validation: (rule) => rule.email(),
+    }),
   ],
   preview: {
     prepare() {

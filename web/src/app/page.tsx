@@ -62,7 +62,7 @@ export default async function HomePage() {
         ) : (
           <h1
             style={{
-              fontSize: "2.5rem",
+              fontSize: "clamp(1.9rem, 6vw + 0.5rem, 2.5rem)",
               fontWeight: 700,
               color: "var(--ink)",
               letterSpacing: "0.04em",
@@ -141,11 +141,6 @@ export default async function HomePage() {
           </nav>
         )}
       </section>
-
-      {/* ── Footer ── */}
-      <footer className="site-footer">
-        Oliver&rsquo;s Guide To Everything
-      </footer>
     </>
   );
 }

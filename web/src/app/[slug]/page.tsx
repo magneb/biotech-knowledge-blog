@@ -77,15 +77,6 @@ export default async function ArticlePage({
           )}
         </div>
       </article>
-
-      {/* ── Ornamental end ── */}
-      <div className="ornament" aria-hidden="true">
-        ✦
-      </div>
-
-      <footer className="site-footer">
-        Oliver&rsquo;s Guide To Everything
-      </footer>
     </>
   );
 }

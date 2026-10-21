@@ -123,6 +123,7 @@ a:hover {
   align-items: center;
   justify-content: center;
   min-height: 70vh;
+  min-height: 70svh; /* ignores mobile browser toolbars; vh above is the fallback */
   padding: 4rem 1.5rem 2rem;
   text-align: center;
   position: relative;
@@ -137,8 +138,10 @@ a:hover {
   transition: filter 0.4s ease;
 }
 
-.landing-logo:hover {
-  filter: sepia(0) contrast(1.1);
+@media (hover: hover) {
+  .landing-logo:hover {
+    filter: sepia(0) contrast(1.1);
+  }
 }
 
 .landing-tagline {
@@ -184,8 +187,19 @@ a:hover {
   border-bottom: 1px solid var(--parchment-shadow);
 }
 
-.article-card:hover {
+/* Hover only on real pointers, so taps don't leave a "stuck" highlight */
+.article-card:focus-visible {
   background-color: var(--parchment-dark);
+}
+
+@media (hover: hover) {
+  .article-card:hover {
+    background-color: var(--parchment-dark);
+  }
+
+  .article-card:hover .article-card-title {
+    color: var(--rust);
+  }
 }
 
 .article-card-title {
@@ -194,10 +208,12 @@ a:hover {
   font-weight: 700;
   color: var(--ink);
   line-height: 1.4;
+  overflow-wrap: break-word;
+  hyphens: auto;
   transition: color 0.2s ease;
 }
 
-.article-card:hover .article-card-title {
+.article-card:focus-visible .article-card-title {
   color: var(--rust);
 }
 
@@ -248,12 +264,14 @@ a:hover {
 
 .paper-title {
   font-family: var(--font-main);
-  font-size: 2rem;
+  font-size: clamp(1.6rem, 4vw + 0.9rem, 2rem);
   font-weight: 700;
   color: var(--ink);
   line-height: 1.25;
   letter-spacing: 0.01em;
   margin: 0;
+  overflow-wrap: break-word;
+  hyphens: auto;
 }
 
 .paper-category {
@@ -286,6 +304,8 @@ a:hover {
   color: var(--sepia);
   text-align: justify;
   hyphens: auto;
+  /* Gene names, catalogue numbers, sequences and URLs must not overflow */
+  overflow-wrap: break-word;
 }
 
 .paper-body h2 {
@@ -384,12 +404,14 @@ a:hover {
 .back-nav {
   max-width: var(--article-max);
   margin: 0 auto;
-  padding: 1.5rem 2rem 0;
+  padding: 1rem 2rem 0;
   position: relative;
   z-index: 1;
 }
 
 .back-link {
+  display: inline-block;
+  padding: 0.5rem 0; /* comfortable tap target */
   font-family: var(--font-main);
   font-size: 0.9rem;
   font-weight: 600;
@@ -418,14 +440,118 @@ a:hover {
 /* ─── Footer ─── */
 
 .site-footer {
+  max-width: var(--page-max);
+  margin: 0 auto;
+  padding: 0 1.5rem 2rem;
   text-align: center;
-  padding: 2rem 1.5rem;
   font-family: var(--font-main);
+  position: relative;
+  z-index: 1;
+}
+
+/* Thin etched rule with centered ✦ — wider than the inline divider */
+.site-footer-rule {
+  padding: 1rem 0 1.25rem;
+}
+
+.site-footer-rule::before,
+.site-footer-rule::after {
+  max-width: 18rem;
+}
+
+/* Links separated by vertical dividers: Contact | About | … */
+.site-footer-links {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  margin: 0 0 1rem;
+  padding: 0;
+  list-style: none;
+  font-size: 1.05rem;
+  letter-spacing: 0.06em;
+}
+
+.site-footer-links li {
+  display: flex;
+  align-items: center;
+}
+
+.site-footer-links li + li::before {
+  content: "";
+  display: inline-block;
+  width: 1px;
+  height: 1em;
+  margin: 0 1.5rem;
+  background: var(--sepia-faint);
+}
+
+.site-footer-links a {
+  display: inline-block;
+  padding: 0.5rem 0.25rem; /* comfortable tap target */
+  color: var(--sepia-mid);
+  font-weight: 600;
+  text-decoration: underline;
+  text-decoration-color: transparent;
+  text-underline-offset: 3px;
+  transition: color 0.2s ease, text-decoration-color 0.2s ease;
+}
+
+.site-footer-links a:hover,
+.site-footer-links a:focus-visible {
+  color: var(--rust);
+  text-decoration-color: var(--gold-faint);
+}
+
+.site-footer-name {
+  margin: 0;
   font-size: 0.8rem;
   font-weight: 600;
   color: var(--sepia-faint);
   letter-spacing: 0.1em;
   text-transform: uppercase;
-  position: relative;
-  z-index: 1;
+}
+
+/* ─── Small Screens (≤ 40rem / 640px) ─── */
+
+@media (max-width: 40rem) {
+  .landing-hero {
+    min-height: 50vh;
+    min-height: 50svh;
+    padding: 2.5rem 1.25rem 1.5rem;
+  }
+
+  .articles-section {
+    padding: 0 1rem 3rem;
+  }
+
+  .article-card {
+    padding: 1rem;
+  }
+
+  .paper {
+    padding: 2rem 1.25rem 3rem;
+  }
+
+  .back-nav {
+    padding: 0.75rem 1.25rem 0;
+  }
+
+  /* Justified text leaves wide word gaps ("rivers") in narrow columns */
+  .paper-body {
+    font-size: 1.05rem;
+    text-align: left;
+  }
+
+  .paper-body p {
+    text-indent: 1em;
+  }
+
+  .site-footer {
+    padding: 0 1rem 1.5rem;
+  }
+
+  .site-footer-links li + li::before {
+    margin: 0 1rem;
+  }
 }

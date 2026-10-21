@@ -15,6 +15,65 @@
 export declare const internalGroqTypeReferenceTo: unique symbol;
 
 // Source: schema.json
+export type SanityImageAssetReference = {
+  _ref: string;
+  _type: "reference";
+  _weak?: boolean;
+  [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+};
+
+export type HomePage = {
+  _id: string;
+  _type: "homePage";
+  _createdAt: string;
+  _updatedAt: string;
+  _rev: string;
+  logo?: {
+    asset?: SanityImageAssetReference;
+    media?: unknown;
+    hotspot?: SanityImageHotspot;
+    crop?: SanityImageCrop;
+    _type: "image";
+  };
+  heading?: string;
+  subheading?: string;
+  intro?: Array<{
+    children?: Array<{
+      marks?: Array<string>;
+      text?: string;
+      _type: "span";
+      _key: string;
+    }>;
+    style?: "normal" | "h1" | "h2" | "h3" | "h4" | "h5" | "h6" | "blockquote";
+    listItem?: "bullet" | "number";
+    markDefs?: Array<{
+      href?: string;
+      _type: "link";
+      _key: string;
+    }>;
+    level?: number;
+    _type: "block";
+    _key: string;
+  }>;
+  contactEmail?: string;
+};
+
+export type SanityImageCrop = {
+  _type: "sanity.imageCrop";
+  top?: number;
+  bottom?: number;
+  left?: number;
+  right?: number;
+};
+
+export type SanityImageHotspot = {
+  _type: "sanity.imageHotspot";
+  x?: number;
+  y?: number;
+  height?: number;
+  width?: number;
+};
+
 export type Article = {
   _id: string;
   _type: "article";
@@ -90,22 +149,6 @@ export type SanityImageMetadata = {
   isOpaque?: boolean;
 };
 
-export type SanityImageHotspot = {
-  _type: "sanity.imageHotspot";
-  x?: number;
-  y?: number;
-  height?: number;
-  width?: number;
-};
-
-export type SanityImageCrop = {
-  _type: "sanity.imageCrop";
-  top?: number;
-  bottom?: number;
-  left?: number;
-  right?: number;
-};
-
 export type SanityFileAsset = {
   _id: string;
   _type: "sanity.fileAsset";
@@ -166,14 +209,16 @@ export type Geopoint = {
 };
 
 export type AllSanitySchemaTypes =
+  | SanityImageAssetReference
+  | HomePage
+  | SanityImageCrop
+  | SanityImageHotspot
   | Article
   | Slug
   | SanityImagePaletteSwatch
   | SanityImagePalette
   | SanityImageDimensions
   | SanityImageMetadata
-  | SanityImageHotspot
-  | SanityImageCrop
   | SanityFileAsset
   | SanityAssetSourceData
   | SanityImageAsset
@@ -218,12 +263,44 @@ export type ARTICLE_QUERY_RESULT = {
 // Source: ../web/src/app/page.tsx
 // Variable: HOME_QUERY
 // Query: *[_id == "homePage"][0]{ heading, subheading, intro, logo }
-export type HOME_QUERY_RESULT = {
-  heading: null;
-  subheading: null;
-  intro: null;
-  logo: null;
-} | null;
+export type HOME_QUERY_RESULT =
+  | {
+      heading: null;
+      subheading: null;
+      intro: null;
+      logo: null;
+    }
+  | {
+      heading: string | null;
+      subheading: string | null;
+      intro: Array<{
+        children?: Array<{
+          marks?: Array<string>;
+          text?: string;
+          _type: "span";
+          _key: string;
+        }>;
+        style?:
+          "blockquote" | "h1" | "h2" | "h3" | "h4" | "h5" | "h6" | "normal";
+        listItem?: "bullet" | "number";
+        markDefs?: Array<{
+          href?: string;
+          _type: "link";
+          _key: string;
+        }>;
+        level?: number;
+        _type: "block";
+        _key: string;
+      }> | null;
+      logo: {
+        asset?: SanityImageAssetReference;
+        media?: unknown;
+        hotspot?: SanityImageHotspot;
+        crop?: SanityImageCrop;
+        _type: "image";
+      } | null;
+    }
+  | null;
 
 // Source: ../web/src/app/page.tsx
 // Variable: ARTICLES_QUERY
@@ -238,6 +315,18 @@ export type ARTICLES_QUERY_RESULT = Array<{
   publishedAt: string | null;
 }>;
 
+// Source: ../web/src/components/SiteFooter.tsx
+// Variable: FOOTER_QUERY
+// Query: *[_id == "homePage"][0]{ contactEmail }
+export type FOOTER_QUERY_RESULT =
+  | {
+      contactEmail: null;
+    }
+  | {
+      contactEmail: string | null;
+    }
+  | null;
+
 // Query TypeMap
 declare global {
   interface SanityQueries {
@@ -245,6 +334,7 @@ declare global {
     '*[_type == "article" && slug.current == $slug][0]{\n    _id, title, body, category, publishedAt\n  }': ARTICLE_QUERY_RESULT;
     '*[_id == "homePage"][0]{ heading, subheading, intro, logo }': HOME_QUERY_RESULT;
     '*[_type == "article" && defined(slug.current)] | order(publishedAt desc){\n    _id, title, slug, summary, category, publishedAt\n  }': ARTICLES_QUERY_RESULT;
+    '*[_id == "homePage"][0]{ contactEmail }': FOOTER_QUERY_RESULT;
   }
 }
 // Lets @sanity/client releases that predate the global registry read it too
