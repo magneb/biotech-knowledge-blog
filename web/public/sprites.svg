@@ -1,28 +1,158 @@
 <svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
   <defs>
-    <!-- 4-point engraved star ✦ -->
-    <symbol id="star-four" viewBox="0 0 24 24">
+    <!-- ══════════════════════════════════════════════════════════════════════════
+         STAR & FLOURISH VARIANTS (1 to 5)
+         ══════════════════════════════════════════════════════════════════════════ -->
+
+    <!-- Star Variant 1: Classic engraved concave 4-point star -->
+    <symbol id="star-four-1" viewBox="0 0 24 24">
       <path
         d="M12 2 C12 7.5 16.5 12 22 12 C16.5 12 12 16.5 12 22 C12 16.5 7.5 12 2 12 C7.5 12 12 7.5 12 2 Z"
         fill="currentColor"
       />
     </symbol>
+    <symbol id="star-four" viewBox="0 0 24 24">
+      <use href="#star-four-1" />
+    </symbol>
 
-    <!-- Ornate Radiant Star / Compass Rose -->
-    <symbol id="star-flourish" viewBox="0 0 24 24">
+    <!-- Star Variant 2: Hand-inked organic star with slightly elongated vertical rays -->
+    <symbol id="star-four-2" viewBox="0 0 24 24">
       <path
-        d="M12 1 C12.2 6.5 17.5 11.8 23 12 C17.5 12.2 12.2 17.5 12 23 C11.8 17.5 6.5 12.2 1 12 C6.5 11.8 11.8 6.5 12 1 Z"
+        d="M12 1 C12.3 7 16.2 11.6 22.5 12 C16.2 12.4 12.3 17 12 23 C11.7 17 7.8 12.4 1.5 12 C7.8 11.6 11.7 7 12 1 Z"
         fill="currentColor"
       />
-      <circle cx="12" cy="12" r="1.5" fill="#f4ead5" />
+      <circle cx="12" cy="12" r="1.2" fill="#f4ead5" />
+    </symbol>
+
+    <!-- Star Variant 3: 8-Point Compass Star with diagonal rays -->
+    <symbol id="star-four-3" viewBox="0 0 24 24">
+      <path
+        d="M12 2 C12.2 6.8 16.8 11.8 22 12 C16.8 12.2 12.2 17.2 12 22 C11.8 17.2 7.2 12.2 2 12 C7.2 11.8 11.8 6.8 12 2 Z"
+        fill="currentColor"
+      />
       <path
         d="M6 6 L18 18 M18 6 L6 18"
         stroke="currentColor"
-        stroke-width="1"
+        stroke-width="1.2"
         stroke-linecap="round"
-        opacity="0.6"
+        opacity="0.75"
       />
     </symbol>
+    <symbol id="star-flourish" viewBox="0 0 24 24">
+      <use href="#star-four-3" />
+    </symbol>
+
+    <!-- Star Variant 4: Botanical Floral Star with rounded lobe tips -->
+    <symbol id="star-four-4" viewBox="0 0 24 24">
+      <path
+        d="M12 2 C13 7 17 11 22 12 C17 13 13 17 12 22 C11 17 7 13 2 12 C7 11 11 7 12 2 Z"
+        fill="currentColor"
+      />
+      <circle cx="12" cy="3" r="1" fill="currentColor" />
+      <circle cx="21" cy="12" r="1" fill="currentColor" />
+      <circle cx="12" cy="21" r="1" fill="currentColor" />
+      <circle cx="3" cy="12" r="1" fill="currentColor" />
+    </symbol>
+
+    <!-- Star Variant 5: Medieval Diamond Star with diamond center -->
+    <symbol id="star-four-5" viewBox="0 0 24 24">
+      <polygon points="12,1 15,9 23,12 15,15 12,23 9,15 1,12 9,9" fill="currentColor" />
+      <polygon points="12,7 14,12 12,17 10,12" fill="#f4ead5" opacity="0.6" />
+    </symbol>
+
+
+    <!-- ══════════════════════════════════════════════════════════════════════════
+         HAND-DRAWN ARROW VARIANTS (1 to 5)
+         Each has distinct organic line weight, fletching, and arrowhead
+         ══════════════════════════════════════════════════════════════════════════ -->
+
+    <!-- Arrow Variant 1: Slender Dip-Pen Arrow with Fletchings -->
+    <symbol id="arrow-right-1" viewBox="0 0 24 24">
+      <g fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+        <line x1="2.5" y1="12" x2="19.5" y2="12" />
+        <polyline points="13.5 6.5 20.5 12 13.5 17.5" />
+        <!-- Feather fletchings -->
+        <line x1="5.5" y1="9" x2="8" y2="12" stroke-width="1.2" />
+        <line x1="5.5" y1="15" x2="8" y2="12" stroke-width="1.2" />
+        <line x1="2.5" y1="9" x2="5" y2="12" stroke-width="1.2" />
+        <line x1="2.5" y1="15" x2="5" y2="12" stroke-width="1.2" />
+      </g>
+    </symbol>
+    <!-- Default alias -->
+    <symbol id="arrow-right" viewBox="0 0 24 24">
+      <use href="#arrow-right-1" />
+    </symbol>
+
+    <!-- Arrow Variant 2: Calligraphic Arched Dart with Solid Spearhead -->
+    <symbol id="arrow-right-2" viewBox="0 0 24 24">
+      <path
+        d="M2.5 13 Q10.5 10.5 17 11.8"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="1.75"
+        stroke-linecap="round"
+      />
+      <!-- Sharp triangular solid spearhead -->
+      <polygon points="14,6.5 21.5,12 14,17.5 16,12" fill="currentColor" />
+      <!-- Tail notch flourish -->
+      <circle cx="2.5" cy="13" r="1.3" fill="currentColor" />
+    </symbol>
+
+    <!-- Arrow Variant 3: Double-Feathered Surveyor's Antique Arrow -->
+    <symbol id="arrow-right-3" viewBox="0 0 24 24">
+      <g fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+        <line x1="2" y1="12" x2="20" y2="12" stroke-width="1.75" />
+        <!-- Open barbed arrowhead -->
+        <path d="M13 6 L21 12 L13 18" stroke-width="1.75" />
+        <!-- Double cross fletchings -->
+        <line x1="4" y1="8" x2="7" y2="12" />
+        <line x1="4" y1="16" x2="7" y2="12" />
+        <line x1="7" y1="8" x2="10" y2="12" />
+        <line x1="7" y1="16" x2="10" y2="12" />
+      </g>
+    </symbol>
+
+    <!-- Arrow Variant 4: Delicate Hand-Wobbled Pen Flick with Asymmetric Barbs -->
+    <symbol id="arrow-right-4" viewBox="0 0 24 24">
+      <path
+        d="M2.5 12.2 C6.5 11.6 11.5 12.6 19 11.8"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="1.6"
+        stroke-linecap="round"
+      />
+      <!-- Asymmetric hand-drawn barbs -->
+      <path
+        d="M13 6.8 C15.5 9 19.5 11.8 19.5 11.8 C16.5 13.8 13.5 17.8 13.5 17.8"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="1.6"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      />
+      <!-- Quill ink deposit at start -->
+      <path d="M2.5 12.2 Q4 10.5 4.5 12.2 Q4 13.8 2.5 12.2" fill="currentColor" />
+    </symbol>
+
+    <!-- Arrow Variant 5: Heavy Engraved Iron Harpoon Arrow with Notched Tail -->
+    <symbol id="arrow-right-5" viewBox="0 0 24 24">
+      <!-- Swallowtail notched tail -->
+      <path
+        d="M2 8.5 L5 12 L2 15.5 M4.5 12 L16 12"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="1.7"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      />
+      <!-- Broad barbed broadhead -->
+      <polygon points="13,5 21.5,12 13,19 15.5,12" fill="currentColor" />
+    </symbol>
+
+
+    <!-- ══════════════════════════════════════════════════════════════════════════
+         DIAMONDS & CARTUCHES & FLOURISHES
+         ══════════════════════════════════════════════════════════════════════════ -->
 
     <!-- Engraved Diamond ◆ with inner facet -->
     <symbol id="diamond" viewBox="0 0 24 24">
@@ -36,7 +166,6 @@
       <g fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
         <path d="M4 36 V12 C4 7.58 7.58 4 12 4 H36" />
         <path d="M8 36 V16 C8 11.58 11.58 8 16 8 H36" stroke-width="0.75" opacity="0.6" />
-        <!-- Scroll flourishes -->
         <path d="M12 4 C10 4 6 6 6 10 C6 13 9 14 11 13 C13 12 13 9 11 8 C9 7 6 9 6 12" />
         <path d="M4 12 C4 10 6 6 10 6 C13 6 14 9 13 11 C12 13 9 13 8 11 C7 9 9 6 12 6" />
         <circle cx="14" cy="14" r="1.5" fill="currentColor" />
@@ -58,7 +187,7 @@
       <use href="#corner-flourish-tl" transform="translate(0, 40) scale(1, -1)" />
     </symbol>
 
-    <!-- Generic Single Corner Flourish (default 24x24) -->
+    <!-- Generic Single Corner Flourish (24x24) -->
     <symbol id="corner-flourish" viewBox="0 0 24 24">
       <path
         d="M3 21 V9 C3 5.7 5.7 3 9 3 H21 M6 21 V12 C6 8.7 8.7 6 12 6 H21"
@@ -68,19 +197,6 @@
         stroke-linecap="round"
       />
       <circle cx="10" cy="10" r="1.2" fill="currentColor" />
-    </symbol>
-
-    <!-- Victorian Engraved Direction Arrow (Feathered / Antique) -->
-    <symbol id="arrow-right" viewBox="0 0 24 24">
-      <g fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
-        <line x1="3" y1="12" x2="19" y2="12" />
-        <polyline points="13 6 20 12 13 18" />
-        <!-- Feather fletching accents -->
-        <line x1="6" y1="9.5" x2="8" y2="12" stroke-width="1.2" />
-        <line x1="6" y1="14.5" x2="8" y2="12" stroke-width="1.2" />
-        <line x1="3" y1="9.5" x2="5" y2="12" stroke-width="1.2" />
-        <line x1="3" y1="14.5" x2="5" y2="12" stroke-width="1.2" />
-      </g>
     </symbol>
 
     <!-- Engraved Botanical Leaf / Acorn Endcap for Rules -->
@@ -114,7 +230,6 @@
         stroke-width="0.75"
         stroke-dasharray="1 2"
       />
-      <!-- Flourish nodes at left & right tips -->
       <circle cx="3" cy="16" r="2" fill="currentColor" />
       <circle cx="61" cy="16" r="2" fill="currentColor" />
       <circle cx="32" cy="2" r="1.5" fill="currentColor" />
@@ -124,11 +239,9 @@
     <!-- Eye of Inquiry / Arcane Insignia -->
     <symbol id="eye-insignia" viewBox="0 0 32 32">
       <g fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round">
-        <!-- Radiant rays -->
         <line x1="16" y1="3" x2="16" y2="7" stroke-width="1" />
         <line x1="25" y1="7" x2="22" y2="10" stroke-width="1" />
         <line x1="7" y1="7" x2="10" y2="10" stroke-width="1" />
-        <!-- Eye shape -->
         <path d="M4 16 C8 10 24 10 28 16 C24 22 8 22 4 16 Z" />
         <circle cx="16" cy="16" r="4" fill="currentColor" />
         <circle cx="15" cy="15" r="1.2" fill="#f4ead5" />

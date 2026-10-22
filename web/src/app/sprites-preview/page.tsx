@@ -1,163 +1,154 @@
-import { Icon, type IconName } from "@/components/ui/Icon";
+import { Icon, HandDrawnArrow, type IconName } from "@/components/ui/Icon";
 import Link from "next/link";
 
-const ICONS: { name: IconName; label: string; description: string }[] = [
+const ARROW_VARIANTS = [
   {
-    name: "star-four",
-    label: "Four-Point Star (✦)",
-    description: "Tapered engraved star for section dividers and rule centerpieces.",
+    variant: 1 as const,
+    name: "Dip-Pen Feather",
+    id: "#arrow-right-1",
+    desc: "Slender quill shaft with angled feather fletchings and sharp barb.",
   },
   {
-    name: "star-flourish",
-    label: "Compass Star / Radiant Flourish",
-    description: "Ornate radiant star with inner ring and diagonal ray accents.",
+    variant: 2 as const,
+    name: "Arched Dart",
+    id: "#arrow-right-2",
+    desc: "Arched flight trajectory with solid triangular spearhead and tail node.",
   },
   {
-    name: "diamond",
-    label: "Engraved Diamond (◆)",
-    description: "Faceted alchemical diamond indicator for lists and metadata badges.",
+    variant: 3 as const,
+    name: "Surveyor's Antique",
+    id: "#arrow-right-3",
+    desc: "Double-feathered surveyor arrow with open barbed head.",
   },
   {
-    name: "corner-flourish",
-    label: "Corner Filigree (Generic)",
-    description: "Single corner scrollwork for boxed cards and engraved borders.",
+    variant: 4 as const,
+    name: "Organic Flick",
+    id: "#arrow-right-4",
+    desc: "Hand-wobbled shaft with asymmetric barbs and quill ink deposit.",
   },
   {
-    name: "corner-flourish-tl",
-    label: "Corner Filigree (Top-Left)",
-    description: "Ornate Victorian top-left corner scroll.",
+    variant: 5 as const,
+    name: "Engraved Harpoon",
+    id: "#arrow-right-5",
+    desc: "Heavy broadhead with swallowtail notched fletching.",
   },
-  {
-    name: "corner-flourish-tr",
-    label: "Corner Filigree (Top-Right)",
-    description: "Mirrored Victorian top-right corner scroll.",
-  },
-  {
-    name: "corner-flourish-br",
-    label: "Corner Filigree (Bottom-Right)",
-    description: "Mirrored Victorian bottom-right corner scroll.",
-  },
-  {
-    name: "corner-flourish-bl",
-    label: "Corner Filigree (Bottom-Left)",
-    description: "Mirrored Victorian bottom-left corner scroll.",
-  },
-  {
-    name: "arrow-right",
-    label: "Engraved Feathered Arrow (→)",
-    description: "Antique drafting arrow with feather fletching and sharp barb.",
-  },
-  {
-    name: "rule-leaf",
-    label: "Botanical Acorn / Leaf",
-    description: "Engraved botanical sprig for rule ends and section breaks.",
-  },
-  {
-    name: "cartouche-oval",
-    label: "Cartouche Oval Medallion",
-    description: "Victorian engraved oval frame with laurel leaves and terminal nodes.",
-  },
-  {
-    name: "eye-insignia",
-    label: "Eye of Inquiry / Arcane Insignia",
-    description: "Radiant engraved eye motif for master headers and brand vignettes.",
-  },
-  {
-    name: "bookmark-ribbon",
-    label: "Bookmark Ribbon",
-    description: "Notched heraldic ribbon for saved protocols and quick-save buttons.",
-  },
+];
+
+const STAR_VARIANTS = [
+  { name: "star-four-1" as IconName, label: "Star 1: Classic Concave (✦)" },
+  { name: "star-four-2" as IconName, label: "Star 2: Inked Organic Pinprick" },
+  { name: "star-four-3" as IconName, label: "Star 3: Compass Radiant Cross" },
+  { name: "star-four-4" as IconName, label: "Star 4: Botanical Floral Lobe" },
+  { name: "star-four-5" as IconName, label: "Star 5: Diamond Cross Facet" },
 ];
 
 export default function SpritesPreviewPage() {
   return (
-    <div style={{ maxWidth: "56rem", margin: "0 auto", padding: "2rem 1rem" }}>
-      <header style={{ textAlign: "center", marginBottom: "3rem" }}>
+    <div style={{ maxWidth: "60rem", margin: "0 auto", padding: "1rem" }}>
+      <header style={{ textAlign: "center", marginBottom: "2.5rem" }}>
         <p className="paper-category">Asset Showcase</p>
         <h1 style={{ fontSize: "2.4rem", marginBottom: "0.5rem" }}>
-          Victorian Vector Sprite Sheet
+          Victorian Vector Sprite Sheet &amp; Hand-Drawn Variants
         </h1>
-        <p style={{ color: "var(--sepia-mid)", fontStyle: "italic" }}>
-          All symbols from <code>/sprites.svg</code> inheriting <code>currentColor</code> in the design system.
+        <p style={{ color: "var(--sepia-mid)", fontStyle: "italic", maxWidth: "38rem", margin: "0 auto" }}>
+          Distinct vector cuts providing natural, pseudorandom human variance across rows and cards without layout shift.
         </p>
 
         <div className="ornament" aria-hidden="true" style={{ marginTop: "1rem" }}>
-          <Icon name="star-flourish" size={24} />
+          <Icon name="star-four-3" size={24} />
         </div>
       </header>
 
-      <div
-        style={{
-          display: "grid",
-          gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))",
-          gap: "1.5rem",
-        }}
-      >
-        {ICONS.map((item) => (
-          <div
-            key={item.name}
-            className="variant-card"
-            style={{
-              border: "1px solid var(--parchment-shadow)",
-              padding: "1.5rem",
-              borderRadius: "2px",
-              display: "flex",
-              flexDirection: "column",
-              alignItems: "center",
-              textAlign: "center",
-              gap: "1rem",
-              background: "rgba(250, 246, 237, 0.6)",
-            }}
-          >
-            {/* Display rendered icon at multiple scales */}
+      {/* ─── 1. Arrow Variants ─── */}
+      <section style={{ marginBottom: "3rem" }}>
+        <h2 style={{ fontSize: "1.3rem", letterSpacing: "0.15em", textTransform: "uppercase", borderBottom: "2px solid var(--parchment-border)", paddingBottom: "0.5rem", marginBottom: "1.25rem", color: "var(--ink)" }}>
+          1. Hand-Drawn Arrow Variants (Cuts 1 &ndash; 5)
+        </h2>
+
+        <div
+          style={{
+            display: "grid",
+            gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))",
+            gap: "1.25rem",
+          }}
+        >
+          {ARROW_VARIANTS.map((item) => (
             <div
+              key={item.variant}
+              className="variant-card"
               style={{
+                border: "1px solid var(--parchment-shadow)",
+                padding: "1.25rem 1rem",
+                textAlign: "center",
                 display: "flex",
+                flexDirection: "column",
                 alignItems: "center",
-                justifyContent: "center",
-                gap: "1.25rem",
-                minHeight: "64px",
-                padding: "0.5rem",
-                color: "var(--ink)",
+                gap: "0.75rem",
+                background: "rgba(250, 246, 237, 0.6)",
               }}
             >
-              <Icon name={item.name} size={20} />
-              <Icon name={item.name} size={32} />
-              <Icon name={item.name} size={48} />
+              <div style={{ display: "flex", alignItems: "center", gap: "1rem", minHeight: "48px", color: "var(--rust)" }}>
+                <HandDrawnArrow variant={item.variant} size={18} />
+                <HandDrawnArrow variant={item.variant} size={28} />
+                <HandDrawnArrow variant={item.variant} size={40} />
+              </div>
+              <div style={{ borderTop: "1px solid var(--parchment-shadow)", paddingTop: "0.5rem", width: "100%" }}>
+                <div style={{ fontWeight: 700, fontSize: "0.95rem", color: "var(--ink)" }}>{item.name}</div>
+                <code style={{ fontSize: "0.75rem", color: "var(--sepia-mid)" }}>{item.id}</code>
+                <p style={{ fontSize: "0.8rem", color: "var(--sepia-faint)", marginTop: "0.4rem", lineHeight: 1.35 }}>
+                  {item.desc}
+                </p>
+              </div>
             </div>
+          ))}
+        </div>
+      </section>
 
-            <div style={{ width: "100%", borderTop: "1px solid var(--parchment-shadow)", paddingTop: "0.75rem" }}>
-              <h2 style={{ fontSize: "1.1rem", fontWeight: 700, color: "var(--ink)" }}>
-                {item.label}
-              </h2>
-              <code
-                style={{
-                  display: "inline-block",
-                  fontSize: "0.8rem",
-                  color: "var(--rust)",
-                  marginTop: "0.25rem",
-                }}
-              >
-                #{item.name}
-              </code>
-              <p
-                style={{
-                  fontSize: "0.85rem",
-                  color: "var(--sepia-mid)",
-                  marginTop: "0.5rem",
-                  lineHeight: 1.4,
-                }}
-              >
-                {item.description}
-              </p>
+      {/* ─── 2. Star & Flourish Variants ─── */}
+      <section style={{ marginBottom: "3rem" }}>
+        <h2 style={{ fontSize: "1.3rem", letterSpacing: "0.15em", textTransform: "uppercase", borderBottom: "2px solid var(--parchment-border)", paddingBottom: "0.5rem", marginBottom: "1.25rem", color: "var(--ink)" }}>
+          2. Star &amp; Flourish Variants (1 &ndash; 5)
+        </h2>
+
+        <div
+          style={{
+            display: "grid",
+            gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))",
+            gap: "1.25rem",
+          }}
+        >
+          {STAR_VARIANTS.map((star) => (
+            <div
+              key={star.name}
+              className="variant-card"
+              style={{
+                border: "1px solid var(--parchment-shadow)",
+                padding: "1.25rem 1rem",
+                textAlign: "center",
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+                gap: "0.75rem",
+                background: "rgba(250, 246, 237, 0.6)",
+              }}
+            >
+              <div style={{ display: "flex", alignItems: "center", gap: "1rem", minHeight: "48px", color: "var(--ink)" }}>
+                <Icon name={star.name} size={18} />
+                <Icon name={star.name} size={28} />
+                <Icon name={star.name} size={40} />
+              </div>
+              <div style={{ borderTop: "1px solid var(--parchment-shadow)", paddingTop: "0.5rem", width: "100%" }}>
+                <div style={{ fontWeight: 700, fontSize: "0.9rem", color: "var(--ink)" }}>{star.label}</div>
+                <code style={{ fontSize: "0.75rem", color: "var(--sepia-mid)" }}>#{star.name}</code>
+              </div>
             </div>
-          </div>
-        ))}
-      </div>
+          ))}
+        </div>
+      </section>
 
-      <div style={{ textAlign: "center", marginTop: "3rem" }}>
+      <div style={{ textAlign: "center", marginTop: "2rem" }}>
         <Link href="/" className="back-link">
-          <Icon name="arrow-right" size={13} style={{ transform: "rotate(180deg)" }} />
+          <HandDrawnArrow variant={1} size={14} style={{ transform: "rotate(180deg)" }} />
           Back to Index
         </Link>
       </div>

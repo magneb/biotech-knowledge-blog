@@ -125,26 +125,84 @@
     color: var(--sepia-muted);
   }
 
-  /* 4. Direction Arrows: Micro natural variation in position and tilt */
-  .variant-arrow:nth-child(5n + 1) {
-    transform: translate(0, 0);
+  /* 4. Direction Arrows: Hand-drawn shape variant slot switching */
+  .variant-arrow-slot {
+    display: inline-flex;
+    align-items: center;
+    vertical-align: middle;
   }
 
-  .variant-arrow:nth-child(5n + 2) {
-    transform: translate(1px, -0.5px);
+  .variant-arrow-slot svg {
+    display: none;
   }
 
-  .variant-arrow:nth-child(5n + 3) {
-    transform: translate(-0.5px, 0.5px) rotate(1deg);
+  /* Default fallback */
+  .variant-arrow-slot svg:first-child {
+    display: inline-block;
   }
 
-  .variant-arrow:nth-child(5n + 4) {
-    transform: translate(1.5px, 0);
+  /* Contextual switching inside rotated cards, links, or rows */
+  :nth-child(5n + 1) .variant-arrow-slot svg,
+  .article-card:nth-child(5n + 1) .variant-arrow-slot svg,
+  .variant-card:nth-child(5n + 1) .variant-arrow-slot svg {
+    display: none;
+  }
+  :nth-child(5n + 1) .variant-arrow-slot .arrow-v1,
+  .article-card:nth-child(5n + 1) .variant-arrow-slot .arrow-v1,
+  .variant-card:nth-child(5n + 1) .variant-arrow-slot .arrow-v1 {
+    display: inline-block;
   }
 
-  .variant-arrow:nth-child(5n + 5) {
-    transform: translate(0, -1px) rotate(-1deg);
+  :nth-child(5n + 2) .variant-arrow-slot svg,
+  .article-card:nth-child(5n + 2) .variant-arrow-slot svg,
+  .variant-card:nth-child(5n + 2) .variant-arrow-slot svg {
+    display: none;
   }
+  :nth-child(5n + 2) .variant-arrow-slot .arrow-v2,
+  .article-card:nth-child(5n + 2) .variant-arrow-slot .arrow-v2,
+  .variant-card:nth-child(5n + 2) .variant-arrow-slot .arrow-v2 {
+    display: inline-block;
+  }
+
+  :nth-child(5n + 3) .variant-arrow-slot svg,
+  .article-card:nth-child(5n + 3) .variant-arrow-slot svg,
+  .variant-card:nth-child(5n + 3) .variant-arrow-slot svg {
+    display: none;
+  }
+  :nth-child(5n + 3) .variant-arrow-slot .arrow-v3,
+  .article-card:nth-child(5n + 3) .variant-arrow-slot .arrow-v3,
+  .variant-card:nth-child(5n + 3) .variant-arrow-slot .arrow-v3 {
+    display: inline-block;
+  }
+
+  :nth-child(5n + 4) .variant-arrow-slot svg,
+  .article-card:nth-child(5n + 4) .variant-arrow-slot svg,
+  .variant-card:nth-child(5n + 4) .variant-arrow-slot svg {
+    display: none;
+  }
+  :nth-child(5n + 4) .variant-arrow-slot .arrow-v4,
+  .article-card:nth-child(5n + 4) .variant-arrow-slot .arrow-v4,
+  .variant-card:nth-child(5n + 4) .variant-arrow-slot .arrow-v4 {
+    display: inline-block;
+  }
+
+  :nth-child(5n + 5) .variant-arrow-slot svg,
+  .article-card:nth-child(5n + 5) .variant-arrow-slot svg,
+  .variant-card:nth-child(5n + 5) .variant-arrow-slot svg {
+    display: none;
+  }
+  :nth-child(5n + 5) .variant-arrow-slot .arrow-v5,
+  .article-card:nth-child(5n + 5) .variant-arrow-slot .arrow-v5,
+  .variant-card:nth-child(5n + 5) .variant-arrow-slot .arrow-v5 {
+    display: inline-block;
+  }
+
+  /* Micro tilt variation */
+  .arrow-v1 { transform: translate(0, 0); }
+  .arrow-v2 { transform: translate(0.5px, -0.5px); }
+  .arrow-v3 { transform: translate(0, 0.5px); }
+  .arrow-v4 { transform: translate(1px, 0); }
+  .arrow-v5 { transform: translate(0, -0.5px); }
 
   /* ─── Drop-Cap Utility ─── */
   .drop-cap::first-letter {

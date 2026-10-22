@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Sprites Preview — Oliver's Guide</title>
+  <title>Sprites & Hand-Drawn Variants Preview — Oliver's Guide</title>
   <style>
     :root {
       --parchment: #f4ead5;
@@ -21,21 +21,32 @@
       background: var(--desk-canvas);
       font-family: Georgia, serif;
       color: var(--sepia);
-      padding: 2rem 1rem;
+      padding: 2.5rem 1rem;
       margin: 0;
     }
     .sheet {
-      max-width: 900px;
+      max-width: 960px;
       margin: 0 auto;
       background: var(--parchment);
-      padding: 3rem 2rem;
+      padding: 3rem 2.5rem;
       border: 1px solid var(--border);
-      box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+      box-shadow: 0 16px 40px rgba(0,0,0,0.6);
     }
     h1 {
       text-align: center;
       color: var(--ink);
-      margin-bottom: 0.5rem;
+      margin-bottom: 0.25rem;
+      font-size: 2.2rem;
+    }
+    h2.section-title {
+      font-size: 1.3rem;
+      text-transform: uppercase;
+      letter-spacing: 0.15em;
+      border-bottom: 2px solid var(--border);
+      padding-bottom: 0.5rem;
+      margin-top: 2.5rem;
+      margin-bottom: 1.25rem;
+      color: var(--ink);
     }
     p.sub {
       text-align: center;
@@ -45,13 +56,13 @@
     }
     .grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-      gap: 1.5rem;
+      grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+      gap: 1.25rem;
     }
     .card {
       background: var(--parchment-light);
       border: 1px solid var(--border);
-      padding: 1.25rem;
+      padding: 1.25rem 0.75rem;
       text-align: center;
       display: flex;
       flex-direction: column;
@@ -62,9 +73,9 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      gap: 1rem;
-      min-height: 56px;
-      color: var(--ink);
+      gap: 0.75rem;
+      min-height: 52px;
+      color: var(--rust);
     }
     svg.icon {
       display: inline-block;
@@ -74,58 +85,135 @@
     .name {
       font-weight: bold;
       color: var(--ink);
-      font-size: 1rem;
+      font-size: 0.95rem;
     }
     .id {
       font-family: monospace;
-      color: var(--rust);
+      color: var(--sepia-mid);
+      font-size: 0.75rem;
+    }
+    .desc {
       font-size: 0.8rem;
+      color: var(--sepia-faint);
+      line-height: 1.35;
     }
   </style>
 </head>
 <body>
   <div class="sheet">
-    <h1>Victorian Vector Sprite Sheet</h1>
-    <p class="sub">Rendered directly from <code>/sprites.svg</code> using <code>&lt;use href="/sprites.svg#id" /&gt;</code></p>
+    <h1>Hand-Drawn Vector Sprite Sheet</h1>
+    <p class="sub">5 organic hand-drawn cuts per symbol for natural rotation &amp; human variance</p>
 
+    <h2 class="section-title">1. Hand-Drawn Arrow Variants (Organic Cuts 1 – 5)</h2>
     <div class="grid">
       <div class="card">
         <div class="icons-row">
-          <svg class="icon" width="20" height="20"><use href="/sprites.svg#star-four" /></svg>
-          <svg class="icon" width="32" height="32"><use href="/sprites.svg#star-four" /></svg>
-          <svg class="icon" width="48" height="48"><use href="/sprites.svg#star-four" /></svg>
+          <svg class="icon" width="22" height="22"><use href="/sprites.svg#arrow-right-1" /></svg>
+          <svg class="icon" width="34" height="34"><use href="/sprites.svg#arrow-right-1" /></svg>
         </div>
-        <div class="name">Four-Point Star (✦)</div>
-        <div class="id">#star-four</div>
+        <div class="name">Cut 1: Dip-Pen Feather</div>
+        <div class="id">#arrow-right-1</div>
+        <div class="desc">Slender quill shaft with angled fletching barb.</div>
       </div>
 
       <div class="card">
         <div class="icons-row">
-          <svg class="icon" width="20" height="20"><use href="/sprites.svg#star-flourish" /></svg>
-          <svg class="icon" width="32" height="32"><use href="/sprites.svg#star-flourish" /></svg>
-          <svg class="icon" width="48" height="48"><use href="/sprites.svg#star-flourish" /></svg>
+          <svg class="icon" width="22" height="22"><use href="/sprites.svg#arrow-right-2" /></svg>
+          <svg class="icon" width="34" height="34"><use href="/sprites.svg#arrow-right-2" /></svg>
         </div>
-        <div class="name">Radiant Flourish / Compass</div>
-        <div class="id">#star-flourish</div>
+        <div class="name">Cut 2: Arched Dart</div>
+        <div class="id">#arrow-right-2</div>
+        <div class="desc">Subtle arched trajectory with solid spearhead &amp; ink dot tail.</div>
       </div>
 
       <div class="card">
         <div class="icons-row">
-          <svg class="icon" width="20" height="20"><use href="/sprites.svg#diamond" /></svg>
-          <svg class="icon" width="32" height="32"><use href="/sprites.svg#diamond" /></svg>
-          <svg class="icon" width="48" height="48"><use href="/sprites.svg#diamond" /></svg>
+          <svg class="icon" width="22" height="22"><use href="/sprites.svg#arrow-right-3" /></svg>
+          <svg class="icon" width="34" height="34"><use href="/sprites.svg#arrow-right-3" /></svg>
         </div>
-        <div class="name">Engraved Diamond (◆)</div>
+        <div class="name">Cut 3: Surveyor's Antique</div>
+        <div class="id">#arrow-right-3</div>
+        <div class="desc">Double-feathered surveyor arrow with open barbed head.</div>
+      </div>
+
+      <div class="card">
+        <div class="icons-row">
+          <svg class="icon" width="22" height="22"><use href="/sprites.svg#arrow-right-4" /></svg>
+          <svg class="icon" width="34" height="34"><use href="/sprites.svg#arrow-right-4" /></svg>
+        </div>
+        <div class="name">Cut 4: Organic Flick</div>
+        <div class="id">#arrow-right-4</div>
+        <div class="desc">Hand-wobbled stroke with asymmetric barbs &amp; quill deposit.</div>
+      </div>
+
+      <div class="card">
+        <div class="icons-row">
+          <svg class="icon" width="22" height="22"><use href="/sprites.svg#arrow-right-5" /></svg>
+          <svg class="icon" width="34" height="34"><use href="/sprites.svg#arrow-right-5" /></svg>
+        </div>
+        <div class="name">Cut 5: Engraved Harpoon</div>
+        <div class="id">#arrow-right-5</div>
+        <div class="desc">Heavy broadhead with swallowtail notched tail.</div>
+      </div>
+    </div>
+
+    <h2 class="section-title">2. Star &amp; Flourish Variants (1 – 5)</h2>
+    <div class="grid">
+      <div class="card">
+        <div class="icons-row" style="color: var(--ink);">
+          <svg class="icon" width="22" height="22"><use href="/sprites.svg#star-four-1" /></svg>
+          <svg class="icon" width="34" height="34"><use href="/sprites.svg#star-four-1" /></svg>
+        </div>
+        <div class="name">Star 1: Classic Concave</div>
+        <div class="id">#star-four-1</div>
+      </div>
+
+      <div class="card">
+        <div class="icons-row" style="color: var(--ink);">
+          <svg class="icon" width="22" height="22"><use href="/sprites.svg#star-four-2" /></svg>
+          <svg class="icon" width="34" height="34"><use href="/sprites.svg#star-four-2" /></svg>
+        </div>
+        <div class="name">Star 2: Inked Organic</div>
+        <div class="id">#star-four-2</div>
+      </div>
+
+      <div class="card">
+        <div class="icons-row" style="color: var(--ink);">
+          <svg class="icon" width="22" height="22"><use href="/sprites.svg#star-four-3" /></svg>
+          <svg class="icon" width="34" height="34"><use href="/sprites.svg#star-four-3" /></svg>
+        </div>
+        <div class="name">Star 3: Compass Radiant</div>
+        <div class="id">#star-four-3</div>
+      </div>
+
+      <div class="card">
+        <div class="icons-row" style="color: var(--ink);">
+          <svg class="icon" width="22" height="22"><use href="/sprites.svg#star-four-4" /></svg>
+          <svg class="icon" width="34" height="34"><use href="/sprites.svg#star-four-4" /></svg>
+        </div>
+        <div class="name">Star 4: Botanical Lobe</div>
+        <div class="id">#star-four-4</div>
+      </div>
+
+      <div class="card">
+        <div class="icons-row" style="color: var(--ink);">
+          <svg class="icon" width="22" height="22"><use href="/sprites.svg#star-four-5" /></svg>
+          <svg class="icon" width="34" height="34"><use href="/sprites.svg#star-four-5" /></svg>
+        </div>
+        <div class="name">Star 5: Diamond Cross</div>
+        <div class="id">#star-four-5</div>
+      </div>
+    </div>
+
+    <h2 class="section-title">3. Vignettes &amp; Victorian Ornaments</h2>
+    <div class="grid">
+      <div class="card">
+        <div class="icons-row">
+          <svg class="icon" width="22" height="22"><use href="/sprites.svg#diamond" /></svg>
+          <svg class="icon" width="34" height="34"><use href="/sprites.svg#diamond" /></svg>
+        </div>
+        <div class="name">Diamond (◆)</div>
         <div class="id">#diamond</div>
-      </div>
-
-      <div class="card">
-        <div class="icons-row">
-          <svg class="icon" width="24" height="24"><use href="/sprites.svg#corner-flourish" /></svg>
-          <svg class="icon" width="36" height="36"><use href="/sprites.svg#corner-flourish" /></svg>
-        </div>
-        <div class="name">Corner Flourish (Generic)</div>
-        <div class="id">#corner-flourish</div>
       </div>
 
       <div class="card">
@@ -133,60 +221,38 @@
           <svg class="icon" width="32" height="32"><use href="/sprites.svg#corner-flourish-tl" /></svg>
           <svg class="icon" width="32" height="32"><use href="/sprites.svg#corner-flourish-tr" /></svg>
         </div>
-        <div class="name">Corner Filigree (TL / TR)</div>
-        <div class="id">#corner-flourish-tl / tr</div>
-      </div>
-
-      <div class="card">
-        <div class="icons-row">
-          <svg class="icon" width="32" height="32"><use href="/sprites.svg#corner-flourish-bl" /></svg>
-          <svg class="icon" width="32" height="32"><use href="/sprites.svg#corner-flourish-br" /></svg>
-        </div>
-        <div class="name">Corner Filigree (BL / BR)</div>
-        <div class="id">#corner-flourish-bl / br</div>
-      </div>
-
-      <div class="card">
-        <div class="icons-row">
-          <svg class="icon" width="20" height="20"><use href="/sprites.svg#arrow-right" /></svg>
-          <svg class="icon" width="32" height="32"><use href="/sprites.svg#arrow-right" /></svg>
-          <svg class="icon" width="44" height="44"><use href="/sprites.svg#arrow-right" /></svg>
-        </div>
-        <div class="name">Feathered Arrow (→)</div>
-        <div class="id">#arrow-right</div>
+        <div class="name">Corner Filigree</div>
+        <div class="id">#corner-flourish-tl/tr</div>
       </div>
 
       <div class="card">
         <div class="icons-row">
           <svg class="icon" width="24" height="24"><use href="/sprites.svg#rule-leaf" /></svg>
-          <svg class="icon" width="36" height="36"><use href="/sprites.svg#rule-leaf" /></svg>
+          <svg class="icon" width="34" height="34"><use href="/sprites.svg#rule-leaf" /></svg>
         </div>
-        <div class="name">Botanical Rule Leaf</div>
+        <div class="name">Botanical Leaf</div>
         <div class="id">#rule-leaf</div>
       </div>
 
       <div class="card">
         <div class="icons-row">
           <svg class="icon" width="48" height="24"><use href="/sprites.svg#cartouche-oval" /></svg>
-          <svg class="icon" width="72" height="36"><use href="/sprites.svg#cartouche-oval" /></svg>
         </div>
-        <div class="name">Cartouche Oval Frame</div>
+        <div class="name">Cartouche Oval</div>
         <div class="id">#cartouche-oval</div>
       </div>
 
       <div class="card">
         <div class="icons-row">
-          <svg class="icon" width="28" height="28"><use href="/sprites.svg#eye-insignia" /></svg>
-          <svg class="icon" width="44" height="44"><use href="/sprites.svg#eye-insignia" /></svg>
+          <svg class="icon" width="32" height="32"><use href="/sprites.svg#eye-insignia" /></svg>
         </div>
-        <div class="name">Eye of Inquiry Insignia</div>
+        <div class="name">Eye of Inquiry</div>
         <div class="id">#eye-insignia</div>
       </div>
 
       <div class="card">
         <div class="icons-row">
-          <svg class="icon" width="20" height="20"><use href="/sprites.svg#bookmark-ribbon" /></svg>
-          <svg class="icon" width="32" height="32"><use href="/sprites.svg#bookmark-ribbon" /></svg>
+          <svg class="icon" width="24" height="24"><use href="/sprites.svg#bookmark-ribbon" /></svg>
         </div>
         <div class="name">Bookmark Ribbon</div>
         <div class="id">#bookmark-ribbon</div>

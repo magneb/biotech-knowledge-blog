@@ -3,7 +3,7 @@ import { createImageUrlBuilder } from "@sanity/image-url";
 import { PortableText, defineQuery, type SanityDocument } from "next-sanity";
 import Link from "next/link";
 
-import { Icon } from "@/components/ui/Icon";
+import { Icon, HandDrawnArrow } from "@/components/ui/Icon";
 
 const builder = createImageUrlBuilder(client);
 
@@ -122,7 +122,7 @@ export default async function HomePage() {
                   <span className="article-card-title">
                     {article.title as string}
                   </span>
-                  <Icon name="arrow-right" size={14} className="variant-arrow" style={{ color: "var(--rust)" }} />
+                  <HandDrawnArrow size={16} style={{ color: "var(--rust)" }} />
                 </div>
 
                 <span className="article-card-meta">
