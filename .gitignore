@@ -11,9 +11,13 @@
 # next.js
 /.next/
 /out/
+/.open-next/
+.open-next/
 
 # production
 /build
+.wrangler/
+web/.wrangler/
 
 # misc
 .DS_Store
