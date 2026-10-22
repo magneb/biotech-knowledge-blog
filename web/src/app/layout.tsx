@@ -19,10 +19,12 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
-    <html lang="en" className={cormorantGaramond.variable}>
-      <body>
-        {children}
-        <SiteFooter />
+    <html lang="en" className={cormorantGaramond.variable} data-scroll-behavior="smooth">
+      <body className="desk-canvas">
+        <div className="parchment-sheet">
+          <main className="sheet-content">{children}</main>
+          <SiteFooter />
+        </div>
       </body>
     </html>
   );

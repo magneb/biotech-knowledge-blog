@@ -70,7 +70,7 @@ graph TD
 
 ---
 
-## WP-3: Design System, CSS Architecture & Vector Sprite Sheet
+## WP-3: Design System, CSS Architecture & Vector Sprite Sheet [COMPLETED]
 * **Objective:** Replace Tailwind CSS with a structured, modular Vanilla CSS architecture that enforces the Victorian copperplate etching aesthetic.
 * **Scope:**
   - Remove Tailwind dependencies (`@tailwindcss/postcss`, `tailwindcss`, PostCSS config).
@@ -78,18 +78,20 @@ graph TD
   - Create `web/src/styles/tokens.css`:
     - Full antique parchment and ink color scale (`--parchment`, `--parchment-light`, `--ink`, `--sepia-mid`, etc.).
     - Typography tokens (Cormorant Garamond scale, line-heights, tracking).
-    - Ornate border variables, drop-shadows, and layout geometry.
+    - Ornate border variables, drop-shadows, and layout geometry (`--paper-max-width: 1180px`).
   - Create `web/src/styles/base.css`:
-    - Centered paper sheet floating over a warm gray desk canvas (`#2b2824` / `#36332e`).
-    - Subtle paper texture and edge bevels.
+    - Centered paper sheet floating over a warm dark desk canvas (`#23201c` / `#2e2a25`).
+    - Subtle paper texture, drop-shadows, and double-line engraved outer bevels.
+    - Responsive mobile layout collapses desk margin to 0 for edge-to-edge reading.
   - Create master SVG sprite sheet `web/public/sprites.svg`:
     - Victorian ornaments, corner flourishes, four-point stars (`✦`), diamond indicators (`◆`), cartouches, arrows, and emblems.
     - Vector `<symbol>` definitions with `currentColor` inheritance for zero-flicker cached rendering.
-  - Implement 5-variant CSS selector rotation (`:nth-child(5n + x)`) for subtle natural variance in dividers and bullets.
+    - Reusable `<Icon />` component in `web/src/components/ui/Icon.tsx`.
+  - Implement 5-variant CSS selector rotation (`:nth-child(5n + x)`) for subtle natural variance in dividers, bullets, arrows, and cards.
 * **Acceptance Criteria:**
-  - Clean separation: zero Tailwind in build.
-  - All icons and flourishes load from a single cached `/sprites.svg` request.
-  - Visual layout renders as a centered parchment sheet over a warm desk background.
+  - [x] Clean separation: zero Tailwind in build.
+  - [x] All icons and flourishes load from a single cached `/sprites.svg` request.
+  - [x] Visual layout renders as a centered parchment sheet over a warm desk background (collapsing to edge-to-edge on mobile).
 
 ---
 

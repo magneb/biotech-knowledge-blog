@@ -1,0 +1,134 @@
+@layer base {
+  /* ─── Body & Desk Canvas ─── */
+  body.desk-canvas,
+  body {
+    background-color: var(--desk-canvas);
+    /* Layered subtle desk lighting: ambient glow in the center fading to darker edges */
+    background-image:
+      radial-gradient(circle at 50% 25%, var(--desk-surface) 0%, var(--desk-canvas) 70%),
+      radial-gradient(ellipse at 80% 85%, var(--desk-highlight) 0%, transparent 60%);
+    background-attachment: fixed;
+    color: var(--sepia);
+    font-family: var(--font-main);
+    font-size: var(--text-base);
+    font-weight: 500;
+    line-height: var(--leading-normal);
+    min-height: 100vh;
+    padding: var(--desk-padding-y) var(--desk-padding-x);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  /* ─── The Floating Parchment Sheet ─── */
+  .parchment-sheet {
+    width: 100%;
+    max-width: var(--paper-max-width);
+    min-height: calc(100vh - (var(--desk-padding-y) * 2));
+    margin: 0 auto;
+    position: relative;
+    background-color: var(--parchment);
+    /* Subtle parchment grain and aged tone modulation */
+    background-image:
+      radial-gradient(ellipse at 15% 30%, rgba(184, 149, 46, 0.05) 0%, transparent 60%),
+      radial-gradient(ellipse at 85% 15%, rgba(139, 69, 19, 0.04) 0%, transparent 50%),
+      radial-gradient(ellipse at 50% 90%, rgba(196, 168, 84, 0.05) 0%, transparent 55%),
+      linear-gradient(to right, rgba(17, 10, 4, 0.02) 0%, transparent 4%, transparent 96%, rgba(17, 10, 4, 0.02) 100%);
+    border: 1px solid var(--parchment-border);
+    box-shadow: var(--shadow-folio), var(--shadow-paper-bevel);
+    display: flex;
+    flex-direction: column;
+    /* Prevent any overflow leak while preserving page flow */
+    overflow: hidden;
+  }
+
+  /* Fine double-line outer margin frame mimicking an engraved book folio */
+  .parchment-sheet::before {
+    content: "";
+    position: absolute;
+    inset: 10px;
+    border: 1px solid var(--parchment-shadow);
+    outline: 1px solid rgba(212, 196, 160, 0.35);
+    outline-offset: 3px;
+    pointer-events: none;
+    z-index: 2;
+  }
+
+  /* Sheet internal content container */
+  .sheet-content {
+    flex: 1 0 auto;
+    position: relative;
+    z-index: 3;
+    padding: var(--paper-padding-y) var(--paper-padding-x);
+  }
+
+  /* ─── Headings ─── */
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-main);
+    color: var(--ink);
+    font-weight: 700;
+    letter-spacing: var(--tracking-normal);
+    line-height: var(--leading-tight);
+  }
+
+  h1 {
+    font-size: var(--text-4xl);
+  }
+
+  h2 {
+    font-size: var(--text-2xl);
+  }
+
+  h3 {
+    font-size: var(--text-xl);
+  }
+
+  /* ─── Hyperlinks ─── */
+  a {
+    color: var(--rust);
+    font-weight: 600;
+    text-decoration: underline;
+    text-decoration-color: transparent;
+    text-underline-offset: 3px;
+    transition: color var(--transition-fast), text-decoration-color var(--transition-fast);
+  }
+
+  a:hover,
+  a:focus-visible {
+    color: var(--gold);
+    text-decoration-color: var(--gold-faint);
+  }
+
+  /* ─── Horizontal Dividers ─── */
+  hr {
+    border: 0;
+    height: 1px;
+    background: linear-gradient(to right, transparent, var(--sepia-faint), transparent);
+    margin: 2.5rem 0;
+  }
+
+  /* ─── Mobile Responsiveness (Edge-to-Edge) ─── */
+  @media (max-width: 768px) {
+    body.desk-canvas,
+    body {
+      padding: 0;
+      background-color: var(--parchment);
+      background-image: none;
+    }
+
+    .parchment-sheet {
+      border: none;
+      box-shadow: none;
+      min-height: 100vh;
+      border-radius: 0;
+    }
+
+    .parchment-sheet::before {
+      display: none; /* remove double-line margin frame on narrow screens to maximize reading area */
+    }
+
+    .sheet-content {
+      padding: 1.75rem 1.25rem 2.5rem;
+    }
+  }
+}

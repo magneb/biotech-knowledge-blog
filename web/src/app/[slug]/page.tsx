@@ -2,6 +2,7 @@ import { PortableText, defineQuery, type SanityDocument } from "next-sanity";
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import { client } from "@/sanity/client";
+import { Icon } from "@/components/ui/Icon";
 
 const ARTICLES_SLUGS_QUERY = defineQuery(
   `*[_type == "article" && defined(slug.current)]{ "slug": slug.current }`
@@ -46,7 +47,8 @@ export default async function ArticlePage({
       {/* ── Back navigation ── */}
       <nav className="back-nav">
         <Link href="/" className="back-link">
-          ← Back to index
+          <Icon name="arrow-right" size={13} style={{ transform: "rotate(180deg)" }} />
+          Back to index
         </Link>
       </nav>
 

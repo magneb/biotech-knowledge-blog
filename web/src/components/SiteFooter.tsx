@@ -1,6 +1,8 @@
 import { defineQuery } from "next-sanity";
 import { client } from "@/sanity/client";
 
+import { Icon } from "@/components/ui/Icon";
+
 const FOOTER_QUERY = defineQuery(
   `*[_id == "homePage"][0]{ contactEmail }`
 );
@@ -29,7 +31,7 @@ export default async function SiteFooter() {
   return (
     <footer className="site-footer">
       <div className="ornament site-footer-rule" aria-hidden="true">
-        ✦
+        <Icon name="star-four" size={16} />
       </div>
 
       {links.length > 0 && (

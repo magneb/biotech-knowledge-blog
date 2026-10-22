@@ -3,6 +3,8 @@ import { createImageUrlBuilder } from "@sanity/image-url";
 import { PortableText, defineQuery, type SanityDocument } from "next-sanity";
 import Link from "next/link";
 
+import { Icon } from "@/components/ui/Icon";
+
 const builder = createImageUrlBuilder(client);
 
 const HOME_QUERY = defineQuery(
@@ -97,7 +99,7 @@ export default async function HomePage() {
 
       {/* ── Ornamental divider ── */}
       <div className="ornament" aria-hidden="true">
-        ✦
+        <Icon name="star-four" size={18} />
       </div>
 
       {/* ── Articles ── */}
@@ -116,9 +118,12 @@ export default async function HomePage() {
                 href={`/${(article.slug as { current?: string })?.current}`}
                 className="article-card"
               >
-                <span className="article-card-title">
-                  {article.title as string}
-                </span>
+                <div style={{ display: "flex", alignItems: "baseline", justifyContent: "space-between", gap: "1rem" }}>
+                  <span className="article-card-title">
+                    {article.title as string}
+                  </span>
+                  <Icon name="arrow-right" size={14} className="variant-arrow" style={{ color: "var(--rust)" }} />
+                </div>
 
                 <span className="article-card-meta">
                   {article.category && (

@@ -1,0 +1,94 @@
+@layer tokens {
+  :root {
+    /* ─── Parchment Scale (Main Reading Surface) ─── */
+    --parchment:          #f4ead5;
+    --parchment-light:    #faf6ed;
+    --parchment-dark:     #e8d9b8;
+    --parchment-shadow:   #d4c4a0;
+    --parchment-border:   #c9b893;
+    --parchment-bevel:    rgba(255, 250, 240, 0.45);
+
+    /* ─── Desk Canvas Scale (Background Surface on Desktop) ─── */
+    --desk-canvas:        #23201c;
+    --desk-surface:       #2e2a25;
+    --desk-highlight:     #3a352f;
+    --desk-ambient:       #191714;
+    --desk-shadow:        rgba(10, 8, 6, 0.7);
+
+    /* ─── Ink Scale (Deep Engraved Charcoal & Blacks) ─── */
+    --ink:                #110a04;
+    --ink-medium:         #1a0f06;
+    --ink-light:          #2c1e12;
+
+    /* ─── Sepia Scale (Warm Antique Browns & Medium Tones) ─── */
+    --sepia:              #1f1208;
+    --sepia-mid:          #352214;
+    --sepia-muted:        #56402c;
+    --sepia-faint:        #8a7560;
+    --sepia-ghost:        #c2b09b;
+
+    /* ─── Accent Colors (Gilded Illuminations & Alchemical Wax) ─── */
+    --gold:               #8b6914;
+    --gold-muted:         #a07d2a;
+    --gold-faint:         #c4a854;
+    --rust:               #6e3610;
+    --burgundy:           #5c1a1a;
+    --copper:             #a55d28;
+
+    /* ─── Typography (Cormorant Garamond) ─── */
+    --font-serif: var(--font-cormorant-garamond), "Cormorant Garamond", "Palatino Linotype", "Book Antiqua", Palatino, Georgia, serif;
+    --font-main:  var(--font-serif);
+
+    /* Typographic Scale */
+    --text-xs:    0.75rem;    /* 12px */
+    --text-sm:    0.85rem;    /* 13.6px */
+    --text-base:  1.05rem;   /* 16.8px */
+    --text-lg:    1.2rem;     /* 19.2px */
+    --text-xl:    1.4rem;     /* 22.4px */
+    --text-2xl:   1.75rem;    /* 28px */
+    --text-3xl:   2.2rem;     /* 35.2px */
+    --text-4xl:   clamp(2.4rem, 5vw + 1rem, 3.2rem);
+
+    /* Tracking & Line Heights */
+    --tracking-tight:   0.01em;
+    --tracking-normal:  0.03em;
+    --tracking-wide:    0.08em;
+    --tracking-widest:  0.18em;
+
+    --leading-tight:    1.25;
+    --leading-normal:   1.65;
+    --leading-relaxed:  1.8;
+
+    /* ─── Layout Geometry ─── */
+    --paper-max-width:    1180px;
+    --article-max-width:  44rem;
+    --page-reading-width: 48rem;
+
+    --desk-padding-y:     2.5rem;
+    --desk-padding-x:     1.5rem;
+    --paper-padding-y:    3.5rem;
+    --paper-padding-x:    3rem;
+
+    /* ─── Borders, Frames & Bevels ─── */
+    --border-hairline:    1px solid var(--parchment-shadow);
+    --border-engraved:    1px solid var(--sepia-faint);
+    --border-double:      3px double var(--sepia-faint);
+    --border-gold:        1px solid var(--gold-muted);
+
+    /* ─── Shadows & Depth ─── */
+    --shadow-folio:
+      0 20px 45px -12px rgba(8, 6, 4, 0.7),
+      0 4px 16px rgba(8, 6, 4, 0.35);
+
+    --shadow-paper-bevel:
+      inset 0 0 0 1px var(--parchment-bevel),
+      inset 0 0 25px rgba(139, 105, 20, 0.06);
+
+    --shadow-card:
+      0 2px 6px rgba(31, 18, 8, 0.05);
+
+    /* ─── Transitions ─── */
+    --transition-fast:    0.15s ease;
+    --transition-medium:  0.25s ease;
+  }
+}
