@@ -8,4 +8,7 @@ const nextConfig: NextConfig = {};
 export default nextConfig;
 
 // Makes Cloudflare bindings (KV, D1, …) available to `next dev`.
-initOpenNextCloudflareForDev();
+if (process.env.NODE_ENV === "development") {
+  initOpenNextCloudflareForDev();
+}
+

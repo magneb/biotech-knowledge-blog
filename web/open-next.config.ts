@@ -11,9 +11,14 @@ import memoryQueue from "@opennextjs/cloudflare/overrides/queue/memory-queue";
  * - Cache interception — cached pages are served without booting the Next server,
  *   which keeps CPU time well under the Free plan's 10 ms limit.
  */
-export default defineCloudflareConfig({
+const config = defineCloudflareConfig({
   incrementalCache: kvIncrementalCache,
   tagCache: d1NextTagCache,
   queue: memoryQueue,
   enableCacheInterception: true,
 });
+
+config.buildCommand = "npm run build:next";
+
+export default config;
+
