@@ -112,7 +112,7 @@ export default async function HomePage() {
           </p>
         ) : (
           <nav>
-            {articles.map((article) => (
+            {articles.map((article, index) => (
               <Link
                 key={article._id}
                 href={`/${(article.slug as { current?: string })?.current}`}
@@ -122,7 +122,7 @@ export default async function HomePage() {
                   <span className="article-card-title">
                     {article.title as string}
                   </span>
-                  <HandDrawnArrow size={16} style={{ color: "var(--rust)" }} />
+                  <HandDrawnArrow index={index} size={15} style={{ color: "var(--rust)" }} />
                 </div>
 
                 <span className="article-card-meta">

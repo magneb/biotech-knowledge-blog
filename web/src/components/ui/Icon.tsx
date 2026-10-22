@@ -49,7 +49,6 @@ export function Icon({
       height={size}
       aria-hidden="true"
       style={{
-        display: "inline-block",
         verticalAlign: "middle",
         flexShrink: 0,
         ...style,
@@ -65,6 +64,7 @@ export type VariantNumber = 1 | 2 | 3 | 4 | 5;
 
 export interface HandDrawnArrowProps {
   variant?: VariantNumber;
+  index?: number;
   size?: number | string;
   className?: string;
   style?: CSSProperties;
@@ -72,34 +72,28 @@ export interface HandDrawnArrowProps {
 
 /**
  * Renders a hand-drawn Victorian arrow.
- * If `variant` is specified (1-5), renders that specific hand-drawn cut.
- * If omitted, renders a multi-slot container where the CSS `:nth-child(5n + x)`
- * rule automatically displays a distinct hand-drawn arrow variant per row without JS.
+ * If `variant` (1-5) or `index` is passed, renders exactly that single SVG.
+ * If omitted, renders a slot where CSS switches between cuts.
  */
 export function HandDrawnArrow({
   variant,
+  index,
   size = 16,
   className = "",
   style,
 }: HandDrawnArrowProps) {
-  if (variant) {
-    return (
-      <Icon
-        name={`arrow-right-${variant}` as IconName}
-        size={size}
-        className={className}
-        style={style}
-      />
-    );
-  }
+  const resolvedVariant: VariantNumber =
+    variant ??
+    (index !== undefined
+      ? (((Math.abs(index) % 5) + 1) as VariantNumber)
+      : 1);
 
   return (
-    <span className={`variant-arrow-slot ${className}`.trim()} style={style}>
-      <Icon name="arrow-right-1" size={size} className="arrow-v1" />
-      <Icon name="arrow-right-2" size={size} className="arrow-v2" />
-      <Icon name="arrow-right-3" size={size} className="arrow-v3" />
-      <Icon name="arrow-right-4" size={size} className="arrow-v4" />
-      <Icon name="arrow-right-5" size={size} className="arrow-v5" />
-    </span>
+    <Icon
+      name={`arrow-right-${resolvedVariant}` as IconName}
+      size={size}
+      className={`hand-drawn-arrow ${className}`.trim()}
+      style={style}
+    />
   );
 }
