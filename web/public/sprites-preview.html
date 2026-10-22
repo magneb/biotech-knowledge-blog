@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sprites Preview — Oliver's Guide</title>
+  <style>
+    :root {
+      --parchment: #f4ead5;
+      --parchment-light: #faf6ed;
+      --desk-canvas: #23201c;
+      --ink: #110a04;
+      --sepia: #1f1208;
+      --sepia-mid: #352214;
+      --sepia-faint: #8a7560;
+      --gold: #8b6914;
+      --rust: #6e3610;
+      --border: #c9b893;
+    }
+    body {
+      background: var(--desk-canvas);
+      font-family: Georgia, serif;
+      color: var(--sepia);
+      padding: 2rem 1rem;
+      margin: 0;
+    }
+    .sheet {
+      max-width: 900px;
+      margin: 0 auto;
+      background: var(--parchment);
+      padding: 3rem 2rem;
+      border: 1px solid var(--border);
+      box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    }
+    h1 {
+      text-align: center;
+      color: var(--ink);
+      margin-bottom: 0.5rem;
+    }
+    p.sub {
+      text-align: center;
+      color: var(--sepia-mid);
+      font-style: italic;
+      margin-bottom: 2rem;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 1.5rem;
+    }
+    .card {
+      background: var(--parchment-light);
+      border: 1px solid var(--border);
+      padding: 1.25rem;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.75rem;
+    }
+    .icons-row {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 1rem;
+      min-height: 56px;
+      color: var(--ink);
+    }
+    svg.icon {
+      display: inline-block;
+      vertical-align: middle;
+      color: currentColor;
+    }
+    .name {
+      font-weight: bold;
+      color: var(--ink);
+      font-size: 1rem;
+    }
+    .id {
+      font-family: monospace;
+      color: var(--rust);
+      font-size: 0.8rem;
+    }
+  </style>
+</head>
+<body>
+  <div class="sheet">
+    <h1>Victorian Vector Sprite Sheet</h1>
+    <p class="sub">Rendered directly from <code>/sprites.svg</code> using <code>&lt;use href="/sprites.svg#id" /&gt;</code></p>
+
+    <div class="grid">
+      <div class="card">
+        <div class="icons-row">
+          <svg class="icon" width="20" height="20"><use href="/sprites.svg#star-four" /></svg>
+          <svg class="icon" width="32" height="32"><use href="/sprites.svg#star-four" /></svg>
+          <svg class="icon" width="48" height="48"><use href="/sprites.svg#star-four" /></svg>
+        </div>
+        <div class="name">Four-Point Star (✦)</div>
+        <div class="id">#star-four</div>
+      </div>
+
+      <div class="card">
+        <div class="icons-row">
+          <svg class="icon" width="20" height="20"><use href="/sprites.svg#star-flourish" /></svg>
+          <svg class="icon" width="32" height="32"><use href="/sprites.svg#star-flourish" /></svg>
+          <svg class="icon" width="48" height="48"><use href="/sprites.svg#star-flourish" /></svg>
+        </div>
+        <div class="name">Radiant Flourish / Compass</div>
+        <div class="id">#star-flourish</div>
+      </div>
+
+      <div class="card">
+        <div class="icons-row">
+          <svg class="icon" width="20" height="20"><use href="/sprites.svg#diamond" /></svg>
+          <svg class="icon" width="32" height="32"><use href="/sprites.svg#diamond" /></svg>
+          <svg class="icon" width="48" height="48"><use href="/sprites.svg#diamond" /></svg>
+        </div>
+        <div class="name">Engraved Diamond (◆)</div>
+        <div class="id">#diamond</div>
+      </div>
+
+      <div class="card">
+        <div class="icons-row">
+          <svg class="icon" width="24" height="24"><use href="/sprites.svg#corner-flourish" /></svg>
+          <svg class="icon" width="36" height="36"><use href="/sprites.svg#corner-flourish" /></svg>
+        </div>
+        <div class="name">Corner Flourish (Generic)</div>
+        <div class="id">#corner-flourish</div>
+      </div>
+
+      <div class="card">
+        <div class="icons-row">
+          <svg class="icon" width="32" height="32"><use href="/sprites.svg#corner-flourish-tl" /></svg>
+          <svg class="icon" width="32" height="32"><use href="/sprites.svg#corner-flourish-tr" /></svg>
+        </div>
+        <div class="name">Corner Filigree (TL / TR)</div>
+        <div class="id">#corner-flourish-tl / tr</div>
+      </div>
+
+      <div class="card">
+        <div class="icons-row">
+          <svg class="icon" width="32" height="32"><use href="/sprites.svg#corner-flourish-bl" /></svg>
+          <svg class="icon" width="32" height="32"><use href="/sprites.svg#corner-flourish-br" /></svg>
+        </div>
+        <div class="name">Corner Filigree (BL / BR)</div>
+        <div class="id">#corner-flourish-bl / br</div>
+      </div>
+
+      <div class="card">
+        <div class="icons-row">
+          <svg class="icon" width="20" height="20"><use href="/sprites.svg#arrow-right" /></svg>
+          <svg class="icon" width="32" height="32"><use href="/sprites.svg#arrow-right" /></svg>
+          <svg class="icon" width="44" height="44"><use href="/sprites.svg#arrow-right" /></svg>
+        </div>
+        <div class="name">Feathered Arrow (→)</div>
+        <div class="id">#arrow-right</div>
+      </div>
+
+      <div class="card">
+        <div class="icons-row">
+          <svg class="icon" width="24" height="24"><use href="/sprites.svg#rule-leaf" /></svg>
+          <svg class="icon" width="36" height="36"><use href="/sprites.svg#rule-leaf" /></svg>
+        </div>
+        <div class="name">Botanical Rule Leaf</div>
+        <div class="id">#rule-leaf</div>
+      </div>
+
+      <div class="card">
+        <div class="icons-row">
+          <svg class="icon" width="48" height="24"><use href="/sprites.svg#cartouche-oval" /></svg>
+          <svg class="icon" width="72" height="36"><use href="/sprites.svg#cartouche-oval" /></svg>
+        </div>
+        <div class="name">Cartouche Oval Frame</div>
+        <div class="id">#cartouche-oval</div>
+      </div>
+
+      <div class="card">
+        <div class="icons-row">
+          <svg class="icon" width="28" height="28"><use href="/sprites.svg#eye-insignia" /></svg>
+          <svg class="icon" width="44" height="44"><use href="/sprites.svg#eye-insignia" /></svg>
+        </div>
+        <div class="name">Eye of Inquiry Insignia</div>
+        <div class="id">#eye-insignia</div>
+      </div>
+
+      <div class="card">
+        <div class="icons-row">
+          <svg class="icon" width="20" height="20"><use href="/sprites.svg#bookmark-ribbon" /></svg>
+          <svg class="icon" width="32" height="32"><use href="/sprites.svg#bookmark-ribbon" /></svg>
+        </div>
+        <div class="name">Bookmark Ribbon</div>
+        <div class="id">#bookmark-ribbon</div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
