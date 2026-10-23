@@ -1,11 +1,15 @@
 import fs from "node:fs";
 import path from "node:path";
 import { describe, expect, it } from "vitest";
-import { article } from "../../studio/schemaTypes/article";
-import { homePage } from "../../studio/schemaTypes/homePage";
-import { schemaTypes } from "../../studio/schemaTypes";
 
 const REPO_ROOT = path.resolve(__dirname, "../..");
+const STUDIO_SCHEMAS_DIR = path.join(REPO_ROOT, "studio/schemaTypes");
+
+interface ParsedSchemaDefinition {
+  exportName: string;
+  name: string;
+  fields: string[];
+}
 
 function collectSourceFiles(dir: string): string[] {
   const results: string[] = [];
@@ -13,24 +17,81 @@ function collectSourceFiles(dir: string): string[] {
     const fullPath = path.join(dir, entry.name);
     if (entry.isDirectory()) {
       results.push(...collectSourceFiles(fullPath));
-    } else if (/\.(ts|tsx)$/.test(entry.name) && !entry.name.endsWith(".test.ts") && !entry.name.endsWith(".test.tsx")) {
+    } else if (
+      /\.(ts|tsx)$/.test(entry.name) &&
+      !entry.name.endsWith(".test.ts") &&
+      !entry.name.endsWith(".test.tsx")
+    ) {
       results.push(fullPath);
     }
   }
   return results;
 }
 
+/**
+ * Parses `studio/schemaTypes/*.ts` from source text without importing `studio/`
+ * runtime modules into `web/` (which has no `sanity` dependency in Cloudflare CI).
+ */
+function parseStudioSchemas(): {
+  registeredExports: string[];
+  schemas: ParsedSchemaDefinition[];
+} {
+  const indexSource = fs.readFileSync(
+    path.join(STUDIO_SCHEMAS_DIR, "index.ts"),
+    "utf-8"
+  );
+  const arrayMatch = indexSource.match(/schemaTypes\s*=\s*\[([^\]]+)\]/);
+  const registeredExports = arrayMatch
+    ? arrayMatch[1]
+        .split(",")
+        .map((s) => s.trim())
+        .filter(Boolean)
+    : [];
+
+  const schemas: ParsedSchemaDefinition[] = [];
+  for (const entry of fs.readdirSync(STUDIO_SCHEMAS_DIR, {
+    withFileTypes: true,
+  })) {
+    if (!entry.isFile() || !entry.name.endsWith(".ts") || entry.name === "index.ts") {
+      continue;
+    }
+    const source = fs.readFileSync(
+      path.join(STUDIO_SCHEMAS_DIR, entry.name),
+      "utf-8"
+    );
+    const typeHeaderMatch = source.match(
+      /export\s+const\s+(\w+)\s*=\s*defineType\s*\(\s*\{[\s\S]*?name:\s*['"]([^'"]+)['"]/
+    );
+    if (!typeHeaderMatch) continue;
+
+    const [, exportName, schemaName] = typeHeaderMatch;
+    const fields = Array.from(
+      source.matchAll(/defineField\s*\(\s*\{\s*name:\s*['"]([^'"]+)['"]/g),
+      (m) => m[1]
+    );
+
+    schemas.push({ exportName, name: schemaName, fields });
+  }
+
+  return { registeredExports, schemas };
+}
+
 describe("Sanity Studio Schemas, Client Config & Dynamic TypeGen Sync", () => {
   it("registers core article and homePage schemas in studio/schemaTypes", () => {
-    expect(schemaTypes).toEqual(expect.arrayContaining([article, homePage]));
+    const { registeredExports, schemas } = parseStudioSchemas();
+    expect(registeredExports).toEqual(
+      expect.arrayContaining(["article", "homePage"])
+    );
 
-    const articleFields = article.fields.map((f) => f.name);
-    expect(articleFields).toEqual(
+    const articleSchema = schemas.find((s) => s.name === "article");
+    expect(articleSchema).toBeDefined();
+    expect(articleSchema?.fields).toEqual(
       expect.arrayContaining(["title", "slug", "body"])
     );
 
-    const homeFields = homePage.fields.map((f) => f.name);
-    expect(homeFields).toEqual(
+    const homeSchema = schemas.find((s) => s.name === "homePage");
+    expect(homeSchema).toBeDefined();
+    expect(homeSchema?.fields).toEqual(
       expect.arrayContaining(["heading", "subheading", "intro", "contactEmail"])
     );
   });
@@ -48,7 +109,15 @@ describe("Sanity Studio Schemas, Client Config & Dynamic TypeGen Sync", () => {
       value?: { attributes?: Record<string, unknown> };
     }>;
 
-    for (const schemaDef of schemaTypes) {
+    const { registeredExports, schemas } = parseStudioSchemas();
+    expect(schemas.length).toBeGreaterThan(0);
+
+    for (const schemaDef of schemas) {
+      expect(
+        registeredExports,
+        `Schema export '${schemaDef.exportName}' is defined in studio/schemaTypes but not registered in studio/schemaTypes/index.ts`
+      ).toContain(schemaDef.exportName);
+
       const extracted = schemaJson.find((entry) => entry.name === schemaDef.name);
       expect(
         extracted,
@@ -57,13 +126,11 @@ describe("Sanity Studio Schemas, Client Config & Dynamic TypeGen Sync", () => {
 
       const extractedAttrs =
         extracted?.attributes ?? extracted?.value?.attributes ?? {};
-      if ("fields" in schemaDef && Array.isArray(schemaDef.fields)) {
-        for (const field of schemaDef.fields) {
-          expect(
-            extractedAttrs,
-            `Field '${schemaDef.name}.${field.name}' is missing from studio/schema.json. Run 'npm run typegen'.`
-          ).toHaveProperty(field.name);
-        }
+      for (const fieldName of schemaDef.fields) {
+        expect(
+          extractedAttrs,
+          `Field '${schemaDef.name}.${fieldName}' is missing from studio/schema.json. Run 'npm run typegen'.`
+        ).toHaveProperty(fieldName);
       }
     }
   });
@@ -92,6 +159,31 @@ describe("Sanity Studio Schemas, Client Config & Dynamic TypeGen Sync", () => {
         typesContent,
         `Query '${queryName}' is missing 'export type ${queryName}_RESULT' in web/sanity.types.ts. Run 'npm run typegen'.`
       ).toContain(`export type ${queryName}_RESULT =`);
+    }
+  });
+
+  it("ensures web/ files never import TypeScript modules from ../studio/ (prevents CI typecheck failure when studio/node_modules is absent)", () => {
+    const webFiles = [
+      ...collectSourceFiles(path.join(REPO_ROOT, "web/src")),
+      ...fs
+        .readdirSync(path.join(REPO_ROOT, "web/tests"))
+        .filter((f) => /\.(ts|tsx)$/.test(f))
+        .map((f) => path.join(REPO_ROOT, "web/tests", f)),
+    ];
+
+    const studioImportPattern = new RegExp(
+      String.raw`\b(?:from|import)\s+['"][^'"]*` + "studio/"
+    );
+    for (const file of webFiles) {
+      const source = fs.readFileSync(file, "utf-8");
+      const stripped = source
+        .replace(/\/\*[\s\S]*?\*\//g, "")
+        .replace(/\/\/.*$/gm, "");
+      const hasStudioImport = studioImportPattern.test(stripped);
+      expect(
+        hasStudioImport,
+        `File '${path.relative(REPO_ROOT, file)}' has an import referencing 'studio/'. In Cloudflare Workers Builds, 'studio/node_modules' is not installed, causing 'next build' TypeScript verification to fail with TS2307.`
+      ).toBe(false);
     }
   });
 
