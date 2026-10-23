@@ -1,7 +1,7 @@
-import { PortableText, defineQuery, type SanityDocument } from "next-sanity";
+import { PortableText, defineQuery, stegaClean } from "next-sanity";
 import { notFound } from "next/navigation";
 import Link from "next/link";
-import { client } from "@/sanity/client";
+import { sanityFetch } from "@/sanity/live";
 import { Icon } from "@/components/ui/Icon";
 import { formatCategory, formatDate } from "@/lib/format";
 
@@ -16,10 +16,12 @@ const ARTICLE_QUERY = defineQuery(
 );
 
 export async function generateStaticParams() {
-  const articles = await client.fetch<{ slug: string }[]>(
-    ARTICLES_SLUGS_QUERY
-  );
-  // Static export requires at least one param. Use a placeholder that 404s via notFound().
+  const { data: articles } = await sanityFetch({
+    query: ARTICLES_SLUGS_QUERY,
+    perspective: "published",
+    stega: false,
+  });
+  // Static export / prerender fallback when dataset has no published articles yet.
   if (articles.length === 0) return [{ slug: "_" }];
   return articles.map((article) => ({ slug: article.slug }));
 }
@@ -30,8 +32,9 @@ export default async function ArticlePage({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
-  const article = await client.fetch<SanityDocument | null>(ARTICLE_QUERY, {
-    slug,
+  const { data: article } = await sanityFetch({
+    query: ARTICLE_QUERY,
+    params: { slug },
   });
 
   if (!article) return notFound();
@@ -51,15 +54,15 @@ export default async function ArticlePage({
         <header className="paper-header">
           {article.category && (
             <span className="paper-category">
-              {formatCategory(article.category as string)}
+              {formatCategory(stegaClean(article.category))}
             </span>
           )}
 
-          <h1 className="paper-title">{article.title as string}</h1>
+          <h1 className="paper-title">{article.title}</h1>
 
           {article.publishedAt && (
             <time className="paper-date">
-              {formatDate(article.publishedAt as string, "long")}
+              {formatDate(stegaClean(article.publishedAt), "long")}
             </time>
           )}
         </header>

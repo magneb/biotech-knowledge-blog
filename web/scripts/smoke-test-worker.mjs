@@ -107,16 +107,40 @@ async function main() {
       }
     }
 
-    if (!dryRunOutput.includes("env.ASSETS") || !dryRunOutput.includes("env.WORKER_SELF_REFERENCE")) {
+    if (
+      !dryRunOutput.includes("env.ASSETS") ||
+      !dryRunOutput.includes("env.WORKER_SELF_REFERENCE") ||
+      !dryRunOutput.includes("env.NEXT_INC_CACHE_KV") ||
+      !dryRunOutput.includes("env.NEXT_TAG_CACHE_D1")
+    ) {
       fail(
         "dry-run",
-        `Wrangler dry-run output missing expected bindings (env.ASSETS / env.WORKER_SELF_REFERENCE):\n${dryRunOutput}`
+        `Wrangler dry-run output missing expected bindings (env.ASSETS / env.WORKER_SELF_REFERENCE / env.NEXT_INC_CACHE_KV / env.NEXT_TAG_CACHE_D1):\n${dryRunOutput}`
       );
     }
     log("dry-run", "Wrangler dry-run packaging & binding validation succeeded.");
   } finally {
     fs.rmSync(dryRunDir, { recursive: true, force: true });
   }
+
+  // 2b. Ensure local D1 revalidations table exists for local workerd smoke test
+  log("d1-init", "Ensuring local D1 'revalidations' table is initialized...");
+  execFileSync(
+    "npx",
+    [
+      "wrangler",
+      "d1",
+      "execute",
+      "NEXT_TAG_CACHE_D1",
+      "--local",
+      "--command",
+      "CREATE TABLE IF NOT EXISTS revalidations (tag TEXT NOT NULL, revalidatedAt INTEGER NOT NULL, stale INTEGER, expire INTEGER default NULL, UNIQUE(tag) ON CONFLICT REPLACE);",
+    ],
+    {
+      cwd: WEB_ROOT,
+      stdio: ["ignore", "pipe", "pipe"],
+    }
+  );
 
   // 3. Live Runtime Smoke Test inside local workerd via Wrangler
   const port = await getFreePort();
@@ -136,6 +160,8 @@ async function main() {
       "--show-interactive-dev-session=false",
       "--log-level",
       "error",
+      "--var",
+      "SANITY_REVALIDATE_SECRET:smoke-test-secret",
     ],
     {
       cwd: WEB_ROOT,
@@ -194,6 +220,33 @@ async function main() {
       );
     }
     log("runtime", "✓ GET /__non_existent_smoke_slug_404__ -> 404 Not Found");
+
+    // Assertion E: Draft Mode disable route redirects safely to /
+    const disableRes = await fetch(
+      `${baseUrl}/api/draft-mode/disable?redirect=/`,
+      { redirect: "manual" }
+    );
+    if (disableRes.status !== 307 && disableRes.status !== 302) {
+      fail(
+        "runtime",
+        `GET /api/draft-mode/disable returned status ${disableRes.status} (expected 307/302)`
+      );
+    }
+    log("runtime", "✓ GET /api/draft-mode/disable -> 307 Redirect");
+
+    // Assertion F: Revalidate webhook rejects unsigned requests with 401
+    const revalidateRes = await fetch(`${baseUrl}/api/revalidate`, {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({ _type: "article" }),
+    });
+    if (revalidateRes.status !== 401) {
+      fail(
+        "runtime",
+        `POST /api/revalidate (unsigned) returned status ${revalidateRes.status} (expected 401)`
+      );
+    }
+    log("runtime", "✓ POST /api/revalidate (unsigned) -> 401 Unauthorized");
 
     log("done", "All Worker build, dry-run, and live runtime smoke checks passed!");
   } catch (err) {

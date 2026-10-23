@@ -1,7 +1,10 @@
 import type { Metadata } from "next";
 import { Cormorant_Garamond } from "next/font/google";
+import { draftMode } from "next/headers";
+import { VisualEditing } from "next-sanity/visual-editing";
 import "./globals.css";
 import SiteFooter from "@/components/SiteFooter";
+import { SanityLive } from "@/sanity/live";
 
 const cormorantGaramond = Cormorant_Garamond({
   variable: "--font-cormorant-garamond",
@@ -17,7 +20,9 @@ export const metadata: Metadata = {
     "A personal knowledge base for biotech and cancer research protocols",
 };
 
-export default function RootLayout({ children }: LayoutProps<"/">) {
+export default async function RootLayout({ children }: LayoutProps<"/">) {
+  const { isEnabled: isDraftMode } = await draftMode();
+
   return (
     <html lang="en" className={cormorantGaramond.variable} data-scroll-behavior="smooth">
       <body className="desk-canvas">
@@ -25,6 +30,8 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
           <main className="sheet-content">{children}</main>
           <SiteFooter />
         </div>
+        <SanityLive />
+        {isDraftMode && <VisualEditing />}
       </body>
     </html>
   );

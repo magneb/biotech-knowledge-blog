@@ -17,6 +17,19 @@
       "service": "olivers-guide-to-everything"
     }
   ],
+  "kv_namespaces": [
+    {
+      "binding": "NEXT_INC_CACHE_KV",
+      "id": "c9b40bfdfa0c4800936fbc8910bcf1a9"
+    }
+  ],
+  "d1_databases": [
+    {
+      "binding": "NEXT_TAG_CACHE_D1",
+      "database_name": "olivers-guide-tag-cache",
+      "database_id": "8380a4c0-3be8-42f1-8bf9-f4afc6f7a6ce"
+    }
+  ],
   "observability": {
     "enabled": true,
     "logs": {

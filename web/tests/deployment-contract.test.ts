@@ -70,6 +70,11 @@ describe("Deployment & Infrastructure Configuration Contract", () => {
     const errors = validateDeploymentConfig({
       ...live,
       openNextSource: brokenOpenNext,
+      wranglerConfig: {
+        ...live.wranglerConfig,
+        kv_namespaces: [],
+        d1_databases: [],
+      },
     });
 
     expect(errors).toEqual(

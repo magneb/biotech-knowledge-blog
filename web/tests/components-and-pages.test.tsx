@@ -1,18 +1,31 @@
 import { render } from "@testing-library/react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
-const { mockFetch, mockNotFound } = vi.hoisted(() => ({
-  mockFetch: vi.fn(),
-  mockNotFound: vi.fn(() => {
-    throw new Error("NEXT_NOT_FOUND");
-  }),
-}));
+const { mockFetch, mockSanityFetch, mockNotFound } = vi.hoisted(() => {
+  const fetchFn = vi.fn();
+  return {
+    mockFetch: fetchFn,
+    mockSanityFetch: vi.fn(async (...args: unknown[]) => ({
+      data: await fetchFn(...args),
+      sourceMap: null,
+      tags: [],
+    })),
+    mockNotFound: vi.fn(() => {
+      throw new Error("NEXT_NOT_FOUND");
+    }),
+  };
+});
 
 vi.mock("@/sanity/client", () => ({
   client: {
     fetch: mockFetch,
     config: () => ({ projectId: "9bx84ykf", dataset: "production" }),
   },
+}));
+
+vi.mock("@/sanity/live", () => ({
+  sanityFetch: mockSanityFetch,
+  SanityLive: () => null,
 }));
 
 vi.mock("next/navigation", () => ({

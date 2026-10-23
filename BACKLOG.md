@@ -56,7 +56,7 @@ Every work package must satisfy the 3-tier verification gate before commit/push:
 
 ---
 
-## WP-2: Sanity Live, Draft Mode, Edge Cache Bindings & Data Access Layer
+## WP-2: Sanity Live, Draft Mode, Edge Cache Bindings & Data Access Layer [COMPLETED]
 * **Objective:** Provision Cloudflare KV/D1 edge cache bindings and implement real-time draft preview plus fine-grained on-demand revalidation using `next-sanity` Live Content API.
 * **Scope:**
   - **Provision & Bind Cloudflare Edge Cache:**
@@ -77,10 +77,10 @@ Every work package must satisfy the 3-tier verification gate before commit/push:
   - Use `stegaClean` for string fields controlling display logic; enforce `stega: false` for all metadata queries and `generateStaticParams`.
   - Always use `defineQuery` for all GROQ queries to guarantee TypeGen schema typing.
 * **Acceptance Criteria:**
-  - Editing in Sanity Studio updates the preview iframe in real time.
-  - Publishing a document triggers the webhook and invalidates the D1/KV tag cache instantly.
-  - Public visitors receive pre-rendered cached pages without server overhead (`enableCacheInterception: true`).
-  - `npm run verify` passes with KV and D1 bindings active.
+  - [x] Editing in Sanity Studio updates the preview iframe in real time.
+  - [x] Publishing a document triggers the webhook and invalidates the D1/KV tag cache instantly.
+  - [x] Public visitors receive pre-rendered cached pages without server overhead (`enableCacheInterception: true`).
+  - [x] `npm run verify` passes with KV and D1 bindings active.
 
 ---
 

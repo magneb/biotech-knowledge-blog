@@ -1,6 +1,7 @@
 import { client } from "@/sanity/client";
+import { sanityFetch } from "@/sanity/live";
 import { createImageUrlBuilder } from "@sanity/image-url";
-import { PortableText, defineQuery, type SanityDocument } from "next-sanity";
+import { PortableText, defineQuery, stegaClean } from "next-sanity";
 import Link from "next/link";
 
 import { Icon, HandDrawnArrow } from "@/components/ui/Icon";
@@ -19,9 +20,9 @@ const ARTICLES_QUERY = defineQuery(
 );
 
 export default async function HomePage() {
-  const [home, articles] = await Promise.all([
-    client.fetch<SanityDocument | null>(HOME_QUERY),
-    client.fetch<SanityDocument[]>(ARTICLES_QUERY),
+  const [{ data: home }, { data: articles }] = await Promise.all([
+    sanityFetch({ query: HOME_QUERY }),
+    sanityFetch({ query: ARTICLES_QUERY }),
   ]);
 
   // Build logo URL if available
@@ -41,7 +42,8 @@ export default async function HomePage() {
           <img
             src={logoUrl}
             alt={
-              (home?.heading as string) || "Oliver's Guide To Everything emblem"
+              stegaClean(home?.heading) ||
+              "Oliver's Guide To Everything emblem"
             }
             className="landing-logo"
             width={320}
@@ -56,14 +58,13 @@ export default async function HomePage() {
               letterSpacing: "0.04em",
             }}
           >
-            {(home?.heading as string) || "Oliver\u2019s Guide To Everything"}
+            {home?.heading || "Oliver\u2019s Guide To Everything"}
           </h1>
         )}
 
         {(home?.subheading || !home) && (
           <p className="landing-tagline">
-            {(home?.subheading as string) ||
-              "Biotech & cancer research protocols"}
+            {home?.subheading || "Biotech & cancer research protocols"}
           </p>
         )}
 
@@ -101,12 +102,12 @@ export default async function HomePage() {
             {articles.map((article, index) => (
               <Link
                 key={article._id}
-                href={`/${(article.slug as { current?: string })?.current}`}
+                href={`/${stegaClean(article.slug?.current)}`}
                 className="article-card"
               >
                 <div style={{ display: "flex", alignItems: "baseline", justifyContent: "space-between", gap: "1rem" }}>
                   <span className="article-card-title">
-                    {article.title as string}
+                    {article.title}
                   </span>
                   <HandDrawnArrow index={index} size={15} style={{ color: "var(--rust)" }} />
                 </div>
@@ -114,17 +115,17 @@ export default async function HomePage() {
                 <span className="article-card-meta">
                   {article.category && (
                     <span className="article-card-category">
-                      {formatCategory(article.category as string)}
+                      {formatCategory(stegaClean(article.category))}
                     </span>
                   )}
                   {article.publishedAt && (
-                    <span>{formatDate(article.publishedAt as string)}</span>
+                    <span>{formatDate(stegaClean(article.publishedAt))}</span>
                   )}
                 </span>
 
                 {article.summary && (
                   <span className="article-card-summary">
-                    {article.summary as string}
+                    {article.summary}
                   </span>
                 )}
               </Link>
