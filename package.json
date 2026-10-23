@@ -1,0 +1,19 @@
+{
+  "name": "olivers-guide-monorepo",
+  "private": true,
+  "description": "Root orchestration for Oliver's Guide To Everything (studio + web)",
+  "scripts": {
+    "dev:web": "npm --prefix web run dev",
+    "dev:studio": "npm --prefix studio run dev",
+    "build": "npm --prefix web run build",
+    "typegen": "npm --prefix studio run typegen",
+    "typecheck": "npm --prefix web run typecheck && npm --prefix studio run typecheck",
+    "lint": "npm --prefix web run lint && npm --prefix studio run lint",
+    "test": "npm --prefix web test",
+    "test:watch": "npm --prefix web run test:watch",
+    "test:smoke": "npm --prefix web run test:smoke",
+    "check": "npm run typecheck && npm run lint && npm test",
+    "verify": "npm run check && npm run test:smoke",
+    "prepare": "git config core.hooksPath .githooks"
+  }
+}

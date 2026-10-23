@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import Link from "next/link";
 import { client } from "@/sanity/client";
 import { Icon } from "@/components/ui/Icon";
+import { formatCategory, formatDate } from "@/lib/format";
 
 const ARTICLES_SLUGS_QUERY = defineQuery(
   `*[_type == "article" && defined(slug.current)]{ "slug": slug.current }`
@@ -21,13 +22,6 @@ export async function generateStaticParams() {
   // Static export requires at least one param. Use a placeholder that 404s via notFound().
   if (articles.length === 0) return [{ slug: "_" }];
   return articles.map((article) => ({ slug: article.slug }));
-}
-
-function formatCategory(cat: string) {
-  return cat
-    .split("-")
-    .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
-    .join(" ");
 }
 
 export default async function ArticlePage({
@@ -65,10 +59,7 @@ export default async function ArticlePage({
 
           {article.publishedAt && (
             <time className="paper-date">
-              {new Date(article.publishedAt as string).toLocaleDateString(
-                "en-US",
-                { year: "numeric", month: "long", day: "numeric" }
-              )}
+              {formatDate(article.publishedAt as string, "long")}
             </time>
           )}
         </header>

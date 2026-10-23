@@ -4,6 +4,7 @@ import { PortableText, defineQuery, type SanityDocument } from "next-sanity";
 import Link from "next/link";
 
 import { Icon, HandDrawnArrow } from "@/components/ui/Icon";
+import { formatCategory, formatDate } from "@/lib/format";
 
 const builder = createImageUrlBuilder(client);
 
@@ -16,21 +17,6 @@ const ARTICLES_QUERY = defineQuery(
     _id, title, slug, summary, category, publishedAt
   }`
 );
-
-function formatDate(dateStr: string) {
-  return new Date(dateStr).toLocaleDateString("en-US", {
-    year: "numeric",
-    month: "short",
-    day: "numeric",
-  });
-}
-
-function formatCategory(cat: string) {
-  return cat
-    .split("-")
-    .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
-    .join(" ");
-}
 
 export default async function HomePage() {
   const [home, articles] = await Promise.all([

@@ -25,32 +25,44 @@ graph TD
 
 ---
 
-## WP-1: OpenNext SSR & Cloudflare Workers Runtime Baseline [COMPLETED]
-* **Objective:** Establish the hybrid SSR/ISR deployment baseline on Cloudflare Workers using `@opennextjs/cloudflare` (revising Decisions 004, 006, and 007).
-* **Key Motivation:** Enables instant on-demand cache revalidation via Sanity webhooks, live Draft Mode preview in Studio, and dynamic route rendering while keeping edge response times under the Cloudflare Free Tier 10 ms CPU budget.
+## Definition of Done (All Work Packages)
+
+Every work package must satisfy the 3-tier verification gate before commit/push:
+- **Code / UI / Styles / Sprites:** `npm run check` passes (`tsc --noEmit` + `eslint` across `web` and `studio`, plus Vitest unit and contract tests).
+- **Sanity Schemas / GROQ Queries:** `npm run typegen && npm run check` passes (verified by dynamic schema and query sync tests in `web/tests/sanity-schema-sync.test.ts`).
+- **Cloudflare / OpenNext / Build / Route Config:** `npm run verify` passes (`npm run check` + full OpenNext Worker build, `wrangler deploy --dry-run`, and live `workerd` HTTP smoke tests).
+
+---
+
+## WP-1: OpenNext SSR, Cloudflare Workers Runtime & Verification Baseline [COMPLETED]
+* **Objective:** Establish the hybrid SSR/ISR deployment baseline on Cloudflare Workers using `@opennextjs/cloudflare` and enforce a 3-tier automated testing and pre-push verification pipeline (Decisions 004, 006, 007, 010).
+* **Key Motivation:** Enables server-rendered routes and prepares for Draft Mode and webhook revalidation while preventing misconfigured builds or missing Worker bindings from reaching production.
 * **Scope:**
-  - Complete Next.js 16.4.x + `@opennextjs/cloudflare` + `wrangler` config.
-  - Finalize `web/open-next.config.ts`:
-    - Incremental cache backed by Cloudflare KV (`kvIncrementalCache`).
-    - Tag cache backed by Cloudflare D1 (`d1NextTagCache`) for strong consistency.
-    - Queue using `memoryQueue` for on-demand revalidation.
-    - Enable `enableCacheInterception: true` to bypass the Next.js server for cached routes (saving CPU).
-  - Update `web/wrangler.jsonc` with Cloudflare worker bindings (`KV`, `D1`, service self-reference).
-  - Verify local dev environment (`npm run dev`) and test build (`npx opennextjs-cloudflare build`).
-  - Update `DECISIONLOG.md` (Revisions to 004, 006, 007).
+  - Complete Next.js 16.4.x + `@opennextjs/cloudflare` + `wrangler.jsonc` baseline (`ASSETS`, `WORKER_SELF_REFERENCE`, `nodejs_compat`, Workers Observability logs & traces).
+  - Configure `web/open-next.config.ts` with default `defineCloudflareConfig()` and `config.buildCommand = "npm run build:next"` (preventing build recursion and allowing deploys before KV/D1 provisioning).
+  - Guard `initOpenNextCloudflareForDev()` in `web/next.config.ts` for development only.
+  - Implement 3-tier verification framework:
+    - Tier 1: Static analysis (`tsc` + `eslint` in `web` & `studio`) + OpenNext/Wrangler deployment contract validator (`web/src/lib/deployment-validator.ts`).
+    - Tier 2: Vitest unit, component, design-system, and dynamic Sanity schema/TypeGen sync tests (`web/tests/`).
+    - Tier 3: Live `workerd` runtime HTTP smoke test & Wrangler dry-run bundle check (`web/scripts/smoke-test-worker.mjs`).
+  - Wire `.githooks/pre-push` and root `package.json` verification scripts.
 * **Sanity Best Practice Alignment:**
   - Standalone Studio remains decoupled in `studio/`.
   - Next.js build no longer uses `output: "export"`.
 * **Acceptance Criteria:**
-  - [x] `web` builds cleanly with OpenNext without peer-dependency errors.
-  - [x] Local dev server starts and renders pages.
-  - [x] Decision Log updated with documented premises.
+  - [x] `web` builds cleanly with OpenNext without peer-dependency or recursion errors.
+  - [x] `npm run verify` passes all static, unit, contract, dry-run, and live `workerd` HTTP smoke checks.
+  - [x] Decision Log updated with documented premises (Decisions 004, 006, 007, 010).
 
 ---
 
-## WP-2: Sanity Live, Draft Mode & Data Access Layer
-* **Objective:** Implement real-time draft preview and fine-grained on-demand revalidation using `next-sanity` Live Content API.
+## WP-2: Sanity Live, Draft Mode, Edge Cache Bindings & Data Access Layer
+* **Objective:** Provision Cloudflare KV/D1 edge cache bindings and implement real-time draft preview plus fine-grained on-demand revalidation using `next-sanity` Live Content API.
 * **Scope:**
+  - **Provision & Bind Cloudflare Edge Cache:**
+    - Provision Cloudflare KV namespace (`NEXT_INC_CACHE_KV`) and D1 database (`NEXT_TAG_CACHE_D1`) via Wrangler and add bindings to `web/wrangler.jsonc`.
+    - Enable `kvIncrementalCache`, `d1NextTagCache`, `memoryQueue`, and `enableCacheInterception: true` in `web/open-next.config.ts` (validated by `deployment-contract.test.ts`).
+    - Configure local secrets in `web/.dev.vars` and production secrets via `wrangler secret put` (`SANITY_API_READ_TOKEN`, `SANITY_REVALIDATE_SECRET`).
   - Create unified Sanity live client: `web/src/sanity/live.ts` using `defineLive`:
     - Setup `sanityFetch` and `<SanityLive />` components.
     - Configure `serverToken` / `browserToken` with environment fallbacks.
@@ -59,14 +71,16 @@ graph TD
   - Mount `<SanityLive />` and conditional `<VisualEditing />` in `web/src/app/layout.tsx`.
   - Add GROQ webhook endpoint `web/src/app/api/revalidate/route.ts` using `parseBody` from `next-sanity/webhook` to handle instant revalidation on document publish/unpublish.
   - Configure Sanity Presentation Tool in `studio/sanity.config.ts` pointing at front-end preview URL.
+  - Add unit and smoke tests covering `/api/revalidate` signature verification and draft-mode routes.
 * **Sanity Best Practice Alignment:**
-  - Strict data isolation: tokens never leaked into client bundles.
+  - Strict data isolation: tokens never leaked into client bundles or `wrangler.jsonc` `vars`.
   - Use `stegaClean` for string fields controlling display logic; enforce `stega: false` for all metadata queries and `generateStaticParams`.
   - Always use `defineQuery` for all GROQ queries to guarantee TypeGen schema typing.
 * **Acceptance Criteria:**
   - Editing in Sanity Studio updates the preview iframe in real time.
-  - Publishing a document triggers the webhook and invalidates the tag cache instantly.
-  - Public visitors receive pre-rendered cached pages without server overhead.
+  - Publishing a document triggers the webhook and invalidates the D1/KV tag cache instantly.
+  - Public visitors receive pre-rendered cached pages without server overhead (`enableCacheInterception: true`).
+  - `npm run verify` passes with KV and D1 bindings active.
 
 ---
 
