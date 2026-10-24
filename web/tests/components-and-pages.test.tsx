@@ -95,15 +95,21 @@ describe("SiteFooter Server Component", () => {
 
     const link = getByText("Contact") as HTMLAnchorElement;
     expect(link.getAttribute("href")).toBe("mailto:oliver@example.org");
+    expect(getByText("Table of Contents")).toBeDefined();
+    expect(getByText("Register")).toBeDefined();
+    expect(getByText("QnA")).toBeDefined();
+    expect(getByText("About")).toBeDefined();
     expect(container.textContent).toContain("Oliver’s Guide To Everything");
   });
 
-  it("omits footer nav when contactEmail is null or empty", async () => {
+  it("renders Victorian navigation links and omits contact link when contactEmail is null or empty", async () => {
     mockFetch.mockResolvedValueOnce({ contactEmail: null });
     const ui = await SiteFooter();
-    const { container } = render(ui);
+    const { container, queryByText, getByText } = render(ui);
 
-    expect(container.querySelector("nav")).toBeNull();
+    expect(queryByText("Contact")).toBeNull();
+    expect(getByText("Table of Contents")).toBeDefined();
+    expect(getByText("Register")).toBeDefined();
     expect(container.textContent).toContain("Oliver’s Guide To Everything");
   });
 });
