@@ -38,4 +38,7 @@ The previously listed items have been consolidated into formal work packages:
 
 *(Drop new prospective ideas, raw notes, or exploratory questions here before formalizing into work packages)*
 
-- [ ] *(Empty — ready for new incoming thoughts)*
+- [ ] Users should be able to to generate APA7 citation with persistant link to versioned page. must have.
+- [ ] What can we do with page versioning? is that something we can support? store norske leksicon har gjort dette på en god måte. Neders står sist oppdatert med tidspunkt med link til versjonsside, og en liten diff mellom hver versjon. Tilgang til tidligere versjoner er viktig. nice to have.
+- [ ] what about links to other pages? and links that dont have a page yet. 
+
