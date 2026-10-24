@@ -435,11 +435,17 @@
     background: var(--sepia-faint);
   }
 
-  .site-footer-links a {
+  .site-footer-links a,
+  .site-footer-links .site-footer-btn {
     display: inline-block;
     padding: 0.5rem 0.25rem;
     color: var(--sepia-mid);
     font-weight: 600;
+    font-family: inherit;
+    font-size: inherit;
+    background: transparent;
+    border: none;
+    cursor: pointer;
     text-decoration: underline;
     text-decoration-color: transparent;
     text-underline-offset: 3px;
@@ -447,7 +453,9 @@
   }
 
   .site-footer-links a:hover,
-  .site-footer-links a:focus-visible {
+  .site-footer-links a:focus-visible,
+  .site-footer-links .site-footer-btn:hover,
+  .site-footer-links .site-footer-btn:focus-visible {
     color: var(--rust);
     text-decoration-color: var(--gold-faint);
   }

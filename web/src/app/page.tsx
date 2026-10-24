@@ -16,15 +16,44 @@ const HOME_QUERY = defineQuery(
 
 const ARTICLES_QUERY = defineQuery(
   `*[_type == "article" && defined(slug.current)] | order(publishedAt desc){
-    _id, title, slug, summary, contentType, publishedAt
+    _id, title, slug, summary, contentType, publishedAt,
+    topics[]->{ _id, name, symbol, slug }
   }`
 );
 
-export default async function HomePage() {
-  const [{ data: home }, { data: articles }] = await Promise.all([
-    sanityFetch({ query: HOME_QUERY }),
-    sanityFetch({ query: ARTICLES_QUERY }),
+interface HomePageProps {
+  searchParams?: Promise<{
+    topic?: string;
+  }>;
+}
+
+export default async function HomePage(props: HomePageProps = {}) {
+  const resolvedParams = props.searchParams ? await props.searchParams : {};
+  const activeTopic = stegaClean(resolvedParams.topic?.trim() || "");
+
+  const [{ data: home }, { data: allArticles }] = await Promise.all([
+    sanityFetch({ query: HOME_QUERY }).catch((err) => {
+      console.warn("Unable to fetch home data from Sanity:", err);
+      return { data: null };
+    }),
+    sanityFetch({ query: ARTICLES_QUERY }).catch((err) => {
+      console.warn("Unable to fetch articles data from Sanity:", err);
+      return { data: null };
+    }),
   ]);
+
+  const articles = activeTopic
+    ? (allArticles ?? []).filter((art) =>
+        art.topics?.some((t) => stegaClean(t?.slug?.current) === activeTopic)
+      )
+    : allArticles ?? [];
+
+  // Identify active topic object for banner display
+  const activeTopicObj = activeTopic
+    ? allArticles
+        ?.flatMap((a) => a.topics ?? [])
+        .find((t) => stegaClean(t?.slug?.current) === activeTopic)
+    : null;
 
   // Build logo URL if available
   const logoUrl = home?.logo
@@ -92,11 +121,37 @@ export default async function HomePage() {
 
       {/* ── Articles ── */}
       <section className="articles-section">
-        <h2 className="articles-heading">Articles</h2>
+        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", flexWrap: "wrap", gap: "1rem", marginBottom: "1.5rem" }}>
+          <h2 className="articles-heading" style={{ margin: 0 }}>
+            {activeTopic ? "Filtered Inscriptions" : "Articles"}
+          </h2>
+          {activeTopic && (
+            <div style={{ display: "flex", alignItems: "center", gap: "0.5rem", fontSize: "var(--text-sm)", color: "var(--sepia-mid)" }}>
+              <span>Taxonomy:</span>
+              <strong style={{ color: "var(--rust)" }}>
+                {activeTopicObj?.symbol ? `[ ${activeTopicObj.symbol} ] ` : ""}
+                {activeTopicObj?.name || activeTopic}
+              </strong>
+              <Link
+                href="/"
+                style={{
+                  fontSize: "var(--text-xs)",
+                  color: "var(--sepia-muted)",
+                  textDecoration: "underline",
+                  marginLeft: "0.5rem",
+                }}
+              >
+                [ Clear Filter ✕ ]
+              </Link>
+            </div>
+          )}
+        </div>
 
         {articles.length === 0 ? (
           <p className="empty-state">
-            No articles yet — add some in the Studio.
+            {activeTopic
+              ? "No articles found matching this topic taxonomy."
+              : "No articles yet — add some in the Studio."}
           </p>
         ) : (
           <nav>

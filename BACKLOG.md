@@ -170,7 +170,7 @@ Every work package must satisfy the 3-tier verification gate before commit/push:
 
 ---
 
-## WP-6: Global Shell, Navigation & Book Table of Contents
+## WP-6: Global Shell, Navigation & Book Table of Contents [COMPLETED]
 * **Objective:** Build the global navigation header, elemental quick-filter pill row, and the book-style Master Table of Contents.
 * **Scope:**
   - **Global Header (`web/src/components/GlobalHeader.tsx`):**
@@ -179,14 +179,17 @@ Every work package must satisfy the 3-tier verification gate before commit/push:
     - Utility icons: Home (`⌂`), Bookmarks (`🔖`), Settings (`⚙`).
     - Elemental topic pill row (`[ CA ] [ TE ] [ GO ] [ RI ] [ ES ]...`).
   - **Book Index / Table of Contents Page (`web/src/app/contents/page.tsx` or overlay):**
-    - Shows all chapters in numbered sequence.
+    - Shows all chapters in numbered sequence with Roman numerals and vignettes.
     - Displays published articles nested under their respective chapters.
     - Smooth navigation to article slugs.
-  - Update `SiteFooter` with full Victorian rule and responsive navigation links.
+    - Standalone treatises section in Appendix.
+    - Full search query, scope dropdown, and topic filter support.
+  - Update `SiteFooter` with full Victorian rule and responsive navigation links (Register, Table of Contents, Contact, QnA, About).
 * **Acceptance Criteria:**
-  - Responsive header adapts gracefully to mobile screens with collapsible drawer.
-  - Clicking an elemental pill filters articles by that topic.
-  - Book chapters display their nested pages clearly in order.
+  - [x] Responsive header adapts gracefully to mobile screens with collapsible drawer.
+  - [x] Clicking an elemental pill filters articles by that topic on Home and Contents.
+  - [x] Book chapters display their nested pages clearly in order.
+  - [x] All 3 verification tiers (`npm run check` and `npm run verify`) pass.
 
 ---
 

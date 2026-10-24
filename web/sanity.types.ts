@@ -445,6 +445,61 @@ export type ARTICLE_QUERY_RESULT = {
   publishedAt: string | null;
 } | null;
 
+// Source: ../web/src/app/contents/page.tsx
+// Variable: CONTENTS_PAGE_QUERY
+// Query: {    "chapters": *[_type == "chapter"] | order(number asc){      _id,      title,      number,      slug,      summary,      vignette {        asset->{          _id,          url        },        alt      },      "articles": *[_type == "article" && references(^._id) && defined(slug.current)] | order(chapterOrder asc, publishedAt desc){        _id,        title,        slug,        contentType,        summary,        chapterOrder,        publishedAt,        topics[]->{          _id,          name,          symbol,          slug        }      }    },    "standaloneArticles": *[_type == "article" && !defined(chapter) && defined(slug.current)] | order(publishedAt desc){      _id,      title,      slug,      contentType,      summary,      publishedAt,      topics[]->{        _id,        name,        symbol,        slug      }    },    "topics": *[_type == "topic"] | order(name asc){      _id,      name,      symbol,      slug    }  }
+export type CONTENTS_PAGE_QUERY_RESULT = {
+  chapters: Array<{
+    _id: string;
+    title: string | null;
+    number: number | null;
+    slug: Slug | null;
+    summary: string | null;
+    vignette: {
+      asset: {
+        _id: string;
+        url: string | null;
+      } | null;
+      alt: string | null;
+    } | null;
+    articles: Array<{
+      _id: string;
+      title: string | null;
+      slug: Slug | null;
+      contentType: "article" | "guide" | "protocol" | "research-note" | null;
+      summary: string | null;
+      chapterOrder: number | null;
+      publishedAt: string | null;
+      topics: Array<{
+        _id: string;
+        name: string | null;
+        symbol: string | null;
+        slug: Slug | null;
+      }> | null;
+    }>;
+  }>;
+  standaloneArticles: Array<{
+    _id: string;
+    title: string | null;
+    slug: Slug | null;
+    contentType: "article" | "guide" | "protocol" | "research-note" | null;
+    summary: string | null;
+    publishedAt: string | null;
+    topics: Array<{
+      _id: string;
+      name: string | null;
+      symbol: string | null;
+      slug: Slug | null;
+    }> | null;
+  }>;
+  topics: Array<{
+    _id: string;
+    name: string | null;
+    symbol: string | null;
+    slug: Slug | null;
+  }>;
+};
+
 // Source: ../web/src/app/page.tsx
 // Variable: HOME_QUERY
 // Query: *[_id == "homePage"][0]{ heading, subheading, intro, logo }
@@ -489,7 +544,7 @@ export type HOME_QUERY_RESULT =
 
 // Source: ../web/src/app/page.tsx
 // Variable: ARTICLES_QUERY
-// Query: *[_type == "article" && defined(slug.current)] | order(publishedAt desc){    _id, title, slug, summary, contentType, publishedAt  }
+// Query: *[_type == "article" && defined(slug.current)] | order(publishedAt desc){    _id, title, slug, summary, contentType, publishedAt,    topics[]->{ _id, name, symbol, slug }  }
 export type ARTICLES_QUERY_RESULT = Array<{
   _id: string;
   title: string | null;
@@ -497,7 +552,37 @@ export type ARTICLES_QUERY_RESULT = Array<{
   summary: string | null;
   contentType: "article" | "guide" | "protocol" | "research-note" | null;
   publishedAt: string | null;
+  topics: Array<{
+    _id: string;
+    name: string | null;
+    symbol: string | null;
+    slug: Slug | null;
+  }> | null;
 }>;
+
+// Source: ../web/src/components/GlobalHeader.tsx
+// Variable: NAVIGATION_QUERY
+// Query: {    "topics": *[_type == "topic"] | order(name asc){      _id,      name,      symbol,      slug    },    "chapters": *[_type == "chapter"] | order(number asc){      _id,      title,      number,      slug,      "articles": *[_type == "article" && references(^._id) && defined(slug.current)] | order(chapterOrder asc, publishedAt desc){        _id,        title,        slug,        contentType      }    }  }
+export type NAVIGATION_QUERY_RESULT = {
+  topics: Array<{
+    _id: string;
+    name: string | null;
+    symbol: string | null;
+    slug: Slug | null;
+  }>;
+  chapters: Array<{
+    _id: string;
+    title: string | null;
+    number: number | null;
+    slug: Slug | null;
+    articles: Array<{
+      _id: string;
+      title: string | null;
+      slug: Slug | null;
+      contentType: "article" | "guide" | "protocol" | "research-note" | null;
+    }>;
+  }>;
+};
 
 // Source: ../web/src/components/SiteFooter.tsx
 // Variable: FOOTER_QUERY
@@ -516,8 +601,10 @@ declare global {
   interface SanityQueries {
     '*[_type == "article" && defined(slug.current)]{ "slug": slug.current }': ARTICLES_SLUGS_QUERY_RESULT;
     '*[_type == "article" && slug.current == $slug][0]{\n    _id, title, body, contentType, publishedAt\n  }': ARTICLE_QUERY_RESULT;
+    '{\n    "chapters": *[_type == "chapter"] | order(number asc){\n      _id,\n      title,\n      number,\n      slug,\n      summary,\n      vignette {\n        asset->{\n          _id,\n          url\n        },\n        alt\n      },\n      "articles": *[_type == "article" && references(^._id) && defined(slug.current)] | order(chapterOrder asc, publishedAt desc){\n        _id,\n        title,\n        slug,\n        contentType,\n        summary,\n        chapterOrder,\n        publishedAt,\n        topics[]->{\n          _id,\n          name,\n          symbol,\n          slug\n        }\n      }\n    },\n    "standaloneArticles": *[_type == "article" && !defined(chapter) && defined(slug.current)] | order(publishedAt desc){\n      _id,\n      title,\n      slug,\n      contentType,\n      summary,\n      publishedAt,\n      topics[]->{\n        _id,\n        name,\n        symbol,\n        slug\n      }\n    },\n    "topics": *[_type == "topic"] | order(name asc){\n      _id,\n      name,\n      symbol,\n      slug\n    }\n  }': CONTENTS_PAGE_QUERY_RESULT;
     '*[_id == "homePage"][0]{ heading, subheading, intro, logo }': HOME_QUERY_RESULT;
-    '*[_type == "article" && defined(slug.current)] | order(publishedAt desc){\n    _id, title, slug, summary, contentType, publishedAt\n  }': ARTICLES_QUERY_RESULT;
+    '*[_type == "article" && defined(slug.current)] | order(publishedAt desc){\n    _id, title, slug, summary, contentType, publishedAt,\n    topics[]->{ _id, name, symbol, slug }\n  }': ARTICLES_QUERY_RESULT;
+    '{\n    "topics": *[_type == "topic"] | order(name asc){\n      _id,\n      name,\n      symbol,\n      slug\n    },\n    "chapters": *[_type == "chapter"] | order(number asc){\n      _id,\n      title,\n      number,\n      slug,\n      "articles": *[_type == "article" && references(^._id) && defined(slug.current)] | order(chapterOrder asc, publishedAt desc){\n        _id,\n        title,\n        slug,\n        contentType\n      }\n    }\n  }': NAVIGATION_QUERY_RESULT;
     '*[_id == "homePage"][0]{ contactEmail }': FOOTER_QUERY_RESULT;
   }
 }
