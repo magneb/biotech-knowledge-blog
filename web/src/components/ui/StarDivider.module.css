@@ -1,0 +1,57 @@
+.divider {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.85rem;
+  width: 100%;
+  color: var(--sepia-faint);
+  user-select: none;
+}
+
+/* ─── Spacing ─── */
+.spacingSm {
+  margin: 1rem 0;
+}
+
+.spacingMd {
+  margin: 1.75rem 0;
+}
+
+.spacingLg {
+  margin: 2.75rem 0;
+}
+
+/* ─── Rule Lines ─── */
+.ruleLine {
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(
+    to right,
+    transparent,
+    var(--sepia-faint) 25%,
+    var(--parchment-border) 80%,
+    var(--sepia-faint)
+  );
+}
+
+.ruleLineRight {
+  transform: scaleX(-1);
+}
+
+/* Ornate Double-Line Variant */
+.ornate .ruleLine {
+  height: 3px;
+  border-top: 1px solid var(--sepia-faint);
+  border-bottom: 1px solid var(--parchment-shadow);
+  background: transparent;
+}
+
+/* ─── Center Symbol ─── */
+.symbolSlot {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--gold-muted);
+  flex-shrink: 0;
+  transition: transform var(--transition-medium), color var(--transition-medium);
+}

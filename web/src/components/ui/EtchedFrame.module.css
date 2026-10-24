@@ -1,0 +1,127 @@
+.frame {
+  position: relative;
+  box-sizing: border-box;
+  background-color: rgba(250, 246, 237, 0.6);
+  color: var(--ink);
+  transition: background-color var(--transition-medium), border-color var(--transition-medium), box-shadow var(--transition-medium);
+}
+
+/* ─── Variants ─── */
+
+/* 1. Card Variant */
+.variantCard {
+  border: 1px solid var(--parchment-border);
+  box-shadow: 0 1px 4px rgba(31, 18, 8, 0.05);
+  padding: 1.5rem;
+}
+
+.variantCard::before {
+  content: "";
+  position: absolute;
+  inset: 3px;
+  border: 1px solid rgba(212, 196, 160, 0.45);
+  pointer-events: none;
+}
+
+/* 2. Hero Variant: Ornate multi-rule with corner brackets */
+.variantHero {
+  border: 2px solid var(--sepia-faint);
+  background: radial-gradient(circle at 50% 20%, rgba(255, 252, 245, 0.85), rgba(244, 234, 213, 0.7));
+  box-shadow: 0 4px 16px rgba(31, 18, 8, 0.07), inset 0 0 20px rgba(139, 105, 20, 0.04);
+  padding: 2rem;
+}
+
+.variantHero::before {
+  content: "";
+  position: absolute;
+  inset: 5px;
+  border: 1px dashed rgba(138, 117, 96, 0.4);
+  pointer-events: none;
+}
+
+/* 3. Inset Variant: Recessed paper slab */
+.variantInset {
+  border: 1px solid var(--parchment-border);
+  background-color: var(--parchment-dark);
+  box-shadow: inset 0 2px 6px rgba(31, 18, 8, 0.12), inset 0 0 15px rgba(31, 18, 8, 0.04);
+  padding: 1.25rem;
+}
+
+/* 4. Panel Variant: Scholarly sidebar box */
+.variantPanel {
+  border: 3px double var(--sepia-faint);
+  background-color: rgba(250, 246, 237, 0.75);
+  box-shadow: 0 2px 8px rgba(31, 18, 8, 0.06);
+  padding: 1.5rem;
+}
+
+/* ─── Corner Flourishes ─── */
+.cornerTL,
+.cornerTR,
+.cornerBL,
+.cornerBR {
+  position: absolute;
+  width: 14px;
+  height: 14px;
+  color: var(--gold-muted);
+  pointer-events: none;
+  opacity: 0.85;
+}
+
+.cornerTL {
+  top: 4px;
+  left: 4px;
+}
+
+.cornerTR {
+  top: 4px;
+  right: 4px;
+}
+
+.cornerBL {
+  bottom: 4px;
+  left: 4px;
+}
+
+.cornerBR {
+  bottom: 4px;
+  right: 4px;
+}
+
+/* ─── Frame Badge ─── */
+.badgeContainer {
+  position: absolute;
+  top: -12px;
+  z-index: 2;
+  display: flex;
+}
+
+.badgeAlignLeft {
+  left: 1.25rem;
+}
+
+.badgeAlignCenter {
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.badgeAlignRight {
+  right: 1.25rem;
+}
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.15rem 0.65rem;
+  background-color: var(--parchment-light);
+  border: 1px solid var(--sepia-faint);
+  border-radius: 1px;
+  font-family: var(--font-main);
+  font-size: var(--text-xs);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-widest);
+  color: var(--gold);
+  box-shadow: 0 1px 3px rgba(31, 18, 8, 0.08);
+}
