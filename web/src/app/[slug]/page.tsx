@@ -16,14 +16,18 @@ const ARTICLE_QUERY = defineQuery(
 );
 
 export async function generateStaticParams() {
-  const { data: articles } = await sanityFetch({
-    query: ARTICLES_SLUGS_QUERY,
-    perspective: "published",
-    stega: false,
-  });
-  // Static export / prerender fallback when dataset has no published articles yet.
-  if (articles.length === 0) return [{ slug: "_" }];
-  return articles.map((article) => ({ slug: article.slug }));
+  try {
+    const { data: articles } = await sanityFetch({
+      query: ARTICLES_SLUGS_QUERY,
+      perspective: "published",
+      stega: false,
+    });
+    // Static export / prerender fallback when dataset has no published articles yet.
+    if (!articles || articles.length === 0) return [{ slug: "_" }];
+    return articles.map((article) => ({ slug: article.slug }));
+  } catch {
+    return [{ slug: "_" }];
+  }
 }
 
 export default async function ArticlePage({
