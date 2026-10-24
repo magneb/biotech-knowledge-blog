@@ -1,0 +1,139 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 400" width="100%" height="100%">
+  <defs>
+    <linearGradient id="specimensBg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#faf6ed"/>
+      <stop offset="50%" stop-color="#f4ead5"/>
+      <stop offset="100%" stop-color="#e8d9b8"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Background Tint -->
+  <rect width="600" height="400" fill="url(#specimensBg)"/>
+
+  <!-- Engraved Double Border -->
+  <rect x="14" y="14" width="572" height="372" fill="none" stroke="#8a7560" stroke-width="2"/>
+  <rect x="20" y="20" width="560" height="360" fill="none" stroke="#352214" stroke-width="0.8" stroke-dasharray="6 3"/>
+
+  <!-- Corner Flourishes -->
+  <g stroke="#8b6914" stroke-width="1.2" fill="none">
+    <path d="M 24 38 C 34 38 38 34 38 24"/>
+    <circle cx="38" cy="38" r="2.5" fill="#8b6914"/>
+    <path d="M 576 38 C 566 38 562 34 562 24"/>
+    <circle cx="562" cy="38" r="2.5" fill="#8b6914"/>
+    <path d="M 24 362 C 34 362 38 366 38 376"/>
+    <circle cx="38" cy="362" r="2.5" fill="#8b6914"/>
+    <path d="M 576 362 C 566 362 562 366 562 376"/>
+    <circle cx="562" cy="362" r="2.5" fill="#8b6914"/>
+  </g>
+
+  <!-- Title Ribbon -->
+  <g transform="translate(300, 52)" text-anchor="middle">
+    <text font-family="'Cormorant Garamond', Georgia, serif" font-size="13" font-weight="700" letter-spacing="0.28em" fill="#8b6914" text-transform="uppercase">Plate III &bull; Natural History</text>
+    <text y="24" font-family="'Cormorant Garamond', Georgia, serif" font-size="22" font-weight="700" letter-spacing="0.1em" fill="#110a04">BIOLOGICAL SPECIMENS &amp; MORPHOLOGY</text>
+  </g>
+
+  <!-- Center Specimen: Radiolarian & Marine Echinoderm (Center 300, 220) -->
+  <g stroke="#110a04" stroke-linecap="round" stroke-linejoin="round" fill="none">
+    <!-- Center: Radiolarian (Ernst Haeckel inspired geometric skeleton) -->
+    <g transform="translate(300, 215)">
+      <circle cx="0" cy="0" r="50" fill="#faf6ed" stroke-width="1.8"/>
+      <!-- Concentric Rings -->
+      <circle cx="0" cy="0" r="42" stroke="#8a7560" stroke-width="0.8" stroke-dasharray="3 3"/>
+      <circle cx="0" cy="0" r="30" stroke="#352214" stroke-width="1"/>
+      <circle cx="0" cy="0" r="16" stroke="#8b6914" stroke-width="1.2"/>
+      <circle cx="0" cy="0" r="6" fill="#6e3610"/>
+
+      <!-- Radiating Geometric Spines (12 Axes) -->
+      <g stroke="#110a04" stroke-width="1.4">
+        <line x1="0" y1="-50" x2="0" y2="-90"/>
+        <circle cx="0" cy="-90" r="2" fill="#8b6914"/>
+        <line x1="0" y1="50" x2="0" y2="90"/>
+        <circle cx="0" cy="90" r="2" fill="#8b6914"/>
+        <line x1="-50" y1="0" x2="-90" y2="0"/>
+        <circle cx="-90" cy="0" r="2" fill="#8b6914"/>
+        <line x1="50" y1="0" x2="90" y2="0"/>
+        <circle cx="90" cy="0" r="2" fill="#8b6914"/>
+
+        <!-- Diagonal Spines -->
+        <line x1="-35" y1="-35" x2="-65" y2="-65"/>
+        <line x1="35" y1="-35" x2="65" y2="-65"/>
+        <line x1="-35" y1="35" x2="-65" y2="65"/>
+        <line x1="35" y1="35" x2="65" y2="65"/>
+      </g>
+
+      <!-- Lattice Pores -->
+      <g fill="#352214">
+        <circle cx="0" cy="-22" r="2"/>
+        <circle cx="15" cy="-15" r="2"/>
+        <circle cx="22" cy="0" r="2"/>
+        <circle cx="15" cy="15" r="2"/>
+        <circle cx="0" cy="22" r="2"/>
+        <circle cx="-15" cy="15" r="2"/>
+        <circle cx="-22" cy="0" r="2"/>
+        <circle cx="-15" cy="-15" r="2"/>
+      </g>
+
+      <!-- Radial Hatching -->
+      <g stroke="#8a7560" stroke-width="0.7">
+        <line x1="0" y1="-30" x2="0" y2="-42"/>
+        <line x1="21" y1="-21" x2="30" y2="-30"/>
+        <line x1="30" y1="0" x2="42" y2="0"/>
+        <line x1="21" y1="21" x2="30" y2="30"/>
+        <line x1="0" y1="30" x2="0" y2="42"/>
+        <line x1="-21" y1="21" x2="-30" y2="30"/>
+        <line x1="-30" y1="0" x2="-42" y2="0"/>
+        <line x1="-21" y1="-21" x2="-30" y2="-30"/>
+      </g>
+      <text x="0" y="112" font-family="'Cormorant Garamond', Georgia, serif" font-size="11" font-style="italic" fill="#56402c" text-anchor="middle">Fig. 1 — Acanthometra elastica</text>
+    </g>
+
+    <!-- Left: Botanical Herbarium Branch (Atropa Belladonna) -->
+    <g transform="translate(130, 160)">
+      <!-- Main Stem -->
+      <path d="M 40 180 C 35 130 10 90 20 20" stroke="#352214" stroke-width="2"/>
+      <!-- Side Branch Left -->
+      <path d="M 32 110 C 15 95 -10 90 -25 95" stroke="#352214" stroke-width="1.4"/>
+      <!-- Side Branch Right -->
+      <path d="M 24 65 C 40 50 65 52 75 60" stroke="#352214" stroke-width="1.4"/>
+
+      <!-- Leaves with Engraved Venation -->
+      <!-- Leaf 1 (Top) -->
+      <path d="M 20 20 C 5 0 20 -25 35 -10 C 45 10 30 20 20 20 Z" fill="#faf6ed" stroke-width="1.2"/>
+      <path d="M 22 15 C 26 -2 30 -8 32 -10" stroke="#8a7560" stroke-width="0.8"/>
+      <!-- Leaf 2 (Left) -->
+      <path d="M -25 95 C -45 80 -40 60 -20 70 C -5 80 -15 95 -25 95 Z" fill="#faf6ed" stroke-width="1.2"/>
+      <!-- Leaf 3 (Right) -->
+      <path d="M 75 60 C 95 45 95 25 75 35 C 60 45 65 60 75 60 Z" fill="#faf6ed" stroke-width="1.2"/>
+
+      <!-- Berry Specimen -->
+      <circle cx="28" cy="85" r="7" fill="#6e3610" stroke="#110a04" stroke-width="1.2"/>
+      <circle cx="26" cy="83" r="2" fill="#ffffff" opacity="0.8"/>
+      <text x="25" y="195" font-family="'Cormorant Garamond', Georgia, serif" font-size="11" font-style="italic" fill="#56402c" text-anchor="middle">Fig. 2 — Ramus foliosus</text>
+    </g>
+
+    <!-- Right: Anatomical Dissection / Insect Wing Vein Architecture -->
+    <g transform="translate(450, 155)">
+      <!-- Odonate Dragonfly Wing -->
+      <path d="M -20 120 C -15 70 -5 20 45 -5 C 70 5 80 40 70 80 C 50 130 0 150 -20 120 Z" fill="#faf6ed" stroke-width="1.6"/>
+      <!-- Marginal Veins -->
+      <path d="M -15 110 C -2 65 10 25 45 -2" stroke="#8b6914" stroke-width="1.4"/>
+      <!-- Subcosta and Radial Sector -->
+      <path d="M -10 115 C 5 75 25 40 58 15" stroke="#352214" stroke-width="1"/>
+      <path d="M -5 118 C 15 85 38 60 68 45" stroke="#352214" stroke-width="0.8"/>
+      <!-- Cross-vein Reticulation Grid -->
+      <line x1="5" y1="50" x2="18" y2="44" stroke="#8a7560" stroke-width="0.6"/>
+      <line x1="12" y1="62" x2="28" y2="54" stroke="#8a7560" stroke-width="0.6"/>
+      <line x1="20" y1="75" x2="38" y2="65" stroke="#8a7560" stroke-width="0.6"/>
+      <line x1="28" y1="88" x2="48" y2="76" stroke="#8a7560" stroke-width="0.6"/>
+      <line x1="38" y1="100" x2="58" y2="86" stroke="#8a7560" stroke-width="0.6"/>
+      <!-- Pterostigma Cell -->
+      <polygon points="48,1 58,7 52,11 42,5" fill="#6e3610" stroke="#110a04" stroke-width="0.8"/>
+      <text x="25" y="170" font-family="'Cormorant Garamond', Georgia, serif" font-size="11" font-style="italic" fill="#56402c" text-anchor="middle">Fig. 3 — Ala membranacea</text>
+    </g>
+  </g>
+
+  <!-- Plate Footer -->
+  <g transform="translate(300, 382)" text-anchor="middle">
+    <text font-family="'Cormorant Garamond', Georgia, serif" font-size="10.5" font-style="italic" fill="#8a7560" letter-spacing="0.08em">Engraved for Oliver&rsquo;s Guide To Everything &bull; MDCCCLXXXIV</text>
+  </g>
+</svg>

@@ -1,0 +1,148 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 400" width="100%" height="100%">
+  <defs>
+    <linearGradient id="reagentsBg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#faf6ed"/>
+      <stop offset="50%" stop-color="#f4ead5"/>
+      <stop offset="100%" stop-color="#e8d9b8"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Background Tint -->
+  <rect width="600" height="400" fill="url(#reagentsBg)"/>
+
+  <!-- Engraved Double Border -->
+  <rect x="14" y="14" width="572" height="372" fill="none" stroke="#8a7560" stroke-width="2"/>
+  <rect x="20" y="20" width="560" height="360" fill="none" stroke="#352214" stroke-width="0.8" stroke-dasharray="6 3"/>
+
+  <!-- Corner Flourishes -->
+  <g stroke="#8b6914" stroke-width="1.2" fill="none">
+    <path d="M 24 38 C 34 38 38 34 38 24"/>
+    <circle cx="38" cy="38" r="2.5" fill="#8b6914"/>
+    <path d="M 576 38 C 566 38 562 34 562 24"/>
+    <circle cx="562" cy="38" r="2.5" fill="#8b6914"/>
+    <path d="M 24 362 C 34 362 38 366 38 376"/>
+    <circle cx="38" cy="362" r="2.5" fill="#8b6914"/>
+    <path d="M 576 362 C 566 362 562 366 562 376"/>
+    <circle cx="562" cy="362" r="2.5" fill="#8b6914"/>
+  </g>
+
+  <!-- Title Ribbon -->
+  <g transform="translate(300, 52)" text-anchor="middle">
+    <text font-family="'Cormorant Garamond', Georgia, serif" font-size="13" font-weight="700" letter-spacing="0.28em" fill="#8b6914" text-transform="uppercase">Plate II &bull; Chemical Philosophy</text>
+    <text y="24" font-family="'Cormorant Garamond', Georgia, serif" font-size="22" font-weight="700" letter-spacing="0.1em" fill="#110a04">REAGENTS, ALKALI &amp; DISTILLATION</text>
+  </g>
+
+  <!-- Chemical Apparatus & Glassware -->
+  <g stroke="#110a04" stroke-linecap="round" stroke-linejoin="round" fill="none">
+    <!-- Stone Hearth / Lab Bench -->
+    <rect x="70" y="325" width="460" height="12" fill="#2c1e12" stroke-width="1.5"/>
+    <line x1="72" y1="329" x2="528" y2="329" stroke="#c9b893" stroke-width="0.8"/>
+    <!-- Bench Shading -->
+    <path d="M 70 337 L 70 350 L 530 350 L 530 337 Z" fill="#1f1208"/>
+
+    <!-- Left: Apothecary Fluted Dropper Bottle (Acid. Nitric.) -->
+    <g transform="translate(130, 190)">
+      <!-- Ground Glass Stopper -->
+      <polygon points="12,0 28,0 24,15 16,15" fill="#f4ead5" stroke-width="1.2"/>
+      <circle cx="20" cy="-6" r="6" fill="#8b6914" stroke-width="1.2"/>
+      <!-- Bottle Neck -->
+      <rect x="14" y="15" width="12" height="18" fill="#faf6ed" stroke-width="1.4"/>
+      <!-- Shoulder & Body -->
+      <path d="M 14 33 C 4 38 0 55 0 75 L 0 135 L 40 135 L 40 75 C 40 55 36 38 26 33 Z" fill="#faf6ed" stroke-width="1.6"/>
+      <!-- Meniscus & Liquid -->
+      <path d="M 2 85 C 10 82 30 82 38 85 L 38 133 L 2 133 Z" fill="#e8d9b8" opacity="0.65"/>
+      <line x1="2" y1="85" x2="38" y2="85" stroke="#8b6914" stroke-width="1"/>
+      <!-- Glass Fluting Hatching -->
+      <line x1="8" y1="50" x2="8" y2="130" stroke="#8a7560" stroke-width="0.7"/>
+      <line x1="16" y1="42" x2="16" y2="130" stroke="#8a7560" stroke-width="0.7"/>
+      <line x1="24" y1="42" x2="24" y2="130" stroke="#8a7560" stroke-width="0.7"/>
+      <line x1="32" y1="50" x2="32" y2="130" stroke="#8a7560" stroke-width="0.7"/>
+      <!-- Paper Label Cartouche -->
+      <rect x="6" y="92" width="28" height="24" fill="#f4ead5" stroke="#352214" stroke-width="0.9"/>
+      <text x="20" y="104" font-family="'Cormorant Garamond', Georgia, serif" font-size="7" font-weight="700" fill="#6e3610" text-anchor="middle">ACID.</text>
+      <text x="20" y="112" font-family="'Cormorant Garamond', Georgia, serif" font-size="6.5" font-weight="600" fill="#110a04" text-anchor="middle">NITRIC.</text>
+    </g>
+
+    <!-- Center: Distillation Retort & Receiver Flask -->
+    <g transform="translate(250, 160)">
+      <!-- Retort Bulb -->
+      <circle cx="45" cy="85" r="42" fill="#faf6ed" stroke-width="1.8"/>
+      <!-- Liquid level -->
+      <path d="M 12 95 C 30 92 60 92 78 95 C 70 120 20 120 12 95 Z" fill="#d4c4a0" opacity="0.7"/>
+      <!-- Retort Tubulure & Stopper -->
+      <rect x="40" y="32" width="10" height="12" fill="#e8d9b8" stroke-width="1.2"/>
+      <circle cx="45" cy="27" r="5" fill="#8b6914" stroke-width="1"/>
+      <!-- Long Neck Beak descending into receiver -->
+      <path d="M 80 65 C 105 60 145 90 175 140" stroke-width="2" stroke="#110a04"/>
+      <path d="M 78 72 C 100 68 140 96 170 144" stroke-width="1.6" stroke="#110a04"/>
+      <!-- Vapour Bubbles in Retort -->
+      <circle cx="35" cy="98" r="2" stroke="#8b6914" stroke-width="0.7"/>
+      <circle cx="52" cy="92" r="1.5" stroke="#8b6914" stroke-width="0.7"/>
+      <circle cx="42" cy="78" r="2.5" stroke="#8b6914" stroke-width="0.7"/>
+
+      <!-- Spirit Lamp Heating the Retort -->
+      <g transform="translate(25, 128)">
+        <ellipse cx="20" cy="30" rx="22" ry="7" fill="#8b6914" stroke-width="1.4"/>
+        <path d="M 0 30 C 0 34 40 34 40 30 L 32 37 L 8 37 Z" fill="#2c1e12" stroke-width="1"/>
+        <!-- Burner Collar & Wick -->
+        <rect x="16" y="22" width="8" height="8" fill="#e8d9b8" stroke-width="1"/>
+        <line x1="20" y1="22" x2="20" y2="16" stroke="#110a04" stroke-width="2"/>
+        <!-- Flame -->
+        <path d="M 20 16 C 14 12 16 4 20 -2 C 24 4 26 12 20 16 Z" fill="#c4a854" stroke="#a55d28" stroke-width="0.9"/>
+        <path d="M 20 14 C 17 11 18 6 20 2 C 22 6 23 11 20 14 Z" fill="#ffffff" stroke-width="0"/>
+      </g>
+
+      <!-- Receiver Florence Flask -->
+      <g transform="translate(155, 95)">
+        <!-- Flask neck receiving beak -->
+        <rect x="10" y="35" width="16" height="20" fill="#faf6ed" stroke-width="1.4"/>
+        <!-- Flask Body -->
+        <circle cx="18" cy="65" r="20" fill="#faf6ed" stroke-width="1.6"/>
+        <!-- Distillate Pool -->
+        <path d="M 2 70 C 10 68 26 68 34 70 C 30 82 6 82 2 70 Z" fill="#8b6914" opacity="0.4"/>
+        <!-- Condensate Drops -->
+        <circle cx="18" cy="50" r="1.5" fill="#8b6914"/>
+        <circle cx="18" cy="58" r="1.5" fill="#8b6914"/>
+      </g>
+    </g>
+
+    <!-- Right: Graduated Cylinder & Ground Stoppered Amber Bottle -->
+    <g transform="translate(435, 185)">
+      <!-- Graduated Cylinder -->
+      <rect x="0" y="30" width="16" height="110" fill="#faf6ed" stroke-width="1.4"/>
+      <ellipse cx="8" cy="140" rx="14" ry="4" fill="#e8d9b8" stroke-width="1.4"/>
+      <!-- Pour Spout -->
+      <polygon points="0,30 -4,26 4,28" fill="#faf6ed" stroke-width="1"/>
+      <!-- Calibration Markings -->
+      <line x1="2" y1="45" x2="8" y2="45" stroke="#352214" stroke-width="0.8"/>
+      <line x1="2" y1="55" x2="6" y2="55" stroke="#352214" stroke-width="0.7"/>
+      <line x1="2" y1="65" x2="8" y2="65" stroke="#352214" stroke-width="0.8"/>
+      <line x1="2" y1="75" x2="6" y2="75" stroke="#352214" stroke-width="0.7"/>
+      <line x1="2" y1="85" x2="10" y2="85" stroke="#8b6914" stroke-width="1"/>
+      <line x1="2" y1="95" x2="6" y2="95" stroke="#352214" stroke-width="0.7"/>
+      <line x1="2" y1="105" x2="8" y2="105" stroke="#352214" stroke-width="0.8"/>
+      <line x1="2" y1="115" x2="6" y2="115" stroke="#352214" stroke-width="0.7"/>
+      <line x1="2" y1="125" x2="10" y2="125" stroke="#8b6914" stroke-width="1"/>
+      <!-- Liquid in cylinder -->
+      <rect x="1" y="85" width="14" height="54" fill="#d4c4a0" opacity="0.6"/>
+
+      <!-- Wide-Mouth Apothecary Jar (Aq. Destillata) -->
+      <g transform="translate(32, 18)">
+        <rect x="14" y="0" width="22" height="10" fill="#8b6914" stroke-width="1.2"/>
+        <rect x="12" y="10" width="26" height="12" fill="#faf6ed" stroke-width="1.4"/>
+        <rect x="0" y="22" width="50" height="100" fill="#faf6ed" stroke-width="1.6"/>
+        <line x1="8" y1="23" x2="8" y2="120" stroke="#8a7560" stroke-width="0.7"/>
+        <line x1="42" y1="23" x2="42" y2="120" stroke="#8a7560" stroke-width="0.7"/>
+        <!-- Label -->
+        <rect x="8" y="52" width="34" height="30" fill="#f4ead5" stroke="#352214" stroke-width="0.9"/>
+        <text x="25" y="66" font-family="'Cormorant Garamond', Georgia, serif" font-size="8" font-weight="700" fill="#6e3610" text-anchor="middle">AQ.</text>
+        <text x="25" y="76" font-family="'Cormorant Garamond', Georgia, serif" font-size="7" font-weight="600" fill="#110a04" text-anchor="middle">DESTILLATA</text>
+      </g>
+    </g>
+  </g>
+
+  <!-- Plate Footer -->
+  <g transform="translate(300, 382)" text-anchor="middle">
+    <text font-family="'Cormorant Garamond', Georgia, serif" font-size="10.5" font-style="italic" fill="#8a7560" letter-spacing="0.08em">Engraved for Oliver&rsquo;s Guide To Everything &bull; MDCCCLXXXIV</text>
+  </g>
+</svg>

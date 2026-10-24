@@ -1,0 +1,137 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 400" width="100%" height="100%">
+  <defs>
+    <linearGradient id="apparatusBg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#faf6ed"/>
+      <stop offset="50%" stop-color="#f4ead5"/>
+      <stop offset="100%" stop-color="#e8d9b8"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Background Tint -->
+  <rect width="600" height="400" fill="url(#apparatusBg)"/>
+
+  <!-- Engraved Double Border -->
+  <rect x="14" y="14" width="572" height="372" fill="none" stroke="#8a7560" stroke-width="2"/>
+  <rect x="20" y="20" width="560" height="360" fill="none" stroke="#352214" stroke-width="0.8" stroke-dasharray="6 3"/>
+
+  <!-- Corner Flourishes -->
+  <g stroke="#8b6914" stroke-width="1.2" fill="none">
+    <path d="M 24 38 C 34 38 38 34 38 24"/>
+    <circle cx="38" cy="38" r="2.5" fill="#8b6914"/>
+    <path d="M 576 38 C 566 38 562 34 562 24"/>
+    <circle cx="562" cy="38" r="2.5" fill="#8b6914"/>
+    <path d="M 24 362 C 34 362 38 366 38 376"/>
+    <circle cx="38" cy="362" r="2.5" fill="#8b6914"/>
+    <path d="M 576 362 C 566 362 562 366 562 376"/>
+    <circle cx="562" cy="362" r="2.5" fill="#8b6914"/>
+  </g>
+
+  <!-- Title Ribbon -->
+  <g transform="translate(300, 52)" text-anchor="middle">
+    <text font-family="'Cormorant Garamond', Georgia, serif" font-size="13" font-weight="700" letter-spacing="0.28em" fill="#8b6914" text-transform="uppercase">Plate IV &bull; Experimental Physics</text>
+    <text y="24" font-family="'Cormorant Garamond', Georgia, serif" font-size="22" font-weight="700" letter-spacing="0.1em" fill="#110a04">PRECISION SCALES, VOLTAIC CELLS &amp; ASSAY</text>
+  </g>
+
+  <!-- Center Apparatus: Analytical Balance Scale (Center 300, 230) -->
+  <g stroke="#110a04" stroke-linecap="round" stroke-linejoin="round" fill="none">
+    <!-- Mahogany Plinth with Levelling Screws -->
+    <rect x="180" y="325" width="240" height="12" fill="#2c1e12" stroke-width="1.6"/>
+    <!-- Levelling Brass Knurled Thumbscrews -->
+    <rect x="195" y="337" width="16" height="6" fill="#8b6914" stroke-width="1"/>
+    <rect x="389" y="337" width="16" height="6" fill="#8b6914" stroke-width="1"/>
+
+    <!-- Central Brass Pillar with Agate Knife-Edge Fulcrum -->
+    <rect x="294" y="160" width="12" height="165" fill="#e8d9b8" stroke-width="1.6"/>
+    <line x1="298" y1="162" x2="298" y2="323" stroke="#8a7560" stroke-width="0.8"/>
+    <!-- Pillar Base Flange -->
+    <path d="M 285 325 L 315 325 L 310 315 L 290 315 Z" fill="#8b6914" stroke-width="1.2"/>
+    <!-- Fulcrum Bracket -->
+    <circle cx="300" cy="160" r="8" fill="#8b6914" stroke-width="1.4"/>
+    <polygon points="296,160 304,160 300,154" fill="#6e3610"/>
+
+    <!-- Horizontal Agate Balance Beam -->
+    <line x1="205" y1="154" x2="395" y2="154" stroke="#110a04" stroke-width="2.5"/>
+    <!-- Pierced Truss Beam Architecture -->
+    <path d="M 210 154 L 300 144 L 390 154" stroke="#8b6914" stroke-width="1.2"/>
+    <line x1="240" y1="154" x2="240" y2="148" stroke="#8a7560" stroke-width="0.8"/>
+    <line x1="270" y1="154" x2="270" y2="145" stroke="#8a7560" stroke-width="0.8"/>
+    <line x1="330" y1="154" x2="330" y2="145" stroke="#8a7560" stroke-width="0.8"/>
+    <line x1="360" y1="154" x2="360" y2="148" stroke="#8a7560" stroke-width="0.8"/>
+
+    <!-- Long Pointer Needle descending to Index Scale -->
+    <line x1="300" y1="160" x2="300" y2="295" stroke="#6e3610" stroke-width="1.2"/>
+    <!-- Index Ivory Scale at bottom -->
+    <path d="M 288 295 Q 300 298 312 295" stroke="#352214" stroke-width="1"/>
+    <line x1="294" y1="294" x2="294" y2="298" stroke="#8a7560" stroke-width="0.6"/>
+    <line x1="300" y1="292" x2="300" y2="299" stroke="#8b6914" stroke-width="0.8"/>
+    <line x1="306" y1="294" x2="306" y2="298" stroke="#8a7560" stroke-width="0.6"/>
+
+    <!-- Left Scale Pan & Suspension Wires -->
+    <g transform="translate(205, 154)">
+      <circle cx="0" cy="0" r="3" fill="#8b6914"/>
+      <!-- Stirrup Ring & Wires -->
+      <line x1="0" y1="3" x2="-22" y2="90" stroke="#352214" stroke-width="0.8"/>
+      <line x1="0" y1="3" x2="22" y2="90" stroke="#352214" stroke-width="0.8"/>
+      <!-- Pan Disc -->
+      <ellipse cx="0" cy="92" rx="26" ry="6" fill="#faf6ed" stroke-width="1.4"/>
+      <ellipse cx="0" cy="92" rx="22" ry="4" fill="#e8d9b8" stroke-width="0.7"/>
+      <!-- Weight on pan -->
+      <rect x="-6" y="85" width="12" height="6" fill="#8b6914" stroke-width="0.8"/>
+      <circle cx="0" cy="83" r="2" fill="#8b6914"/>
+    </g>
+
+    <!-- Right Scale Pan & Suspension Wires -->
+    <g transform="translate(395, 154)">
+      <circle cx="0" cy="0" r="3" fill="#8b6914"/>
+      <line x1="0" y1="3" x2="-22" y2="90" stroke="#352214" stroke-width="0.8"/>
+      <line x1="0" y1="3" x2="22" y2="90" stroke="#352214" stroke-width="0.8"/>
+      <ellipse cx="0" cy="92" rx="26" ry="6" fill="#faf6ed" stroke-width="1.4"/>
+      <ellipse cx="0" cy="92" rx="22" ry="4" fill="#e8d9b8" stroke-width="0.7"/>
+      <!-- Specimen powder on watch glass -->
+      <path d="M -8 91 Q 0 88 8 91" stroke="#6e3610" stroke-width="1.5"/>
+    </g>
+  </g>
+
+  <!-- Left Flank: Daniell Voltaic Battery Cell -->
+  <g transform="translate(100, 205)" stroke="#110a04" stroke-linecap="round" stroke-linejoin="round" fill="none">
+    <!-- Copper Jar Outer Cell -->
+    <rect x="0" y="40" width="50" height="90" rx="3" fill="#faf6ed" stroke-width="1.5"/>
+    <line x1="5" y1="42" x2="5" y2="128" stroke="#8a7560" stroke-width="0.7"/>
+    <line x1="45" y1="42" x2="45" y2="128" stroke="#8a7560" stroke-width="0.7"/>
+    <!-- Porous Earthenware Pot Inside -->
+    <rect x="12" y="30" width="26" height="95" fill="#e8d9b8" stroke-width="1.2" stroke-dasharray="3 2"/>
+    <!-- Zinc Central Rod -->
+    <rect x="22" y="10" width="6" height="110" fill="#2c1e12" stroke-width="1.4"/>
+    <!-- Brass Binding Posts (Terminals) -->
+    <circle cx="6" cy="35" r="4" fill="#8b6914" stroke-width="1"/>
+    <circle cx="25" cy="5" r="4" fill="#8b6914" stroke-width="1"/>
+    <!-- Terminal Wires Coiled -->
+    <path d="M 6 31 C 0 20 -15 25 -20 15" stroke="#a55d28" stroke-width="1.2"/>
+    <text x="25" y="148" font-family="'Cormorant Garamond', Georgia, serif" font-size="11" font-style="italic" fill="#56402c" text-anchor="middle">Fig. 2 — Elementum Daniell</text>
+  </g>
+
+  <!-- Right Flank: Velvet-Lined Weight Case (Weights 50g down to 1mg) -->
+  <g transform="translate(470, 240)" stroke="#110a04" stroke-linecap="round" stroke-linejoin="round" fill="none">
+    <rect x="-35" y="10" width="70" height="45" fill="#2c1e12" stroke-width="1.4"/>
+    <rect x="-32" y="13" width="64" height="39" fill="#5c1a1a" stroke-width="0.8"/>
+    <!-- Brass Gram Weights in Holes -->
+    <g fill="#8b6914" stroke="#352214" stroke-width="0.8">
+      <rect x="-26" y="24" width="10" height="16"/>
+      <circle cx="-21" cy="22" r="2.5"/>
+      <rect x="-12" y="27" width="8" height="13"/>
+      <circle cx="-8" cy="25" r="2"/>
+      <rect x="0" y="30" width="6" height="10"/>
+      <circle cx="3" cy="28" r="1.5"/>
+      <rect x="10" y="33" width="5" height="7"/>
+      <circle cx="12.5" cy="31" r="1.2"/>
+      <!-- Bone Forceps for handling weights -->
+      <path d="M 22 20 L 26 44 M 24 20 L 28 44" stroke="#f4ead5" stroke-width="1"/>
+    </g>
+    <text x="0" y="72" font-family="'Cormorant Garamond', Georgia, serif" font-size="11" font-style="italic" fill="#56402c" text-anchor="middle">Fig. 3 — Scatula ponderum</text>
+  </g>
+
+  <!-- Plate Footer -->
+  <g transform="translate(300, 382)" text-anchor="middle">
+    <text font-family="'Cormorant Garamond', Georgia, serif" font-size="10.5" font-style="italic" fill="#8a7560" letter-spacing="0.08em">Engraved for Oliver&rsquo;s Guide To Everything &bull; MDCCCLXXXIV</text>
+  </g>
+</svg>

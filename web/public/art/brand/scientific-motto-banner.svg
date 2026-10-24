@@ -1,0 +1,121 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 240" width="100%" height="100%">
+  <defs>
+    <linearGradient id="mottoBg" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#f4ead5"/>
+      <stop offset="50%" stop-color="#faf6ed"/>
+      <stop offset="100%" stop-color="#f4ead5"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Background Tint -->
+  <rect width="900" height="240" fill="url(#mottoBg)"/>
+
+  <!-- Engraved Double Border -->
+  <rect x="10" y="10" width="880" height="220" fill="none" stroke="#8a7560" stroke-width="2"/>
+  <rect x="15" y="15" width="870" height="210" fill="none" stroke="#352214" stroke-width="0.8" stroke-dasharray="6 3"/>
+
+  <!-- Corner Flourishes -->
+  <g stroke="#8b6914" stroke-width="1.2" fill="none">
+    <path d="M 18 30 C 26 30 30 26 30 18"/>
+    <circle cx="30" cy="30" r="2" fill="#8b6914"/>
+    <path d="M 882 30 C 874 30 870 26 870 18"/>
+    <circle cx="870" cy="30" r="2" fill="#8b6914"/>
+    <path d="M 18 210 C 26 210 30 214 30 222"/>
+    <circle cx="30" cy="210" r="2" fill="#8b6914"/>
+    <path d="M 882 210 C 874 210 870 214 870 222"/>
+    <circle cx="870" cy="210" r="2" fill="#8b6914"/>
+  </g>
+
+  <!-- Left: Engraved Alpine Mountain Peaks & Pines -->
+  <g stroke="#110a04" stroke-linecap="round" stroke-linejoin="round" fill="none" transform="translate(25, 20)">
+    <!-- Rear Mountain Peak -->
+    <polygon points="120,40 180,180 60,180" fill="#faf6ed" stroke-width="1.4"/>
+    <!-- Shading Lines Right Face -->
+    <path d="M 120 40 L 128 180" stroke="#352214" stroke-width="1.2"/>
+    <line x1="122" y1="60" x2="135" y2="180" stroke="#8a7560" stroke-width="0.7"/>
+    <line x1="124" y1="80" x2="148" y2="180" stroke="#8a7560" stroke-width="0.7"/>
+    <line x1="126" y1="100" x2="160" y2="180" stroke="#8a7560" stroke-width="0.7"/>
+
+    <!-- Fore Mountain Peak -->
+    <polygon points="65,70 120,185 10,185" fill="#faf6ed" stroke-width="1.6"/>
+    <!-- Shading Lines -->
+    <path d="M 65 70 L 72 185" stroke="#352214" stroke-width="1.2"/>
+    <line x1="67" y1="90" x2="80" y2="185" stroke="#8a7560" stroke-width="0.7"/>
+    <line x1="69" y1="110" x2="92" y2="185" stroke="#8a7560" stroke-width="0.7"/>
+    <line x1="71" y1="130" x2="105" y2="185" stroke="#8a7560" stroke-width="0.7"/>
+
+    <!-- Engraved Pine Trees Foreground -->
+    <g fill="#2c1e12" stroke="#110a04" stroke-width="0.8">
+      <!-- Pine 1 -->
+      <polygon points="25,145 30,155 27,155 33,168 29,168 36,185 14,185 21,168 17,168 23,155 20,155"/>
+      <!-- Pine 2 -->
+      <polygon points="45,135 51,146 47,146 54,160 50,160 58,185 32,185 40,160 36,160 43,146 39,146"/>
+      <!-- Pine 3 -->
+      <polygon points="155,140 160,152 157,152 163,166 159,166 166,185 144,185 151,166 147,166 153,152 150,152"/>
+    </g>
+  </g>
+
+  <!-- Center: Master Motto Banner -->
+  <g transform="translate(450, 68)" text-anchor="middle">
+    <!-- Flank Stars -->
+    <g fill="#8b6914">
+      <path d="M -230 40 Q -226 40 -226 36 Q -226 40 -222 40 Q -226 40 -226 44 Q -226 40 -230 40 Z"/>
+      <path d="M 230 40 Q 234 40 234 36 Q 234 40 238 40 Q 234 40 234 44 Q 234 40 230 40 Z"/>
+    </g>
+
+    <!-- Top Line: Knowledge for -->
+    <text y="18" font-family="'Cormorant Garamond', Georgia, serif" font-size="28" font-weight="700" letter-spacing="0.08em" fill="#110a04">Knowledge for</text>
+
+    <!-- Main Line: a More Curious World -->
+    <text y="58" font-family="'Cormorant Garamond', Georgia, serif" font-size="36" font-style="italic" font-weight="700" letter-spacing="0.04em" fill="#110a04">a More Curious World</text>
+
+    <!-- Subtle Engraved Rule Below -->
+    <g stroke="#8a7560" stroke-width="0.8">
+      <line x1="-160" y1="76" x2="-10" y2="76"/>
+      <line x1="10" y1="76" x2="160" y2="76"/>
+      <circle cx="0" cy="76" r="2.5" fill="#8b6914" stroke="none"/>
+    </g>
+
+    <!-- Subtitle: Practical guides, clear explanations... -->
+    <text y="102" font-family="'Cormorant Garamond', Georgia, serif" font-size="14.5" font-weight="500" letter-spacing="0.04em" fill="#56402c">
+      Practical guides, clear explanations, and real-world knowledge
+    </text>
+    <text y="122" font-family="'Cormorant Garamond', Georgia, serif" font-size="14.5" font-weight="500" letter-spacing="0.04em" fill="#56402c">
+      for curious minds everywhere.
+    </text>
+  </g>
+
+  <!-- Right: Engraved Terrestrial/Celestial Globe & Botanical Laurel -->
+  <g stroke="#110a04" stroke-linecap="round" stroke-linejoin="round" fill="none" transform="translate(735, 120)">
+    <!-- Brass Meridian Ring Stand -->
+    <circle cx="65" cy="0" r="72" stroke="#8b6914" stroke-width="2"/>
+    <circle cx="65" cy="0" r="68" stroke="#352214" stroke-width="0.8"/>
+    <!-- Base Horizon Ring -->
+    <ellipse cx="65" cy="85" rx="45" ry="10" fill="#2c1e12" stroke-width="1.4"/>
+    <rect x="58" y="70" width="14" height="15" fill="#8b6914" stroke-width="1"/>
+
+    <!-- Globe Sphere -->
+    <circle cx="65" cy="0" r="62" fill="#faf6ed" stroke-width="2"/>
+    <!-- Equatorial Line & Parallels (Latitude) -->
+    <ellipse cx="65" cy="0" rx="62" ry="18" stroke="#352214" stroke-width="1.2"/>
+    <ellipse cx="65" cy="-28" rx="55" ry="14" stroke="#8a7560" stroke-width="0.8" stroke-dasharray="3 2"/>
+    <ellipse cx="65" cy="28" rx="55" ry="14" stroke="#8a7560" stroke-width="0.8" stroke-dasharray="3 2"/>
+
+    <!-- Meridians of Longitude -->
+    <ellipse cx="65" cy="0" rx="28" ry="62" stroke="#352214" stroke-width="1"/>
+    <ellipse cx="65" cy="0" rx="48" ry="62" stroke="#8a7560" stroke-width="0.8"/>
+    <line x1="65" y1="-62" x2="65" y2="62" stroke="#110a04" stroke-width="1.4"/>
+
+    <!-- Axis Finials (North & South Poles) -->
+    <circle cx="65" cy="-65" r="4" fill="#8b6914"/>
+    <circle cx="65" cy="65" r="4" fill="#8b6914"/>
+
+    <!-- Botanical Laurels at Globe Foot -->
+    <g transform="translate(15, 60)" stroke="#352214" stroke-width="1">
+      <path d="M 0 10 C 15 -10 35 -15 50 -10"/>
+      <ellipse cx="12" cy="-2" rx="6" ry="3" transform="rotate(-30 12 -2)" fill="#faf6ed"/>
+      <ellipse cx="28" cy="-10" rx="6" ry="3" transform="rotate(-15 28 -10)" fill="#faf6ed"/>
+      <ellipse cx="44" cy="-12" rx="6" ry="3" transform="rotate(10 44 -12)" fill="#faf6ed"/>
+    </g>
+  </g>
+</svg>

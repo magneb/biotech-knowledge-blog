@@ -1,0 +1,137 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 400" width="100%" height="100%">
+  <defs>
+    <linearGradient id="parchmentBg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#faf6ed"/>
+      <stop offset="50%" stop-color="#f4ead5"/>
+      <stop offset="100%" stop-color="#e8d9b8"/>
+    </linearGradient>
+    <pattern id="hatchH" width="8" height="8" patternTransform="rotate(45 0 0)" patternUnits="userSpaceOnUse">
+      <line x1="0" y1="0" x2="0" y2="8" stroke="#352214" stroke-width="0.8" opacity="0.3"/>
+    </pattern>
+    <pattern id="crossHatch" width="6" height="6" patternTransform="rotate(30 0 0)" patternUnits="userSpaceOnUse">
+      <line x1="0" y1="0" x2="0" y2="6" stroke="#1f1208" stroke-width="0.7" opacity="0.35"/>
+      <line x1="0" y1="0" x2="6" y2="0" stroke="#1f1208" stroke-width="0.7" opacity="0.35"/>
+    </pattern>
+  </defs>
+
+  <!-- Background Tint -->
+  <rect width="600" height="400" fill="url(#parchmentBg)"/>
+
+  <!-- Engraved Double Border -->
+  <rect x="14" y="14" width="572" height="372" fill="none" stroke="#8a7560" stroke-width="2"/>
+  <rect x="20" y="20" width="560" height="360" fill="none" stroke="#352214" stroke-width="0.8" stroke-dasharray="6 3"/>
+
+  <!-- Corner Flourishes -->
+  <g stroke="#8b6914" stroke-width="1.2" fill="none">
+    <path d="M 24 38 C 34 38 38 34 38 24"/>
+    <circle cx="38" cy="38" r="2.5" fill="#8b6914"/>
+    <path d="M 576 38 C 566 38 562 34 562 24"/>
+    <circle cx="562" cy="38" r="2.5" fill="#8b6914"/>
+    <path d="M 24 362 C 34 362 38 366 38 376"/>
+    <circle cx="38" cy="362" r="2.5" fill="#8b6914"/>
+    <path d="M 576 362 C 566 362 562 366 562 376"/>
+    <circle cx="562" cy="362" r="2.5" fill="#8b6914"/>
+  </g>
+
+  <!-- Title Ribbon -->
+  <g transform="translate(300, 52)" text-anchor="middle">
+    <text font-family="'Cormorant Garamond', Georgia, serif" font-size="13" font-weight="700" letter-spacing="0.28em" fill="#8b6914" text-transform="uppercase">Plate I &bull; Scientific Instruments</text>
+    <text y="24" font-family="'Cormorant Garamond', Georgia, serif" font-size="22" font-weight="700" letter-spacing="0.1em" fill="#110a04">THE ACHROMATIC COMPOUND MICROSCOPE</text>
+  </g>
+
+  <!-- Microscope Illustration (Center 300, 235) -->
+  <g stroke="#110a04" stroke-linecap="round" stroke-linejoin="round" fill="none">
+    <!-- Cast Iron Horseshoe Base -->
+    <path d="M 220 330 C 220 350 245 358 300 358 C 355 358 380 350 380 330 C 380 318 360 312 340 315 C 330 316 322 322 300 322 C 278 322 270 316 260 315 C 240 312 220 318 220 330 Z" fill="#2c1e12" stroke-width="2"/>
+    <path d="M 230 330 C 230 345 250 352 300 352 C 350 352 370 345 370 330" stroke="#f4ead5" stroke-width="1" opacity="0.6"/>
+    <!-- Base Hatching -->
+    <path d="M 235 334 L 245 348 M 255 334 L 265 350 M 275 334 L 285 351 M 315 334 L 325 351 M 335 334 L 345 350 M 355 334 L 365 348" stroke="#8a7560" stroke-width="0.8"/>
+
+    <!-- Pillar and Compass Joint -->
+    <rect x="290" y="270" width="20" height="48" fill="#e8d9b8" stroke-width="1.8"/>
+    <!-- Pillar Hatching -->
+    <line x1="294" y1="272" x2="294" y2="316" stroke="#352214" stroke-width="0.7"/>
+    <line x1="297" y1="272" x2="297" y2="316" stroke="#352214" stroke-width="0.7"/>
+    <circle cx="300" cy="270" r="10" fill="#e8d9b8" stroke-width="1.8"/>
+    <circle cx="300" cy="270" r="4" fill="#352214"/>
+
+    <!-- Concave Mirror & Gimbal Fork -->
+    <path d="M 285 270 C 285 295 275 300 270 300" stroke-width="1.2"/>
+    <ellipse cx="265" cy="302" rx="14" ry="7" transform="rotate(-25 265 302)" fill="#faf6ed" stroke-width="1.5"/>
+    <line x1="255" y1="300" x2="275" y2="304" stroke="#8a7560" stroke-width="0.8"/>
+
+    <!-- Curved Limb / Arm -->
+    <path d="M 300 260 C 330 250 340 210 335 175 C 332 155 320 145 300 145" stroke-width="4" stroke="#352214"/>
+    <path d="M 298 258 C 326 248 335 210 331 176" stroke="#faf6ed" stroke-width="1"/>
+
+    <!-- Stage and Substage -->
+    <rect x="240" y="235" width="120" height="8" rx="1" fill="#2c1e12" stroke-width="1.8"/>
+    <line x1="242" y1="239" x2="358" y2="239" stroke="#c9b893" stroke-width="0.8"/>
+    <!-- Specimen Slide -->
+    <rect x="270" y="232" width="60" height="3" fill="#ffffff" stroke="#8a7560" stroke-width="0.8" opacity="0.9"/>
+    <!-- Stage Clips -->
+    <path d="M 262 232 C 265 228 275 233 278 233" stroke-width="1.2" stroke="#8b6914"/>
+    <path d="M 338 232 C 335 228 325 233 322 233" stroke-width="1.2" stroke="#8b6914"/>
+
+    <!-- Body Tube (Optical Axis inclined slightly or vertical) -->
+    <!-- Coarse Adjustment Wheel -->
+    <circle cx="332" cy="170" r="12" fill="#e8d9b8" stroke-width="1.5"/>
+    <circle cx="332" cy="170" r="8" stroke-dasharray="2 2" stroke-width="0.8"/>
+    <!-- Fine Adjustment Screw Top -->
+    <rect x="318" y="132" width="10" height="8" fill="#e8d9b8" stroke-width="1.2"/>
+
+    <!-- Main Brass Tube -->
+    <g transform="translate(290, 110)">
+      <!-- Eyepiece & Drawtube -->
+      <rect x="-8" y="-12" width="16" height="6" fill="#110a04" stroke-width="1.2"/>
+      <rect x="-6" y="-6" width="12" height="18" fill="#e8d9b8" stroke-width="1.4"/>
+      <!-- Collar -->
+      <rect x="-10" y="12" width="20" height="5" fill="#8b6914" stroke-width="1.2"/>
+      <!-- Outer Body Tube -->
+      <rect x="-9" y="17" width="18" height="68" fill="#f4ead5" stroke-width="1.6"/>
+      <!-- Body Tube Engraved Shading Lines -->
+      <line x1="-5" y1="18" x2="-5" y2="84" stroke="#8a7560" stroke-width="0.8"/>
+      <line x1="-3" y1="18" x2="-3" y2="84" stroke="#8a7560" stroke-width="0.8"/>
+      <line x1="5" y1="18" x2="5" y2="84" stroke="#352214" stroke-width="1"/>
+      <line x1="7" y1="18" x2="7" y2="84" stroke="#1f1208" stroke-width="1"/>
+      <!-- Nosepiece & Objectives -->
+      <path d="M -9 85 L 9 85 L 6 98 L -6 98 Z" fill="#8b6914" stroke-width="1.2"/>
+      <rect x="-4" y="98" width="8" height="18" fill="#2c1e12" stroke-width="1.2"/>
+      <line x1="-2" y1="99" x2="-2" y2="115" stroke="#faf6ed" stroke-width="0.6"/>
+      <!-- Objective Tip -->
+      <polygon points="-3,116 3,116 1.5,122 -1.5,122" fill="#8b6914" stroke-width="1"/>
+    </g>
+
+    <!-- Ray of Light / Optical Axis Indicator -->
+    <line x1="290" y1="235" x2="265" y2="302" stroke="#8b6914" stroke-dasharray="2 3" stroke-width="0.9" opacity="0.65"/>
+  </g>
+
+  <!-- Botanical/Cellular Specimen Vignettes at flanks -->
+  <g stroke="#352214" stroke-width="0.9" fill="none">
+    <!-- Left Specimen: Diatom Shell -->
+    <circle cx="120" cy="225" r="32" stroke="#8a7560" stroke-width="1.2" stroke-dasharray="2 2"/>
+    <circle cx="120" cy="225" r="26" stroke="#352214" stroke-width="1"/>
+    <circle cx="120" cy="225" r="14" stroke="#8b6914" stroke-width="0.8"/>
+    <!-- Diatom Radiating Ribs -->
+    <path d="M 120 199 L 120 251 M 94 225 L 146 225 M 102 207 L 138 243 M 102 243 L 138 207" stroke="#8a7560" stroke-width="0.7"/>
+    <text x="120" y="272" font-family="'Cormorant Garamond', Georgia, serif" font-size="11" font-style="italic" fill="#56402c" text-anchor="middle">Fig. 1 — Diatomaceae</text>
+
+    <!-- Right Specimen: Cellular Tissue Section -->
+    <g transform="translate(480, 225)">
+      <circle cx="0" cy="0" r="32" stroke="#8a7560" stroke-width="1.2" stroke-dasharray="2 2"/>
+      <!-- Hexagonal Cells -->
+      <polygon points="0,-12 10,-6 10,6 0,12 -10,6 -10,-6" stroke="#352214" stroke-width="0.9"/>
+      <polygon points="17,-3 27,3 27,15 17,21 7,15 7,3" stroke="#352214" stroke-width="0.8"/>
+      <polygon points="-17,-3 -7,3 -7,15 -17,21 -27,15 -27,3" stroke="#352214" stroke-width="0.8"/>
+      <circle cx="0" cy="0" r="2.5" fill="#8b6914"/>
+      <circle cx="17" cy="9" r="2" fill="#8b6914"/>
+      <circle cx="-17" cy="9" r="2" fill="#8b6914"/>
+      <text x="0" y="47" font-family="'Cormorant Garamond', Georgia, serif" font-size="11" font-style="italic" fill="#56402c" text-anchor="middle">Fig. 2 — Parenchyma</text>
+    </g>
+  </g>
+
+  <!-- Plate Footer -->
+  <g transform="translate(300, 382)" text-anchor="middle">
+    <text font-family="'Cormorant Garamond', Georgia, serif" font-size="10.5" font-style="italic" fill="#8a7560" letter-spacing="0.08em">Engraved for Oliver&rsquo;s Guide To Everything &bull; MDCCCLXXXIV</text>
+  </g>
+</svg>
