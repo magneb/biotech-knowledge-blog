@@ -273,9 +273,12 @@ describe("ContentsPage Master Table of Contents", () => {
     expect(getByText("Independent Treatises")).toBeDefined();
     expect(getByText("Universal Lab Safety Code")).toBeDefined();
 
-    // Vignette image
-    const vignette = container.querySelector("img[alt='Microscope etching']");
-    expect(vignette).toBeDefined();
+    // Vignette images (custom asset and fallback engraving)
+    const vignette1 = container.querySelector("img[alt='Microscope etching']");
+    expect(vignette1).toBeDefined();
+
+    const vignette2 = container.querySelector("img[src='/art/chapters/reagents.svg']");
+    expect(vignette2).toBeDefined();
   });
 
   it("filters articles by text query param", async () => {
