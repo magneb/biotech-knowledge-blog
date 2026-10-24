@@ -149,7 +149,7 @@ Every work package must satisfy the 3-tier verification gate before commit/push:
 
 ---
 
-## WP-5: Core Victorian Component Kit & Generated Art
+## WP-5: Core Victorian Component Kit & Generated Art [COMPLETED]
 * **Objective:** Build reusable React components with scoped CSS Modules and produce initial copperplate-etched illustrations.
 * **Scope:**
   - **Component Library (`web/src/components/ui/`):**
@@ -165,8 +165,8 @@ Every work package must satisfy the 3-tier verification gate before commit/push:
       - Eye insignia and Oliver's Cartouche Logo.
     - Store SVG/PNG assets in `web/public/art/` or upload to Sanity as default vignettes.
 * **Acceptance Criteria:**
-  - Reusable components styled via CSS Modules without CSS leaks.
-  - High-res etching art assets ready and integrated into components.
+  - [x] Reusable components styled via CSS Modules without CSS leaks.
+  - [x] High-res etching art assets ready and integrated into components.
 
 ---
 
