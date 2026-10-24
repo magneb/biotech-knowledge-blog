@@ -3,6 +3,7 @@
   "private": true,
   "description": "Root orchestration for Oliver's Guide To Everything (studio + web)",
   "scripts": {
+    "dev": "npm run dev:web",
     "dev:web": "npm --prefix web run dev",
     "dev:studio": "npm --prefix studio run dev",
     "build": "npm --prefix web run build",
