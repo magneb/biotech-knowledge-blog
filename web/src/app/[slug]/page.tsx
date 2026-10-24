@@ -39,6 +39,9 @@ export default async function ArticlePage({
   const { data: article } = await sanityFetch({
     query: ARTICLE_QUERY,
     params: { slug },
+  }).catch((err) => {
+    console.warn("Unable to fetch article from Sanity:", err);
+    return { data: null };
   });
 
   if (!article) return notFound();
