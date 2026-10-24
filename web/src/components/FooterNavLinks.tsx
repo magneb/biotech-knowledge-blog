@@ -2,20 +2,14 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { Icon } from "@/components/ui/Icon";
-import styles from "./GlobalHeader.module.css";
+import { NoticeToast, type NoticeToastData } from "@/components/ui/NoticeToast";
 
 interface FooterNavLinksProps {
   contactEmail?: string | null;
 }
 
-interface FooterNotice {
-  title: string;
-  message: string;
-}
-
 export function FooterNavLinks({ contactEmail }: FooterNavLinksProps) {
-  const [notice, setNotice] = useState<FooterNotice | null>(null);
+  const [notice, setNotice] = useState<NoticeToastData | null>(null);
 
   return (
     <>
@@ -38,6 +32,9 @@ export function FooterNavLinks({ contactEmail }: FooterNavLinksProps) {
           </li>
           <li>
             <Link href="/contents">Table of Contents</Link>
+          </li>
+          <li>
+            <Link href="/sprites-preview">Design Folio</Link>
           </li>
           {contactEmail && (
             <li>
@@ -77,23 +74,7 @@ export function FooterNavLinks({ contactEmail }: FooterNavLinksProps) {
         </ul>
       </nav>
 
-      {notice && (
-        <div className={styles.noticeModal} role="status">
-          <button
-            type="button"
-            className={styles.noticeDismiss}
-            onClick={() => setNotice(null)}
-            aria-label="Dismiss message"
-          >
-            ✕
-          </button>
-          <div className={styles.noticeTitle}>
-            <Icon name="star-four" size={13} style={{ color: "var(--gold)" }} />
-            <span>{notice.title}</span>
-          </div>
-          <p className={styles.noticeBody}>{notice.message}</p>
-        </div>
-      )}
+      <NoticeToast notice={notice} onDismiss={() => setNotice(null)} />
     </>
   );
 }

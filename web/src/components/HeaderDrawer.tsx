@@ -179,14 +179,24 @@ export function HeaderDrawer({ chapters = [], topics = [] }: HeaderDrawerProps) 
             </div>
 
             <footer className={styles.drawerFooter}>
-              <Link
-                href="/"
-                className={styles.drawerArticleLink}
-                style={{ fontSize: "var(--text-xs)", color: "var(--sepia-faint)" }}
-                onClick={closeDrawer}
-              >
-                Oliver&rsquo;s Guide To Everything &middot; Folio Edition
-              </Link>
+              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", width: "100%", gap: "1rem" }}>
+                <Link
+                  href="/"
+                  className={styles.drawerArticleLink}
+                  style={{ fontSize: "var(--text-xs)", color: "var(--sepia-faint)" }}
+                  onClick={closeDrawer}
+                >
+                  Oliver&rsquo;s Guide &middot; Frontispiece
+                </Link>
+                <Link
+                  href="/sprites-preview"
+                  className={styles.drawerArticleLink}
+                  style={{ fontSize: "var(--text-xs)", color: "var(--gold)" }}
+                  onClick={closeDrawer}
+                >
+                  Design Folio ✦
+                </Link>
+              </div>
             </footer>
           </div>
         </div>

@@ -427,53 +427,6 @@
   justify-content: center;
 }
 
-/* ─── Gentle Notification Toast / Modal ─── */
-.noticeModal {
-  position: fixed;
-  bottom: 24px;
-  right: 24px;
-  max-width: 360px;
-  background-color: var(--parchment-light);
-  border: 1px solid var(--gold);
-  box-shadow: 0 8px 24px rgba(17, 10, 4, 0.2);
-  padding: 1rem 1.25rem;
-  border-radius: 2px;
-  z-index: 120;
-  animation: slideUpFade 0.25s ease-out;
-}
-
-.noticeTitle {
-  font-weight: 700;
-  color: var(--ink);
-  font-size: var(--text-sm);
-  margin-bottom: 0.25rem;
-  display: flex;
-  align-items: center;
-  gap: 0.45rem;
-}
-
-.noticeBody {
-  font-size: var(--text-xs);
-  color: var(--sepia-mid);
-  line-height: 1.45;
-  margin: 0;
-}
-
-.noticeDismiss {
-  position: absolute;
-  top: 6px;
-  right: 6px;
-  background: transparent;
-  border: none;
-  color: var(--sepia-faint);
-  cursor: pointer;
-  padding: 4px;
-}
-
-.noticeDismiss:hover {
-  color: var(--ink);
-}
-
 /* ─── Keyframe Animations ─── */
 @keyframes fadeIn {
   from { opacity: 0; }

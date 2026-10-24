@@ -3,15 +3,11 @@
 import { useState } from "react";
 import Link from "next/link";
 import { Icon } from "@/components/ui/Icon";
+import { NoticeToast, type NoticeToastData } from "@/components/ui/NoticeToast";
 import styles from "./GlobalHeader.module.css";
 
-interface NoticeState {
-  title: string;
-  message: string;
-}
-
 export function HeaderUtilities() {
-  const [notice, setNotice] = useState<NoticeState | null>(null);
+  const [notice, setNotice] = useState<NoticeToastData | null>(null);
 
   const showNotice = (title: string, message: string) => {
     setNotice({ title, message });
@@ -70,23 +66,7 @@ export function HeaderUtilities() {
         </button>
       </div>
 
-      {notice && (
-        <div className={styles.noticeModal} role="status">
-          <button
-            type="button"
-            className={styles.noticeDismiss}
-            onClick={() => setNotice(null)}
-            aria-label="Dismiss notice"
-          >
-            ✕
-          </button>
-          <div className={styles.noticeTitle}>
-            <Icon name="star-four" size={13} style={{ color: "var(--gold)" }} />
-            <span>{notice.title}</span>
-          </div>
-          <p className={styles.noticeBody}>{notice.message}</p>
-        </div>
-      )}
+      <NoticeToast notice={notice} onDismiss={() => setNotice(null)} />
     </>
   );
 }

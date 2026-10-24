@@ -17,16 +17,13 @@ interface HeaderTopicPillsProps {
   topics: TopicItem[];
 }
 
-function TopicPillsInner({ topics }: HeaderTopicPillsProps) {
-  const searchParams = useSearchParams();
-  const pathname = usePathname();
-  const currentTopic = searchParams?.get("topic") || null;
+interface TopicRowViewProps {
+  topics: TopicItem[];
+  currentTopic?: string | null;
+  basePath: string;
+}
 
-  if (!topics || topics.length === 0) return null;
-
-  // Determine base target path: keep user on /contents if they are already on /contents, else route to /
-  const basePath = pathname === "/contents" ? "/contents" : "/";
-
+function TopicRowView({ topics, currentTopic, basePath }: TopicRowViewProps) {
   return (
     <div className={styles.topicRowContainer}>
       <nav className={styles.topicRow} aria-label="Topic taxonomies">
@@ -44,7 +41,6 @@ function TopicPillsInner({ topics }: HeaderTopicPillsProps) {
           if (!slug || !topic.symbol) return null;
 
           const isActive = currentTopic === slug;
-          // Toggle off if already active, otherwise activate
           const targetHref = isActive ? basePath : `${basePath}?topic=${encodeURIComponent(slug)}`;
 
           return (
@@ -64,26 +60,21 @@ function TopicPillsInner({ topics }: HeaderTopicPillsProps) {
   );
 }
 
+function TopicPillsWithParams({ topics }: HeaderTopicPillsProps) {
+  const searchParams = useSearchParams();
+  const pathname = usePathname();
+  const currentTopic = searchParams?.get("topic") || null;
+  const basePath = pathname === "/contents" ? "/contents" : "/";
+
+  return <TopicRowView topics={topics} currentTopic={currentTopic} basePath={basePath} />;
+}
+
 export function HeaderTopicPills({ topics }: HeaderTopicPillsProps) {
+  if (!topics || topics.length === 0) return null;
+
   return (
-    <Suspense
-      fallback={
-        <div className={styles.topicRowContainer}>
-          <div className={styles.topicRow}>
-            {topics?.map((topic) => (
-              <ElementalPill
-                key={topic._id}
-                symbol={topic.symbol || "??"}
-                label={topic.name || undefined}
-                size="sm"
-                href={`/?topic=${topic.slug?.current || ""}`}
-              />
-            ))}
-          </div>
-        </div>
-      }
-    >
-      <TopicPillsInner topics={topics} />
+    <Suspense fallback={<TopicRowView topics={topics} basePath="/" />}>
+      <TopicPillsWithParams topics={topics} />
     </Suspense>
   );
 }

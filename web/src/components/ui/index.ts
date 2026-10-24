@@ -4,3 +4,4 @@ export * from "./StarDivider";
 export * from "./ElementalPill";
 export * from "./CopperplateButton";
 export * from "./EtchedFigure";
+export * from "./NoticeToast";
