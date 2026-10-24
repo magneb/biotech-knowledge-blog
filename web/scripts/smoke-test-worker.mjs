@@ -69,6 +69,11 @@ async function main() {
     fail("build", ".open-next/assets/sprites.svg is missing from static assets output.");
   }
 
+  const wranglerEnv = {
+    ...process.env,
+    XDG_CONFIG_HOME: "/tmp",
+  };
+
   // 2. Wrangler Dry-Run Packaging & Bundle Budget Check
   log("dry-run", "Validating Worker bundle and bindings with 'wrangler deploy --dry-run'...");
   const dryRunDir = path.join(WEB_ROOT, ".open-next/.dry-run");
@@ -80,6 +85,7 @@ async function main() {
         cwd: WEB_ROOT,
         encoding: "utf-8",
         stdio: ["ignore", "pipe", "pipe"],
+        env: wranglerEnv,
       }
     );
 
@@ -139,6 +145,7 @@ async function main() {
     {
       cwd: WEB_ROOT,
       stdio: ["ignore", "pipe", "pipe"],
+      env: wranglerEnv,
     }
   );
 
@@ -167,6 +174,7 @@ async function main() {
       cwd: WEB_ROOT,
       stdio: ["ignore", "pipe", "pipe"],
       detached: true,
+      env: wranglerEnv,
     }
   );
 
@@ -210,6 +218,20 @@ async function main() {
       );
     }
     log("runtime", "✓ GET /sprites-preview -> 200 OK");
+
+    // Assertion C2: Master Table of Contents (/contents)
+    const contentsRes = await fetch(`${baseUrl}/contents`);
+    if (contentsRes.status !== 200) {
+      fail(
+        "runtime",
+        `GET /contents returned status ${contentsRes.status} (expected 200)`
+      );
+    }
+    const contentsHtml = await contentsRes.text();
+    if (!contentsHtml.includes("Master Table of Contents")) {
+      fail("runtime", "GET /contents response did not contain 'Master Table of Contents'.");
+    }
+    log("runtime", "✓ GET /contents -> 200 OK (Master Table of Contents verified)");
 
     // Assertion D: Unknown article slug returns 404
     const notFoundRes = await fetch(`${baseUrl}/__non_existent_smoke_slug_404__`);

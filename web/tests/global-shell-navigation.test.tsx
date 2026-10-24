@@ -16,10 +16,23 @@ vi.mock("@/sanity/live", () => ({
 
 // Mock next/image
 vi.mock("next/image", () => ({
-  default: ({ src, alt, ...props }: { src: string; alt: string }) => (
+  default: ({
+    src,
+    alt,
+    ...props
+  }: {
+    src: string;
+    alt: string;
+    priority?: boolean;
+    unoptimized?: boolean;
+    [key: string]: unknown;
+  }) => {
+    const rest = { ...props };
+    delete rest.priority;
+    delete rest.unoptimized;
     // eslint-disable-next-line @next/next/no-img-element
-    <img src={src} alt={alt} {...props} />
-  ),
+    return <img src={src} alt={alt} {...rest} />;
+  },
 }));
 
 import { formatRomanNumeral } from "@/lib/format";
