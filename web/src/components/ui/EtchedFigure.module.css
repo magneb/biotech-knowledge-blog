@@ -1,0 +1,126 @@
+.figure {
+  position: relative;
+  display: block;
+  margin: 1.75rem 0;
+  max-width: 100%;
+}
+
+/* ─── Media Container ─── */
+.imageContainer {
+  position: relative;
+  overflow: hidden;
+  border: 1px solid var(--sepia-faint);
+  background-color: rgba(244, 234, 213, 0.4);
+  box-shadow: 0 2px 8px rgba(31, 18, 8, 0.08);
+}
+
+.imageContainer::before {
+  content: "";
+  position: absolute;
+  inset: 3px;
+  border: 1px solid rgba(212, 196, 160, 0.5);
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* ─── Aspect Ratios ─── */
+.ratio11 {
+  aspect-ratio: 1 / 1;
+}
+
+.ratio43 {
+  aspect-ratio: 4 / 3;
+}
+
+.ratio169 {
+  aspect-ratio: 16 / 9;
+}
+
+.ratioAuto {
+  aspect-ratio: auto;
+}
+
+/* Image Element */
+.image {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: sepia(0.18) contrast(1.05);
+  transition: filter var(--transition-medium);
+}
+
+.imageContainer:hover .image {
+  filter: sepia(0.08) contrast(1.08);
+}
+
+/* ─── Caption Plates ─── */
+.caption {
+  font-family: var(--font-main);
+  text-align: center;
+  margin-top: 0.65rem;
+}
+
+/* 1. Bottom Plate: Classic scientific specimen plate */
+.captionBottomPlate {
+  display: inline-block;
+  padding: 0.35rem 0.85rem;
+  background-color: rgba(250, 246, 237, 0.85);
+  border: 1px solid var(--parchment-border);
+  font-size: var(--text-sm);
+  font-weight: 500;
+  font-style: italic;
+  color: var(--sepia-mid);
+  letter-spacing: var(--tracking-normal);
+  box-shadow: 0 1px 3px rgba(31, 18, 8, 0.05);
+}
+
+/* 2. Callout Cartouche: Boxed cartouche with antique bevel */
+.captionCallout {
+  position: relative;
+  display: inline-block;
+  margin-top: 1.25rem;
+  padding: 0.65rem 1.25rem;
+  background: var(--parchment-light);
+  border: 1px solid var(--sepia-faint);
+  box-shadow: 0 2px 6px rgba(31, 18, 8, 0.09);
+  font-size: var(--text-sm);
+  color: var(--ink);
+  text-align: center;
+}
+
+.captionCallout::before {
+  content: "";
+  position: absolute;
+  inset: 2px;
+  border: 1px solid rgba(212, 196, 160, 0.4);
+  pointer-events: none;
+}
+
+/* ─── Leader Line Pointer ─── */
+.leaderContainer {
+  position: relative;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.leaderSvg {
+  width: 100%;
+  height: 32px;
+  overflow: visible;
+  color: var(--sepia-faint);
+  pointer-events: none;
+}
+
+.leaderSvg line {
+  stroke: currentColor;
+  stroke-width: 1;
+}
+
+.leaderSvg circle {
+  stroke: var(--rust);
+  stroke-width: 1.5;
+  fill: var(--parchment);
+}

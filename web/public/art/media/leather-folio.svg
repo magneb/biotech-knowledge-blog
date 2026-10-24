@@ -1,0 +1,83 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 300" width="100%" height="100%">
+  <defs>
+    <radialGradient id="folioBg" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#faf6ed"/>
+      <stop offset="70%" stop-color="#f4ead5"/>
+      <stop offset="100%" stop-color="#e8d9b8"/>
+    </radialGradient>
+  </defs>
+
+  <!-- Background Vignette -->
+  <rect width="300" height="300" fill="url(#folioBg)"/>
+  <rect x="8" y="8" width="284" height="284" fill="none" stroke="#8a7560" stroke-width="1.2"/>
+  <rect x="12" y="12" width="276" height="276" fill="none" stroke="#352214" stroke-width="0.6" stroke-dasharray="4 2"/>
+
+  <!-- Stack of Victorian Leather-Bound Scientific Folios -->
+  <g stroke="#110a04" stroke-linecap="round" stroke-linejoin="round" fill="none" transform="translate(150, 140)">
+    <!-- Polished Desk Surface Line -->
+    <line x1="-110" y1="95" x2="110" y2="95" stroke="#352214" stroke-width="1.5"/>
+    <line x1="-110" y1="98" x2="110" y2="98" stroke="#8a7560" stroke-width="0.8"/>
+
+    <!-- Bottom Volume: Folio Major (Broadest Tome) -->
+    <g transform="translate(0, 60)">
+      <!-- Book Body & Pages (Right Side) -->
+      <path d="M -85 0 L 75 0 L 85 24 L -75 24 Z" fill="#faf6ed" stroke-width="1.4"/>
+      <!-- Page Block Hatching -->
+      <line x1="77" y1="4" x2="83" y2="20" stroke="#8a7560" stroke-width="0.7"/>
+      <line x1="70" y1="4" x2="76" y2="20" stroke="#8a7560" stroke-width="0.7"/>
+      <line x1="63" y1="4" x2="69" y2="20" stroke="#8a7560" stroke-width="0.7"/>
+      <!-- Spine (Curved Leather on Left) -->
+      <path d="M -85 0 C -92 4 -92 20 -85 24 L -75 24 L -75 0 Z" fill="#2c1e12" stroke-width="1.6"/>
+      <!-- Raised Spine Bands (Gilded) -->
+      <line x1="-91" y1="6" x2="-75" y2="6" stroke="#8b6914" stroke-width="1.6"/>
+      <line x1="-91" y1="12" x2="-75" y2="12" stroke="#8b6914" stroke-width="1.6"/>
+      <line x1="-91" y1="18" x2="-75" y2="18" stroke="#8b6914" stroke-width="1.6"/>
+    </g>
+
+    <!-- Middle Volume: Compendium Anatomicum -->
+    <g transform="translate(-5, 30)">
+      <path d="M -75 0 L 68 0 L 78 22 L -65 22 Z" fill="#faf6ed" stroke-width="1.4"/>
+      <line x1="70" y1="4" x2="76" y2="18" stroke="#8a7560" stroke-width="0.7"/>
+      <line x1="62" y1="4" x2="68" y2="18" stroke="#8a7560" stroke-width="0.7"/>
+      <path d="M -75 0 C -82 4 -82 18 -75 22 L -65 22 L -65 0 Z" fill="#5c1a1a" stroke-width="1.6"/>
+      <line x1="-80" y1="5" x2="-65" y2="5" stroke="#c4a854" stroke-width="1.5"/>
+      <line x1="-80" y1="11" x2="-65" y2="11" stroke="#c4a854" stroke-width="1.5"/>
+      <line x1="-80" y1="17" x2="-65" y2="17" stroke="#c4a854" stroke-width="1.5"/>
+    </g>
+
+    <!-- Top Volume: Open Protocol Notebook or Third Tome -->
+    <g transform="translate(4, 2)">
+      <path d="M -65 0 L 60 0 L 70 20 L -55 20 Z" fill="#faf6ed" stroke-width="1.4"/>
+      <line x1="62" y1="4" x2="68" y2="16" stroke="#8a7560" stroke-width="0.7"/>
+      <path d="M -65 0 C -72 4 -72 16 -65 20 L -55 20 L -55 0 Z" fill="#6e3610" stroke-width="1.6"/>
+      <line x1="-70" y1="5" x2="-55" y2="5" stroke="#8b6914" stroke-width="1.5"/>
+      <line x1="-70" y1="10" x2="-55" y2="10" stroke="#8b6914" stroke-width="1.5"/>
+      <line x1="-70" y1="15" x2="-55" y2="15" stroke="#8b6914" stroke-width="1.5"/>
+
+      <!-- Silk Bookmark Ribbon Cascading Down -->
+      <path d="M 45 6 C 55 25 35 45 42 75 L 48 68 L 54 75 C 50 45 65 25 50 6 Z" fill="#5c1a1a" stroke="#110a04" stroke-width="1"/>
+    </g>
+
+    <!-- Flank: Antique Glass Inkwell with Goose Feather Quill -->
+    <g transform="translate(75, 45)">
+      <!-- Inkwell Base (Faceted Heavy Glass) -->
+      <polygon points="-14,35 14,35 10,48 -10,48" fill="#e8d9b8" stroke-width="1.4"/>
+      <line x1="-12" y1="36" x2="-12" y2="47" stroke="#8a7560" stroke-width="0.8"/>
+      <line x1="12" y1="36" x2="12" y2="47" stroke="#8a7560" stroke-width="0.8"/>
+      <!-- Brass Collar -->
+      <rect x="-8" y="27" width="16" height="8" fill="#8b6914" stroke-width="1.2"/>
+      <!-- Black Ink Pool visible through glass -->
+      <ellipse cx="0" cy="42" rx="8" ry="4" fill="#110a04"/>
+
+      <!-- Slender Goose Quill Dipped in Inkwell -->
+      <path d="M 0 30 C 5 0 25 -35 45 -70 C 40 -65 32 -45 28 -30 C 22 -5 10 15 0 30 Z" fill="#faf6ed" stroke-width="1.2"/>
+      <!-- Quill Shaft -->
+      <path d="M 0 30 C 8 -2 22 -35 45 -70" stroke="#8a7560" stroke-width="1.2"/>
+      <!-- Inked Nib Tip -->
+      <path d="M 0 30 L 2 34 L -2 34 Z" fill="#110a04"/>
+    </g>
+  </g>
+
+  <!-- Engraved Caption -->
+  <text x="150" y="278" font-family="'Cormorant Garamond', Georgia, serif" font-size="11" font-weight="600" font-style="italic" fill="#56402c" text-anchor="middle" letter-spacing="0.1em">Tomi Academici &bull; Res Scientifica</text>
+</svg>

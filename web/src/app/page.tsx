@@ -3,8 +3,9 @@ import { sanityFetch } from "@/sanity/live";
 import { createImageUrlBuilder } from "@sanity/image-url";
 import { PortableText, defineQuery, stegaClean } from "next-sanity";
 import Link from "next/link";
+import Image from "next/image";
 
-import { Icon, HandDrawnArrow } from "@/components/ui/Icon";
+import { HandDrawnArrow, StarDivider } from "@/components/ui";
 import { formatCategory, formatDate } from "@/lib/format";
 
 const builder = createImageUrlBuilder(client);
@@ -39,7 +40,7 @@ export default async function HomePage() {
       {/* ── Hero ── */}
       <section className="landing-hero">
         {logoUrl ? (
-          <img
+          <Image
             src={logoUrl}
             alt={
               stegaClean(home?.heading) ||
@@ -48,6 +49,8 @@ export default async function HomePage() {
             className="landing-logo"
             width={320}
             height={320}
+            unoptimized={logoUrl.endsWith(".svg")}
+            priority
           />
         ) : (
           <h1
@@ -85,9 +88,7 @@ export default async function HomePage() {
       </section>
 
       {/* ── Ornamental divider ── */}
-      <div className="ornament" aria-hidden="true">
-        <Icon name="star-four" size={18} />
-      </div>
+      <StarDivider symbol="star" variant={1} spacing="md" />
 
       {/* ── Articles ── */}
       <section className="articles-section">
