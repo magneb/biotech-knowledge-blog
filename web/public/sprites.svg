@@ -260,5 +260,64 @@
       <line x1="8" y1="6" x2="16" y2="6" stroke="currentColor" stroke-width="1" opacity="0.6" />
       <line x1="8" y1="9" x2="16" y2="9" stroke="currentColor" stroke-width="1" opacity="0.6" />
     </symbol>
+
+    <!-- ══════════════════════════════════════════════════════════════════════════
+         NAVIGATION & UTILITY ICONS (WP-6)
+         ══════════════════════════════════════════════════════════════════════════ -->
+
+    <!-- Search Loupe / Reading Glass -->
+    <symbol id="search" viewBox="0 0 24 24">
+      <g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="10" cy="10" r="6.5" stroke-width="1.6" />
+        <line x1="14.8" y1="14.8" x2="21" y2="21" stroke-width="2.2" />
+        <circle cx="10" cy="10" r="4.5" stroke-width="0.75" stroke-dasharray="1 1.5" opacity="0.6" />
+        <circle cx="8" cy="8" r="0.8" fill="currentColor" />
+      </g>
+    </symbol>
+
+    <!-- Antique Home / Folio Manor -->
+    <symbol id="home" viewBox="0 0 24 24">
+      <g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+        <polygon points="12,2 21,9 19,9 19,21 5,21 5,9 3,9" stroke-width="1.6" />
+        <rect x="9.5" y="13" width="5" height="8" stroke-width="1.4" />
+        <circle cx="12" cy="6.5" r="1.2" fill="currentColor" />
+      </g>
+    </symbol>
+
+    <!-- Brass Cogwheel / Settings Astrolabe -->
+    <symbol id="gear" viewBox="0 0 24 24">
+      <g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="12" cy="12" r="4" stroke-width="1.6" />
+        <circle cx="12" cy="12" r="1.5" fill="currentColor" />
+        <path d="M12 2 V4 M12 20 V22 M2 12 H4 M20 12 H22 M4.93 4.93 L6.34 6.34 M17.66 17.66 L19.07 19.07 M4.93 19.07 L6.34 17.66 M17.66 6.34 L19.07 4.93" stroke-width="2" />
+      </g>
+    </symbol>
+
+    <!-- Victorian Ledger / Menu Drawer (3 engraved rules with diamond endpoints) -->
+    <symbol id="menu" viewBox="0 0 24 24">
+      <g stroke="currentColor" stroke-linecap="round">
+        <line x1="4" y1="6" x2="20" y2="6" stroke-width="1.8" />
+        <line x1="4" y1="12" x2="20" y2="12" stroke-width="1.8" />
+        <line x1="4" y1="18" x2="20" y2="18" stroke-width="1.8" />
+      </g>
+      <polygon points="2,6 3,5 4,6 3,7" fill="currentColor" />
+      <polygon points="20,6 21,5 22,6 21,7" fill="currentColor" />
+      <polygon points="2,12 3,11 4,12 3,13" fill="currentColor" />
+      <polygon points="20,12 21,11 22,12 21,13" fill="currentColor" />
+      <polygon points="2,18 3,17 4,18 3,19" fill="currentColor" />
+      <polygon points="20,18 21,17 22,18 21,19" fill="currentColor" />
+    </symbol>
+
+    <!-- Antique Cancel / Close (flourished X) -->
+    <symbol id="close" viewBox="0 0 24 24">
+      <g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8">
+        <line x1="5" y1="5" x2="19" y2="19" />
+        <line x1="19" y1="5" x2="5" y2="19" />
+      </g>
+      <circle cx="5" cy="5" r="1.2" fill="currentColor" />
+      <circle cx="19" cy="5" r="1.2" fill="currentColor" />
+      <circle cx="5" cy="19" r="1.2" fill="currentColor" />
+      <circle cx="19" cy="19" r="1.2" fill="currentColor" />
+    </symbol>
   </defs>
 </svg>

@@ -23,7 +23,12 @@ export type IconName =
   | "rule-leaf"
   | "cartouche-oval"
   | "eye-insignia"
-  | "bookmark-ribbon";
+  | "bookmark-ribbon"
+  | "search"
+  | "home"
+  | "gear"
+  | "menu"
+  | "close";
 
 export interface IconProps extends SVGProps<SVGSVGElement> {
   name: IconName;
