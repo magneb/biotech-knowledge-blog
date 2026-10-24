@@ -5,6 +5,7 @@ import { VisualEditing } from "next-sanity/visual-editing";
 import "./globals.css";
 import GlobalHeader from "@/components/GlobalHeader";
 import SiteFooter from "@/components/SiteFooter";
+import { DevPerformancePatch } from "@/components/DevPerformancePatch";
 import { SanityLive } from "@/sanity/live";
 
 const cormorantGaramond = Cormorant_Garamond({
@@ -28,6 +29,7 @@ export default async function RootLayout({ children }: LayoutProps<"/">) {
     <html lang="en" className={cormorantGaramond.variable} data-scroll-behavior="smooth">
       <body className="desk-canvas">
         <div className="parchment-sheet">
+          <DevPerformancePatch />
           <GlobalHeader />
           <main className="sheet-content">{children}</main>
           <SiteFooter />
