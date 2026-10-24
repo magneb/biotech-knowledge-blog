@@ -22,6 +22,13 @@ export type SanityImageAssetReference = {
   [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
 };
 
+export type ArticleReference = {
+  _ref: string;
+  _type: "reference";
+  _weak?: boolean;
+  [internalGroqTypeReferenceTo]?: "article";
+};
+
 export type HomePage = {
   _id: string;
   _type: "homePage";
@@ -55,6 +62,20 @@ export type HomePage = {
     _type: "block";
     _key: string;
   }>;
+  featuredArticles?: Array<
+    {
+      _key: string;
+    } & ArticleReference
+  >;
+  mottoBanner?: string;
+  mediaChannels?: Array<{
+    platform?: "youtube" | "tiktok" | "linkedin" | "other";
+    title?: string;
+    description?: string;
+    url?: string;
+    _type: "mediaChannel";
+    _key: string;
+  }>;
   contactEmail?: string;
 };
 
@@ -74,6 +95,27 @@ export type SanityImageHotspot = {
   width?: number;
 };
 
+export type ChapterReference = {
+  _ref: string;
+  _type: "reference";
+  _weak?: boolean;
+  [internalGroqTypeReferenceTo]?: "chapter";
+};
+
+export type TopicReference = {
+  _ref: string;
+  _type: "reference";
+  _weak?: boolean;
+  [internalGroqTypeReferenceTo]?: "topic";
+};
+
+export type SanityFileAssetReference = {
+  _ref: string;
+  _type: "reference";
+  _weak?: boolean;
+  [internalGroqTypeReferenceTo]?: "sanity.fileAsset";
+};
+
 export type Article = {
   _id: string;
   _type: "article";
@@ -82,33 +124,132 @@ export type Article = {
   _rev: string;
   title?: string;
   slug?: Slug;
+  contentType?: "article" | "guide" | "protocol" | "research-note";
   summary?: string;
-  category?: "protocol" | "research-note" | "literature-review" | "general";
+  chapter?: ChapterReference;
+  chapterOrder?: number;
+  topics?: Array<
+    {
+      _key: string;
+    } & TopicReference
+  >;
+  featured?: boolean;
   publishedAt?: string;
-  body?: Array<{
-    children?: Array<{
-      marks?: Array<string>;
-      text?: string;
-      _type: "span";
-      _key: string;
-    }>;
-    style?: "normal" | "h1" | "h2" | "h3" | "h4" | "h5" | "h6" | "blockquote";
-    listItem?: "bullet" | "number";
-    markDefs?: Array<{
-      href?: string;
-      _type: "link";
-      _key: string;
-    }>;
-    level?: number;
-    _type: "block";
+  coverEtching?: {
+    asset?: SanityImageAssetReference;
+    media?: unknown;
+    hotspot?: SanityImageHotspot;
+    crop?: SanityImageCrop;
+    alt?: string;
+    caption?: string;
+    _type: "image";
+  };
+  downloadablePdfs?: Array<{
+    title?: string;
+    description?: string;
+    file?: {
+      asset?: SanityFileAssetReference;
+      media?: unknown;
+      _type: "file";
+    };
+    _type: "pdfAttachment";
     _key: string;
   }>;
+  body?: Array<
+    | {
+        children?: Array<{
+          marks?: Array<string>;
+          text?: string;
+          _type: "span";
+          _key: string;
+        }>;
+        style?:
+          "normal" | "h1" | "h2" | "h3" | "h4" | "h5" | "h6" | "blockquote";
+        listItem?: "bullet" | "number";
+        markDefs?: Array<
+          | {
+              href?: string;
+              _type: "link";
+              _key: string;
+            }
+          | {
+              definition?: string;
+              symbol?: string;
+              _type: "annotatedTerm";
+              _key: string;
+            }
+        >;
+        level?: number;
+        _type: "block";
+        _key: string;
+      }
+    | {
+        figureNumber?: string;
+        image?: {
+          asset?: SanityImageAssetReference;
+          media?: unknown;
+          hotspot?: SanityImageHotspot;
+          crop?: SanityImageCrop;
+          _type: "image";
+        };
+        alt?: string;
+        caption?: string;
+        credit?: string;
+        _type: "figureCallout";
+        _key: string;
+      }
+    | {
+        title?: string;
+        formulaNote?: string;
+        items?: Array<{
+          name?: string;
+          quantity?: string;
+          note?: string;
+          _type: "reagentItem";
+          _key: string;
+        }>;
+        _type: "formulaReagents";
+        _key: string;
+      }
+  >;
 };
 
 export type Slug = {
   _type: "slug";
   current?: string;
   source?: string;
+};
+
+export type Topic = {
+  _id: string;
+  _type: "topic";
+  _createdAt: string;
+  _updatedAt: string;
+  _rev: string;
+  name?: string;
+  symbol?: string;
+  slug?: Slug;
+  description?: string;
+};
+
+export type Chapter = {
+  _id: string;
+  _type: "chapter";
+  _createdAt: string;
+  _updatedAt: string;
+  _rev: string;
+  title?: string;
+  number?: number;
+  slug?: Slug;
+  summary?: string;
+  vignette?: {
+    asset?: SanityImageAssetReference;
+    media?: unknown;
+    hotspot?: SanityImageHotspot;
+    crop?: SanityImageCrop;
+    alt?: string;
+    _type: "image";
+  };
 };
 
 export type SanityImagePaletteSwatch = {
@@ -210,11 +351,17 @@ export type Geopoint = {
 
 export type AllSanitySchemaTypes =
   | SanityImageAssetReference
+  | ArticleReference
   | HomePage
   | SanityImageCrop
   | SanityImageHotspot
+  | ChapterReference
+  | TopicReference
+  | SanityFileAssetReference
   | Article
   | Slug
+  | Topic
+  | Chapter
   | SanityImagePaletteSwatch
   | SanityImagePalette
   | SanityImageDimensions
@@ -233,30 +380,68 @@ export type ARTICLES_SLUGS_QUERY_RESULT = Array<{
 
 // Source: ../web/src/app/[slug]/page.tsx
 // Variable: ARTICLE_QUERY
-// Query: *[_type == "article" && slug.current == $slug][0]{    _id, title, body, category, publishedAt  }
+// Query: *[_type == "article" && slug.current == $slug][0]{    _id, title, body, contentType, publishedAt  }
 export type ARTICLE_QUERY_RESULT = {
   _id: string;
   title: string | null;
-  body: Array<{
-    children?: Array<{
-      marks?: Array<string>;
-      text?: string;
-      _type: "span";
-      _key: string;
-    }>;
-    style?: "blockquote" | "h1" | "h2" | "h3" | "h4" | "h5" | "h6" | "normal";
-    listItem?: "bullet" | "number";
-    markDefs?: Array<{
-      href?: string;
-      _type: "link";
-      _key: string;
-    }>;
-    level?: number;
-    _type: "block";
-    _key: string;
-  }> | null;
-  category:
-    "general" | "literature-review" | "protocol" | "research-note" | null;
+  body: Array<
+    | {
+        children?: Array<{
+          marks?: Array<string>;
+          text?: string;
+          _type: "span";
+          _key: string;
+        }>;
+        style?:
+          "blockquote" | "h1" | "h2" | "h3" | "h4" | "h5" | "h6" | "normal";
+        listItem?: "bullet" | "number";
+        markDefs?: Array<
+          | {
+              definition?: string;
+              symbol?: string;
+              _type: "annotatedTerm";
+              _key: string;
+            }
+          | {
+              href?: string;
+              _type: "link";
+              _key: string;
+            }
+        >;
+        level?: number;
+        _type: "block";
+        _key: string;
+      }
+    | {
+        figureNumber?: string;
+        image?: {
+          asset?: SanityImageAssetReference;
+          media?: unknown;
+          hotspot?: SanityImageHotspot;
+          crop?: SanityImageCrop;
+          _type: "image";
+        };
+        alt?: string;
+        caption?: string;
+        credit?: string;
+        _type: "figureCallout";
+        _key: string;
+      }
+    | {
+        title?: string;
+        formulaNote?: string;
+        items?: Array<{
+          name?: string;
+          quantity?: string;
+          note?: string;
+          _type: "reagentItem";
+          _key: string;
+        }>;
+        _type: "formulaReagents";
+        _key: string;
+      }
+  > | null;
+  contentType: "article" | "guide" | "protocol" | "research-note" | null;
   publishedAt: string | null;
 } | null;
 
@@ -304,14 +489,13 @@ export type HOME_QUERY_RESULT =
 
 // Source: ../web/src/app/page.tsx
 // Variable: ARTICLES_QUERY
-// Query: *[_type == "article" && defined(slug.current)] | order(publishedAt desc){    _id, title, slug, summary, category, publishedAt  }
+// Query: *[_type == "article" && defined(slug.current)] | order(publishedAt desc){    _id, title, slug, summary, contentType, publishedAt  }
 export type ARTICLES_QUERY_RESULT = Array<{
   _id: string;
   title: string | null;
   slug: Slug | null;
   summary: string | null;
-  category:
-    "general" | "literature-review" | "protocol" | "research-note" | null;
+  contentType: "article" | "guide" | "protocol" | "research-note" | null;
   publishedAt: string | null;
 }>;
 
@@ -331,9 +515,9 @@ export type FOOTER_QUERY_RESULT =
 declare global {
   interface SanityQueries {
     '*[_type == "article" && defined(slug.current)]{ "slug": slug.current }': ARTICLES_SLUGS_QUERY_RESULT;
-    '*[_type == "article" && slug.current == $slug][0]{\n    _id, title, body, category, publishedAt\n  }': ARTICLE_QUERY_RESULT;
+    '*[_type == "article" && slug.current == $slug][0]{\n    _id, title, body, contentType, publishedAt\n  }': ARTICLE_QUERY_RESULT;
     '*[_id == "homePage"][0]{ heading, subheading, intro, logo }': HOME_QUERY_RESULT;
-    '*[_type == "article" && defined(slug.current)] | order(publishedAt desc){\n    _id, title, slug, summary, category, publishedAt\n  }': ARTICLES_QUERY_RESULT;
+    '*[_type == "article" && defined(slug.current)] | order(publishedAt desc){\n    _id, title, slug, summary, contentType, publishedAt\n  }': ARTICLES_QUERY_RESULT;
     '*[_id == "homePage"][0]{ contactEmail }': FOOTER_QUERY_RESULT;
   }
 }
