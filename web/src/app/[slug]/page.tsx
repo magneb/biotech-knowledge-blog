@@ -11,7 +11,7 @@ const ARTICLES_SLUGS_QUERY = defineQuery(
 
 const ARTICLE_QUERY = defineQuery(
   `*[_type == "article" && slug.current == $slug][0]{
-    _id, title, body, category, publishedAt
+    _id, title, body, contentType, publishedAt
   }`
 );
 
@@ -52,9 +52,9 @@ export default async function ArticlePage({
       {/* ── Paper ── */}
       <article className="paper">
         <header className="paper-header">
-          {article.category && (
+          {article.contentType && (
             <span className="paper-category">
-              {formatCategory(stegaClean(article.category))}
+              {formatCategory(stegaClean(article.contentType))}
             </span>
           )}
 

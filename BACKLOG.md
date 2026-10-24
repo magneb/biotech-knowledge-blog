@@ -109,7 +109,7 @@ Every work package must satisfy the 3-tier verification gate before commit/push:
 
 ---
 
-## WP-4: Content Modeling — Chapters, Articles & Taxonomies
+## WP-4: Content Modeling — Chapters, Articles & Taxonomies [COMPLETED]
 * **Objective:** Restructure Sanity schemas to model the publication as a scientific book with ordered chapters, out-of-order article publishing, and topic filtering.
 * **Scope:**
   - **New Document Type:** `chapter` (`studio/schemaTypes/chapter.ts`):
@@ -143,9 +143,9 @@ Every work package must satisfy the 3-tier verification gate before commit/push:
   - Let Sanity generate document `_id`s; enforce singletons purely via Studio structure (`references/studio-structure.md`).
   - No direct video files stored in Sanity assets; links/embeds only.
 * **Acceptance Criteria:**
-  - Studio displays intuitive navigation with singletons at the top.
-  - Articles can be organized under chapters and tagged with elemental topics.
-  - Generated TypeScript types accurately reflect all schema changes without manual casting.
+  - [x] Studio displays intuitive navigation with singletons at the top.
+  - [x] Articles can be organized under chapters and tagged with elemental topics.
+  - [x] Generated TypeScript types accurately reflect all schema changes without manual casting.
 
 ---
 

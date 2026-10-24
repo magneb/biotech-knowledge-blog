@@ -143,7 +143,7 @@ describe("HomePage Server Component", () => {
           title: "CRISPR-Cas9 Knockout Protocol",
           slug: { current: "crispr-knockout" },
           summary: "Step-by-step guide for mammalian cell lines.",
-          category: "protocol",
+          contentType: "protocol",
           publishedAt: "2026-10-20T00:00:00Z",
         },
         {
@@ -151,7 +151,7 @@ describe("HomePage Server Component", () => {
           title: "Western Blot Troubleshooting",
           slug: { current: "western-blot" },
           summary: "Resolving high background and faint bands.",
-          category: "research-note",
+          contentType: "research-note",
           publishedAt: "2026-10-21T00:00:00Z",
         },
       ]);
@@ -198,11 +198,11 @@ describe("ArticlePage Server Component & generateStaticParams", () => {
     expect(mockNotFound).toHaveBeenCalledTimes(1);
   });
 
-  it("renders article title, formatted category, date, and body when found", async () => {
+  it("renders article title, formatted contentType, date, and body when found", async () => {
     mockFetch.mockResolvedValueOnce({
       _id: "art-1",
       title: "Flow Cytometry Panel Design",
-      category: "literature-review",
+      contentType: "guide",
       publishedAt: "2026-10-22T00:00:00Z",
       body: [
         {
@@ -231,7 +231,7 @@ describe("ArticlePage Server Component & generateStaticParams", () => {
       "Flow Cytometry Panel Design"
     );
     expect(container.querySelector(".paper-category")?.textContent).toBe(
-      "Literature Review"
+      "Guide"
     );
     expect(container.querySelector("time.paper-date")?.textContent).toBe(
       "October 22, 2026"

@@ -15,7 +15,7 @@ const HOME_QUERY = defineQuery(
 
 const ARTICLES_QUERY = defineQuery(
   `*[_type == "article" && defined(slug.current)] | order(publishedAt desc){
-    _id, title, slug, summary, category, publishedAt
+    _id, title, slug, summary, contentType, publishedAt
   }`
 );
 
@@ -113,9 +113,9 @@ export default async function HomePage() {
                 </div>
 
                 <span className="article-card-meta">
-                  {article.category && (
+                  {article.contentType && (
                     <span className="article-card-category">
-                      {formatCategory(stegaClean(article.category))}
+                      {formatCategory(stegaClean(article.contentType))}
                     </span>
                   )}
                   {article.publishedAt && (

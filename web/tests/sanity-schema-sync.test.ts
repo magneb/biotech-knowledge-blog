@@ -29,6 +29,54 @@ function collectSourceFiles(dir: string): string[] {
 }
 
 /**
+ * Extracts top-level `defineField({ name: '...' })` entries inside a `defineType`
+ * root `fields: [...]` array by tracking bracket/brace nesting depth.
+ */
+function extractTopLevelFields(source: string): string[] {
+  const fieldsStart = source.search(/\bfields\s*:\s*\[/);
+  if (fieldsStart === -1) return [];
+
+  const openBracketIdx = source.indexOf("[", fieldsStart);
+  if (openBracketIdx === -1) return [];
+
+  const fields: string[] = [];
+  let bracketDepth = 0;
+  let braceDepth = 0;
+
+  let i = openBracketIdx;
+  while (i < source.length) {
+    const ch = source[i];
+    if (ch === "[") {
+      bracketDepth++;
+    } else if (ch === "]") {
+      bracketDepth--;
+      if (bracketDepth === 0) break;
+    } else if (ch === "{") {
+      braceDepth++;
+    } else if (ch === "}") {
+      braceDepth--;
+    }
+
+    // At top-level of `fields: [...]`, bracketDepth === 1 and braceDepth === 0
+    if (
+      bracketDepth === 1 &&
+      braceDepth === 0 &&
+      source.slice(i).startsWith("defineField")
+    ) {
+      const m = source
+        .slice(i)
+        .match(/^defineField\s*\(\s*\{\s*name:\s*['"]([^'"]+)['"]/);
+      if (m) {
+        fields.push(m[1]);
+      }
+    }
+    i++;
+  }
+
+  return fields;
+}
+
+/**
  * Parses `studio/schemaTypes/*.ts` from source text without importing `studio/`
  * runtime modules into `web/` (which has no `sanity` dependency in Cloudflare CI).
  */
@@ -52,7 +100,11 @@ function parseStudioSchemas(): {
   for (const entry of fs.readdirSync(STUDIO_SCHEMAS_DIR, {
     withFileTypes: true,
   })) {
-    if (!entry.isFile() || !entry.name.endsWith(".ts") || entry.name === "index.ts") {
+    if (
+      !entry.isFile() ||
+      !entry.name.endsWith(".ts") ||
+      entry.name === "index.ts"
+    ) {
       continue;
     }
     const source = fs.readFileSync(
@@ -65,10 +117,7 @@ function parseStudioSchemas(): {
     if (!typeHeaderMatch) continue;
 
     const [, exportName, schemaName] = typeHeaderMatch;
-    const fields = Array.from(
-      source.matchAll(/defineField\s*\(\s*\{\s*name:\s*['"]([^'"]+)['"]/g),
-      (m) => m[1]
-    );
+    const fields = extractTopLevelFields(source);
 
     schemas.push({ exportName, name: schemaName, fields });
   }
@@ -77,23 +126,71 @@ function parseStudioSchemas(): {
 }
 
 describe("Sanity Studio Schemas, Client Config & Dynamic TypeGen Sync", () => {
-  it("registers core article and homePage schemas in studio/schemaTypes", () => {
+  it("registers chapter, topic, article, and homePage schemas in studio/schemaTypes", () => {
     const { registeredExports, schemas } = parseStudioSchemas();
     expect(registeredExports).toEqual(
-      expect.arrayContaining(["article", "homePage"])
+      expect.arrayContaining(["chapter", "topic", "article", "homePage"])
+    );
+
+    const chapterSchema = schemas.find((s) => s.name === "chapter");
+    expect(chapterSchema).toBeDefined();
+    expect(chapterSchema?.fields).toEqual(
+      expect.arrayContaining(["title", "number", "slug", "summary", "vignette"])
+    );
+
+    const topicSchema = schemas.find((s) => s.name === "topic");
+    expect(topicSchema).toBeDefined();
+    expect(topicSchema?.fields).toEqual(
+      expect.arrayContaining(["name", "symbol", "slug", "description"])
     );
 
     const articleSchema = schemas.find((s) => s.name === "article");
     expect(articleSchema).toBeDefined();
     expect(articleSchema?.fields).toEqual(
-      expect.arrayContaining(["title", "slug", "body"])
+      expect.arrayContaining([
+        "title",
+        "slug",
+        "contentType",
+        "summary",
+        "chapter",
+        "chapterOrder",
+        "topics",
+        "featured",
+        "publishedAt",
+        "coverEtching",
+        "downloadablePdfs",
+        "body",
+      ])
     );
+    expect(articleSchema?.fields).not.toContain("category");
 
     const homeSchema = schemas.find((s) => s.name === "homePage");
     expect(homeSchema).toBeDefined();
     expect(homeSchema?.fields).toEqual(
-      expect.arrayContaining(["heading", "subheading", "intro", "contactEmail"])
+      expect.arrayContaining([
+        "logo",
+        "heading",
+        "subheading",
+        "intro",
+        "featuredArticles",
+        "mottoBanner",
+        "mediaChannels",
+        "contactEmail",
+      ])
     );
+  });
+
+  it("organizes Studio Structure with Home Page singleton, Chapters & Content, Topics / Taxonomies, and bibliography slot", () => {
+    const structureSource = fs.readFileSync(
+      path.join(REPO_ROOT, "studio/src/structure/index.ts"),
+      "utf-8"
+    );
+
+    expect(structureSource).toContain("documentId('homePage')");
+    expect(structureSource).toContain("Chapters & Content");
+    expect(structureSource).toContain("Articles by Chapter");
+    expect(structureSource).toContain("Topics / Taxonomies");
+    expect(structureSource).toContain("<bibliography-slot>");
   });
 
   it("dynamically verifies every schema and field in studio/schemaTypes is extracted into studio/schema.json", () => {
