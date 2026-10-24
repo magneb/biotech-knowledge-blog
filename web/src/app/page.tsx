@@ -78,6 +78,7 @@ export default async function HomePage(props: HomePageProps = {}) {
             className="landing-logo"
             width={320}
             height={320}
+            style={{ width: "100%", maxWidth: 320, height: "auto" }}
             unoptimized={logoUrl.endsWith(".svg")}
             priority
           />

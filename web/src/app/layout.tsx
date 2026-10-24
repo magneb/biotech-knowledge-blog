@@ -24,6 +24,7 @@ export const metadata: Metadata = {
 
 export default async function RootLayout({ children }: LayoutProps<"/">) {
   const { isEnabled: isDraftMode } = await draftMode();
+  const isDev = process.env.NODE_ENV === "development";
 
   return (
     <html lang="en" className={cormorantGaramond.variable} data-scroll-behavior="smooth">
@@ -35,7 +36,7 @@ export default async function RootLayout({ children }: LayoutProps<"/">) {
           <SiteFooter />
         </div>
         <SanityLive />
-        {isDraftMode && <VisualEditing />}
+        {(isDraftMode || isDev) && <VisualEditing />}
       </body>
     </html>
   );
