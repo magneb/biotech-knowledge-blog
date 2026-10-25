@@ -3,6 +3,7 @@ import Link from "next/link";
 import Image from "next/image";
 import type { Metadata } from "next";
 import { sanityFetch } from "@/sanity/live";
+import { getChapterVignette } from "@/sanity/image";
 import { StarDivider } from "@/components/ui/StarDivider";
 import { HandDrawnArrow } from "@/components/ui/Icon";
 import { ElementalPill } from "@/components/ui/ElementalPill";
@@ -68,57 +69,6 @@ export const CONTENTS_PAGE_QUERY = defineQuery(
     }
   }`
 );
-
-const DEFAULT_CHAPTER_VIGNETTES = [
-  { url: "/art/chapters/microscopy.svg", alt: "Microscopy & lenses engraving" },
-  { url: "/art/chapters/specimens.svg", alt: "Biological specimens engraving" },
-  { url: "/art/chapters/reagents.svg", alt: "Chemical reagents & distillation engraving" },
-  { url: "/art/chapters/apparatus.svg", alt: "Laboratory apparatus engraving" },
-];
-
-function getChapterVignette(chapter: {
-  title?: string | null;
-  number?: number | null;
-  slug?: { current?: string | null } | null;
-  vignette?: {
-    asset?: { url?: string | null } | null;
-    alt?: string | null;
-  } | null;
-}): { src: string; alt: string } {
-  if (chapter.vignette?.asset?.url) {
-    return {
-      src: chapter.vignette.asset.url,
-      alt: chapter.vignette.alt || `${chapter.title || "Chapter"} vignette`,
-    };
-  }
-
-  const slug = stegaClean(chapter.slug?.current || "").toLowerCase();
-  const title = stegaClean(chapter.title || "").toLowerCase();
-
-  if (slug.includes("micro") || title.includes("micro") || slug.includes("optic") || title.includes("optic") || slug.includes("lens") || title.includes("lens")) {
-    return { src: "/art/chapters/microscopy.svg", alt: `${chapter.title || "Chapter"} microscopy engraving` };
-  }
-  if (slug.includes("specimen") || title.includes("specimen") || slug.includes("bio") || title.includes("bio") || slug.includes("cell") || title.includes("cell") || slug.includes("tissue") || title.includes("tissue")) {
-    return { src: "/art/chapters/specimens.svg", alt: `${chapter.title || "Chapter"} specimens engraving` };
-  }
-  if (slug.includes("reagent") || title.includes("reagent") || slug.includes("chem") || title.includes("chem") || slug.includes("buffer") || title.includes("buffer") || slug.includes("distill") || title.includes("distill")) {
-    return { src: "/art/chapters/reagents.svg", alt: `${chapter.title || "Chapter"} reagents engraving` };
-  }
-  if (slug.includes("apparatus") || title.includes("apparatus") || slug.includes("device") || title.includes("device") || slug.includes("tool") || title.includes("tool") || slug.includes("lab") || title.includes("lab")) {
-    return { src: "/art/chapters/apparatus.svg", alt: `${chapter.title || "Chapter"} laboratory apparatus engraving` };
-  }
-
-  const idx =
-    typeof chapter.number === "number" && chapter.number > 0
-      ? (chapter.number - 1) % DEFAULT_CHAPTER_VIGNETTES.length
-      : 0;
-  const fallback = DEFAULT_CHAPTER_VIGNETTES[idx];
-
-  return {
-    src: fallback.url,
-    alt: `${chapter.title || "Chapter"} illustration etching`,
-  };
-}
 
 interface ContentsPageProps {
   searchParams?: Promise<{
