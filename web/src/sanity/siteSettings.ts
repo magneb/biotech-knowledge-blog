@@ -31,7 +31,7 @@ export const DEFAULT_SITE_METADATA: ResolvedSiteMetadata = {
   publisher: "Oliver's Guide To Everything",
   siteDescription:
     "A personal knowledge base for biotech and cancer research protocols.",
-  canonicalDomain: "https://oliversguide.com",
+  canonicalDomain: "https://oliversguidetoeverything.com",
   contactEmail: null,
 };
 

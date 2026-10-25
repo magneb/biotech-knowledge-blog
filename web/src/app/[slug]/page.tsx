@@ -237,78 +237,84 @@ export default async function ArticlePage({
             slug={slug}
           />
 
-          {/* ── Top-Right Floated Action & Utility Rail ── */}
-          <div className={styles.utilitiesFloated}>
-            <ArticleUtilities
-              title={articleTitle}
-              author={siteMeta.authorName}
-              publishedAt={article.publishedAt}
-              versionNumber={version}
-              slug={slug}
-              chapter={article.chapter}
-              topics={article.topics}
-              downloadablePdfs={article.downloadablePdfs}
-            />
-          </div>
+          {/* ── Top Section: Title, Subtitle, Summary & Unified Third Column ── */}
+          <section className={styles.topSection}>
+            <div className={styles.mainHeaderCol}>
+              <header className={`${styles.header} paper-header`}>
+                <h1 className={`${styles.title} paper-title`}>{articleTitle}</h1>
 
-          {/* ── Screen Article Header (Left-aligned, Victorian Typographic Rule) ── */}
-          <header className={`${styles.header} paper-header`}>
-            <h1 className={`${styles.title} paper-title`}>{articleTitle}</h1>
-
-            <div className={styles.subtitleRow}>
-              {article.contentType && (
-                <span className={`${styles.categoryBadge} paper-category`}>
-                  {formatCategory(stegaClean(article.contentType))}
-                </span>
-              )}
-              <span className={styles.glyphFlourish}>✦</span>
-              <span className={styles.versionBadge}>Edition v{version}</span>
-              <span className={styles.metaAuthor}>
-                — Penned by <strong>{siteMeta.authorName}</strong>
-              </span>
-              {article.publishedAt && (
-                <span className={styles.metaDate}>
-                  &bull; Recorded on{" "}
-                  <time className="paper-date" dateTime={article.publishedAt}>
-                    {formatDate(stegaClean(article.publishedAt), "long")}
-                  </time>
-                </span>
-              )}
-            </div>
-
-            <StarDivider variant={1} />
-
-            {article.summary && (
-              <div className={styles.summaryLead}>
-                <p style={{ margin: 0 }}>{article.summary}</p>
-              </div>
-            )}
-
-            {coverUrl && (
-              <div className={styles.coverContainer}>
-                <div className={styles.coverBox}>
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img
-                    src={coverUrl}
-                    alt={
-                      article.coverEtching?.alt ||
-                      article.coverEtching?.caption ||
-                      articleTitle
-                    }
-                    className={styles.coverImage}
-                    loading="lazy"
-                  />
-                  {article.coverEtching?.caption && (
-                    <div className={styles.coverCaption}>
-                      {article.coverEtching.caption}
-                    </div>
+                <div className={styles.subtitleRow}>
+                  {article.contentType && (
+                    <span className={`${styles.categoryBadge} paper-category`}>
+                      {formatCategory(stegaClean(article.contentType))}
+                    </span>
+                  )}
+                  <span className={styles.glyphFlourish}>✦</span>
+                  <span className={styles.versionBadge}>Edition v{version}</span>
+                  <span className={styles.metaAuthor}>
+                    — Penned by <strong>{siteMeta.authorName}</strong>
+                  </span>
+                  {article.publishedAt && (
+                    <span className={styles.metaDate}>
+                      &bull; Recorded on{" "}
+                      <time className="paper-date" dateTime={article.publishedAt}>
+                        {formatDate(stegaClean(article.publishedAt), "long")}
+                      </time>
+                    </span>
                   )}
                 </div>
-              </div>
-            )}
-          </header>
 
-          {/* ── Article Body with Custom Victorian Serializers ── */}
+                <div className={styles.headerRule} />
+
+                {/* Summary section positioned right beside the third column box */}
+                {article.summary && (
+                  <div className={styles.summaryLead}>
+                    <p style={{ margin: 0 }}>{article.summary}</p>
+                  </div>
+                )}
+              </header>
+            </div>
+
+            {/* Single Unified Third Column Box */}
+            <div className={styles.thirdColumn}>
+              <ArticleUtilities
+                title={articleTitle}
+                author={siteMeta.authorName}
+                publishedAt={article.publishedAt}
+                versionNumber={version}
+                slug={slug}
+                chapter={article.chapter}
+                topics={article.topics}
+                downloadablePdfs={article.downloadablePdfs}
+              />
+            </div>
+          </section>
+
+          {/* ── Cover Etching (Full measure / Centered) ── */}
+          {coverUrl && (
+            <div className={styles.coverContainer}>
+              <div className={styles.coverBox}>
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src={coverUrl}
+                  alt={
+                    article.coverEtching?.alt ||
+                    article.coverEtching?.caption ||
+                    articleTitle
+                  }
+                  className={styles.coverImage}
+                  loading="lazy"
+                />
+                {article.coverEtching?.caption && (
+                  <div className={styles.coverCaption}>
+                    {article.coverEtching.caption}
+                  </div>
+                )}
+              </div>
+            </div>
+          )}
+
+          {/* ── Article Body (Spans Full Width across the Reading Folio) ── */}
           <div className={`${styles.body} paper-body`}>
             {Array.isArray(article.body) && (
               <PortableText

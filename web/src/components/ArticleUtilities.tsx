@@ -80,11 +80,12 @@ export function ArticleUtilities({
 
   return (
     <>
-      <aside className={styles.rail} aria-label="Scholarly actions and attachments">
-        {/* ── Downloadable PDFs (Matches reference layout at top right) ── */}
+      {/* ── Single Unified Third-Column Victorian Card ── */}
+      <aside className={styles.card} aria-label="Scholarly actions and compendium entry">
+        {/* ── Optional Downloadable PDFs Section ── */}
         {hasPdfs && (
-          <div className={styles.card}>
-            <h3 className={styles.cardTitle}>
+          <div className={styles.section}>
+            <h3 className={styles.sectionTitle}>
               <Icon name="bookmark-ribbon" size={13} />
               PDFs
             </h3>
@@ -118,12 +119,14 @@ export function ArticleUtilities({
                 );
               })}
             </ul>
+
+            <div className={styles.cardDivider} />
           </div>
         )}
 
-        {/* ── Actions Card ── */}
-        <div className={styles.card}>
-          <h3 className={styles.cardTitle}>
+        {/* ── Folio Actions Section ── */}
+        <div className={styles.section}>
+          <h3 className={styles.sectionTitle}>
             <Icon name="gear" size={13} />
             Folio Actions
           </h3>
@@ -158,9 +161,11 @@ export function ArticleUtilities({
           </div>
         </div>
 
-        {/* ── Compendium Entry & Taxonomy ── */}
-        <div className={styles.card}>
-          <h3 className={styles.cardTitle}>
+        <div className={styles.cardDivider} />
+
+        {/* ── Compendium Entry & Taxonomy Section ── */}
+        <div className={styles.section}>
+          <h3 className={styles.sectionTitle}>
             <Icon name="diamond" size={11} />
             Compendium Entry
           </h3>

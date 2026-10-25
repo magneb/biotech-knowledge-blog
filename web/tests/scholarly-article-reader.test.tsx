@@ -42,14 +42,14 @@ vi.mock("@/sanity/live", () => ({
 describe("Citation & Archival Permalink Utilities (lib/citation.ts)", () => {
   it("generates persistent edition permalinks in /[slug]/v{N}/ format", () => {
     expect(getVersionPermalink("crispr-cas9", 1)).toBe(
-      "https://oliversguide.com/crispr-cas9/v1/"
+      "https://oliversguidetoeverything.com/crispr-cas9/v1/"
     );
     expect(getVersionPermalink("flow-cytometry", 3)).toBe(
-      "https://oliversguide.com/flow-cytometry/v3/"
+      "https://oliversguidetoeverything.com/flow-cytometry/v3/"
     );
     // Defaults to v1 if version is missing or 0
     expect(getVersionPermalink("western-blot", 0)).toBe(
-      "https://oliversguide.com/western-blot/v1/"
+      "https://oliversguidetoeverything.com/western-blot/v1/"
     );
   });
 
@@ -63,7 +63,7 @@ describe("Citation & Archival Permalink Utilities (lib/citation.ts)", () => {
     });
 
     expect(citation).toBe(
-      "Oliver. (2026, October 25). Polymerase Chain Reaction Protocol (Version 2). In Oliver's Guide To Everything. https://oliversguide.com/pcr-protocol/v2/"
+      "Oliver. (2026, October 25). Polymerase Chain Reaction Protocol (Version 2). In Oliver's Guide To Everything. https://oliversguidetoeverything.com/pcr-protocol/v2/"
     );
   });
 
@@ -79,7 +79,7 @@ describe("Citation & Archival Permalink Utilities (lib/citation.ts)", () => {
     expect(bibtex).toContain("@misc{oliver2026pcrprotocol,");
     expect(bibtex).toContain("title        = {Polymerase Chain Reaction Protocol (Version 2)},");
     expect(bibtex).toContain("howpublished = {Oliver's Guide To Everything},");
-    expect(bibtex).toContain("url          = {https://oliversguide.com/pcr-protocol/v2/},");
+    expect(bibtex).toContain("url          = {https://oliversguidetoeverything.com/pcr-protocol/v2/},");
   });
 });
 
@@ -195,14 +195,14 @@ describe("Dublin Core & Google Scholar Metadata (generateMetadata)", () => {
       "Flow Cytometry Panel Design (Edition v2) — Oliver's Guide To Everything"
     );
     expect(meta.description).toBe("Principles of 12-color fluorophore panel selection.");
-    expect(meta.alternates?.canonical).toBe("https://oliversguide.com/flow-cytometry/");
+    expect(meta.alternates?.canonical).toBe("https://oliversguidetoeverything.com/flow-cytometry/");
 
     const other = meta.other as Record<string, string>;
     expect(other["DC.title"]).toBe("Flow Cytometry Panel Design");
     expect(other["DC.creator"]).toBe("Oliver");
     expect(other["DC.type"]).toBe("Text.Protocol");
-    expect(other["DC.identifier"]).toBe("https://oliversguide.com/flow-cytometry/v2/");
-    expect(other["DC.relation.isVersionOf"]).toBe("https://oliversguide.com/flow-cytometry/");
+    expect(other["DC.identifier"]).toBe("https://oliversguidetoeverything.com/flow-cytometry/v2/");
+    expect(other["DC.relation.isVersionOf"]).toBe("https://oliversguidetoeverything.com/flow-cytometry/");
     expect(other["DC.publisher"]).toBe("Oliver's Guide To Everything");
 
     expect(other["citation_title"]).toBe("Flow Cytometry Panel Design");

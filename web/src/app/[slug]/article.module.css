@@ -46,7 +46,7 @@
   gap: 1.5rem;
 }
 
-/* ── Main Reading Area (No inner boxed card, sits on folio sheet) ── */
+/* ── Main Reading Area (No inner boxed card, sits directly on folio sheet) ── */
 .reader {
   background: transparent;
   border: none;
@@ -56,18 +56,27 @@
   font-family: var(--font-cormorant, "Cormorant Garamond", Georgia, serif);
 }
 
-/* ── Top-Right Floated Action & PDF Rail ── */
-.utilitiesFloated {
-  float: right;
-  width: 270px;
-  margin: 0 0 1.75rem 2.25rem;
-  position: relative;
-  z-index: 2;
+/* ── Top Header Section: Title + Summary & Third Column Side-by-Side ── */
+.topSection {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 280px;
+  gap: 2.5rem;
+  align-items: start;
+  margin-bottom: 2rem;
+}
+
+.mainHeaderCol {
+  min-width: 0;
+}
+
+.thirdColumn {
+  width: 280px;
+  flex-shrink: 0;
 }
 
 /* ── Left-Aligned Header ── */
 .header {
-  margin-bottom: 1.5rem;
+  margin-bottom: 0;
   text-align: left;
 }
 
@@ -88,7 +97,7 @@
   font-size: 1.05rem;
   font-style: italic;
   color: var(--sepia-dark, #5c4d3c);
-  margin-bottom: 1.15rem;
+  margin-bottom: 0.75rem;
 }
 
 .categoryBadge {
@@ -129,8 +138,19 @@
   color: var(--sepia-dark, #5c4d3c);
 }
 
+.headerRule {
+  height: 1px;
+  background: linear-gradient(
+    to right,
+    var(--sepia-light, #c4b59d),
+    rgba(196, 181, 157, 0.4) 80%,
+    transparent
+  );
+  margin: 0.85rem 0 1.15rem;
+}
+
 .summaryLead {
-  margin: 1.25rem 0 1.75rem;
+  margin: 0.85rem 0 0;
   font-size: 1.25rem;
   line-height: 1.6;
   font-style: italic;
@@ -139,7 +159,7 @@
 }
 
 .coverContainer {
-  margin: 1.5rem 0 2rem;
+  margin: 2rem 0 2.5rem;
   text-align: center;
 }
 
@@ -165,7 +185,7 @@
   color: var(--sepia-dark, #5c4d3c);
 }
 
-/* ── Body Typography ── */
+/* ── Body Typography: Spans 100% of the reading measure below topSection ── */
 .body {
   font-size: 1.15rem;
   line-height: 1.75;
@@ -235,10 +255,13 @@
     grid-template-columns: 1fr;
   }
 
-  .utilitiesFloated {
-    float: none;
+  .topSection {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+
+  .thirdColumn {
     width: 100%;
-    margin: 1.5rem 0;
   }
 
   .title {
@@ -269,12 +292,8 @@
     background: transparent !important;
   }
 
-  .utilitiesFloated {
+  .topSection {
     display: none !important;
-  }
-
-  .header {
-    display: none !important; /* Replaced by PrintHeader */
   }
 
   .auditSection {

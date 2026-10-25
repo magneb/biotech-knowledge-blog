@@ -158,7 +158,7 @@ export const homePage = defineType({
       title: 'Canonical Domain / Base URL',
       type: 'url',
       description:
-        'Base URL for persistent edition permalinks (e.g. "https://oliversguide.com").',
+        'Base URL for persistent edition permalinks (e.g. "https://oliversguidetoeverything.com").',
       validation: (rule) =>
         rule.uri({
           scheme: ['http', 'https'],

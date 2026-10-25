@@ -18,7 +18,7 @@ export interface CitationParams {
 export function getVersionPermalink(
   slug: string,
   versionNumber: number = 1,
-  baseUrl: string = "https://oliversguide.com"
+  baseUrl: string = "https://oliversguidetoeverything.com"
 ): string {
   const cleanBase = baseUrl.replace(/\/+$/, "");
   const cleanSlug = slug.replace(/^\/+|\/+$/g, "");
@@ -38,7 +38,7 @@ export function formatApa7Citation({
   publishedAt,
   versionNumber = 1,
   slug,
-  baseUrl = "https://oliversguide.com",
+  baseUrl = "https://oliversguidetoeverything.com",
 }: CitationParams): string {
   const version = Math.max(1, Math.floor(versionNumber || 1));
   const permalink = getVersionPermalink(slug, version, baseUrl);
@@ -66,7 +66,7 @@ export function formatBibtexCitation({
   publishedAt,
   versionNumber = 1,
   slug,
-  baseUrl = "https://oliversguide.com",
+  baseUrl = "https://oliversguidetoeverything.com",
 }: CitationParams): string {
   const version = Math.max(1, Math.floor(versionNumber || 1));
   const permalink = getVersionPermalink(slug, version, baseUrl);
