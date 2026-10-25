@@ -211,7 +211,7 @@ Every work package must satisfy the 3-tier verification gate before commit/push:
 
 ---
 
-## WP-8: Scholarly 3-Column Reader, Planned Links, APA7 Citations & Paged-Media PDF
+## WP-8: Scholarly 3-Column Reader, Planned Links, APA7 Citations & Paged-Media PDF [COMPLETED]
 * **Objective:** Implement the three-column scholarly journal reading layout, dynamic anchor Table of Contents, resilient internal and planned links, visitor-facing APA7/BibTeX citation generator, Dublin Core metadata, and Paged-Media PDF export engine (Decision 015).
 * **Scope:**
   - **Left Column:** Sticky collapsible Table of Contents with active heading observer (H2/H3), anchor sanitization with `stegaClean`, and faint copperplate margin watermark.
@@ -230,19 +230,21 @@ Every work package must satisfy the 3-tier verification gate before commit/push:
     - **Paged-Media PDF Engine:** `[ ⎙ Save / Export PDF ]` button invoking the Victorian `@media print` CSS engine with `<PrintHeader>` and `<PrintFooter>` blocks injecting print date, version number, canonical URL, and A4 running folios.
     - Sticky floating figure annotations.
   - **Selected Images Gallery:** Multi-column grid of scientific illustrations with engraved borders and captions.
-  - **Metadata Engine:** Dublin Core (`DC.*`) and Google Scholar (`citation_*`) metadata injection via Next.js `generateMetadata` on `/[slug]`.
+  - **Metadata Engine & Studio Configuration:** Dublin Core (`DC.*`) and Google Scholar (`citation_*`) metadata injection via Next.js `generateMetadata` on `/[slug]`. Configurable from either `homePage` or the new `aboutPage` singleton in Sanity Studio (`resolveSiteMetadata`).
 * **Sanity Best Practice Alignment:**
   - Custom Portable Text components pass props safely and preserve `_key` values for click-to-edit.
   - Heading slugs sanitized with `stegaClean` so DOM IDs match Table of Contents anchor links in draft mode.
   - Schema extension: Add `internalLink` mark annotation to `article.body` with dual-mode support (`resolved` reference vs `planned` title).
+  - Singletons `homePage` and `aboutPage` provide unified metadata fallback for authors and publishers.
 * **Acceptance Criteria:**
-  - Table of Contents automatically tracks scroll position.
-  - Internal links resolve reliably without breaking on slug changes; planned links display informative hover states.
-  - Visitors can copy a valid APA7 citation and BibTeX record citing the article's edition.
-  - Printing or saving to PDF produces a clean, paginated scientific document with print timestamp, version number, and no web UI clutter.
-  - Dublin Core and Google Scholar meta tags render in page `<head>`.
-  - PDFs are downloadable directly from Sanity asset storage.
-  - Typography renders with the elegance of an antique medical journal.
+  - [x] Table of Contents automatically tracks scroll position.
+  - [x] Internal links resolve reliably without breaking on slug changes; planned links display informative hover states.
+  - [x] Visitors can copy a valid APA7 citation and BibTeX record citing the article's edition.
+  - [x] Printing or saving to PDF produces a clean, paginated scientific document with print timestamp, version number, and no web UI clutter.
+  - [x] Dublin Core and Google Scholar meta tags render in page `<head>`.
+  - [x] General metadata can be configured by Oliver in Sanity Studio from either the Home Page or About & Author Settings.
+  - [x] PDFs are downloadable directly from Sanity asset storage.
+  - [x] Typography renders with the elegance of an antique medical journal.
 
 ---
 
