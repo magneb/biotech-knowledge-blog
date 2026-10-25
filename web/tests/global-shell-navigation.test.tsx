@@ -326,12 +326,11 @@ describe("HomePage Topic Filtering", () => {
   });
 
   it("filters articles on HomePage when topic param is supplied", async () => {
-    mockFetch
-      .mockResolvedValueOnce({
-        data: { heading: "Oliver's Guide", subheading: "Biotech", intro: null },
-      })
-      .mockResolvedValueOnce({
-        data: [
+    mockFetch.mockResolvedValueOnce({
+      data: {
+        home: { heading: "Oliver's Guide", subheading: "Biotech", intro: null },
+        chapters: [],
+        articles: [
           {
             _id: "1",
             title: "Article Alpha",
@@ -349,7 +348,8 @@ describe("HomePage Topic Filtering", () => {
             topics: [{ _id: "t2", name: "Proteins", symbol: "Pr", slug: { current: "pr" } }],
           },
         ],
-      });
+      },
+    });
 
     const ui = await HomePage({
       searchParams: Promise.resolve({ topic: "ca" }),

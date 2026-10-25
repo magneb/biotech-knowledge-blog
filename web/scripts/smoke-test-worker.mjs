@@ -204,8 +204,15 @@ async function main() {
       fail("runtime", `GET / returned status ${homeRes.status} (expected 200)`);
     }
     const homeHtml = await homeRes.text();
-    if (!homeHtml.includes("sheet-content") || !homeHtml.includes("Oliver")) {
-      fail("runtime", "GET / HTML did not contain expected layout (.sheet-content / Oliver).");
+    if (
+      !homeHtml.includes("sheet-content") ||
+      !homeHtml.includes("Oliver") ||
+      !homeHtml.includes("Popular Media")
+    ) {
+      fail(
+        "runtime",
+        "GET / HTML did not contain expected layout (.sheet-content / Oliver / Popular Media)."
+      );
     }
     log("runtime", "✓ GET / -> 200 OK (Victorian parchment layout verified)");
 
