@@ -249,8 +249,11 @@ export default async function HistoricalArticlePage({
   const article = rawData?.article;
   const snapshot = rawData?.snapshot;
 
-  // If neither a frozen snapshot nor a matching live edition exists, 404
-  if (!snapshot && (!article || (article.versionNumber || 1) !== versionNum)) {
+  const currentLiveVersion = article?.versionNumber || 1;
+  const isCurrentActive = currentLiveVersion === versionNum;
+
+  // If neither a frozen snapshot exists nor does the article exist with versionNum <= currentLiveVersion, 404
+  if (!snapshot && (!article || versionNum > currentLiveVersion)) {
     return notFound();
   }
 
@@ -262,11 +265,12 @@ export default async function HistoricalArticlePage({
   const summary = snapshot?.snapshotSummary || article?.summary || "";
   const body = snapshot?.snapshotBody || article?.body;
   const coverEtching = snapshot?.snapshotCoverEtching || article?.coverEtching;
-  const publishedAt = snapshot?.publishedAt || article?.publishedAt;
-  const changeSummary = snapshot?.changeSummary || article?.versionChangelog;
-
-  const currentLiveVersion = article?.versionNumber || 1;
-  const isCurrentActive = currentLiveVersion === versionNum;
+  const publishedAt = snapshot?.publishedAt || (isCurrentActive ? article?.publishedAt : undefined);
+  const changeSummary =
+    snapshot?.changeSummary ||
+    (isCurrentActive
+      ? article?.versionChangelog
+      : `Archival record for Edition v${versionNum}.`);
 
   const headings = Array.isArray(body) ? extractTocHeadings(body) : [];
   const coverUrl = buildSanityImageUrl(coverEtching, {
@@ -312,7 +316,7 @@ export default async function HistoricalArticlePage({
             slug={slug}
           />
 
-          {/* ── Store Norske Leksikon-Style Archival Edition Alert Banner ── */}
+          {/* ── Archival Edition Alert Banner ── */}
           <div className={styles.archivalBanner} role="status">
             <div className={styles.archivalBannerIcon}>📜</div>
             <div className={styles.archivalBannerContent}>
@@ -446,14 +450,14 @@ export default async function HistoricalArticlePage({
             )}
           </div>
 
-          {/* ── Reader Footer & Full-Width References & SNL Audit ── */}
+          {/* ── Reader Footer & Full-Width References & Archival Audit ── */}
           <footer className={styles.footer}>
             <StarDivider variant={1} />
 
-            {/* Store Norske Leksikon-style audit line */}
+            {/* Archival audit record */}
             <div className={styles.auditSection}>
               <div>
-                <span>Sist oppdatert / Recorded: </span>
+                <span>Archival Record &amp; Last Revised: </span>
                 <strong>
                   {publishedAt
                     ? formatDate(stegaClean(publishedAt), "long")

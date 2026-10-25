@@ -126,7 +126,7 @@ export async function generateMetadata({
 
   return {
     title: `Version History & Archival Diffs: ${cleanTitle} — ${siteMeta.siteTitle}`,
-    description: `Complete Store Norske Leksikon-style version timeline, editorial changelogs, and visual text diffs for "${cleanTitle}".`,
+    description: `Complete official version timeline, editorial changelogs, and visual text diffs for "${cleanTitle}".`,
     alternates: {
       canonical: canonicalUrl,
     },
@@ -181,25 +181,30 @@ export default async function ArticleVersionsPage({
     }
   }
 
-  // 2. Ensure the active live article is represented
+  // 2. Ensure all editions from 1 up to liveVersion are represented
   const liveVersion = article.versionNumber || 1;
-  if (!editionMap.has(liveVersion)) {
-    editionMap.set(liveVersion, {
-      versionNumber: liveVersion,
-      publishedAt: article.publishedAt,
-      changeSummary: article.versionChangelog || "Initial publication or active edition.",
-      title: article.title,
-      contentType: article.contentType,
-      summary: article.summary,
-      body: article.body,
-      isCurrentActive: true,
-    });
-  } else {
-    // Make sure liveVersion is tagged as isCurrentActive
-    const existing = editionMap.get(liveVersion);
-    if (existing) {
-      existing.isCurrentActive = true;
+  for (let v = 1; v <= liveVersion; v++) {
+    if (!editionMap.has(v)) {
+      editionMap.set(v, {
+        versionNumber: v,
+        publishedAt: v === liveVersion ? article.publishedAt : undefined,
+        changeSummary:
+          v === liveVersion
+            ? article.versionChangelog || "Initial publication or active edition."
+            : `Edition v${v} archival record.`,
+        title: article.title,
+        contentType: article.contentType,
+        summary: article.summary,
+        body: article.body,
+        isCurrentActive: v === liveVersion,
+      });
     }
+  }
+
+  // 3. Mark the active live edition
+  const activeRecord = editionMap.get(liveVersion);
+  if (activeRecord) {
+    activeRecord.isCurrentActive = true;
   }
 
   const editions: EditionRecord[] = Array.from(editionMap.values()).sort(
@@ -248,7 +253,7 @@ export default async function ArticleVersionsPage({
         <div className={styles.headerRule} />
       </header>
 
-      {/* ── Interactive SNL Timeline & Visual Diff Viewer ── */}
+      {/* ── Interactive Version Timeline & Visual Diff Viewer ── */}
       <VersionHistoryDiffViewer
         slug={slug}
         author={siteMeta.authorName}
@@ -259,7 +264,7 @@ export default async function ArticleVersionsPage({
       <footer className={styles.footer}>
         <StarDivider variant={2} />
         <div className={styles.footerAudit}>
-          <span>Store Norske Leksikon Editorial Model</span>
+          <span>Permanent Archival Record</span>
           <span>&bull;</span>
           <span>Immutable Permanent Edge Archival</span>
           <span>&bull;</span>

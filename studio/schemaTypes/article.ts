@@ -1,4 +1,3 @@
-import {ArchiveIcon} from '@sanity/icons/Archive'
 import {BottleIcon} from '@sanity/icons/Bottle'
 import {DocumentPdfIcon} from '@sanity/icons/DocumentPdf'
 import {DocumentTextIcon} from '@sanity/icons/DocumentText'
@@ -15,9 +14,56 @@ export const article = defineType({
   groups: [
     {name: 'content', title: 'Content & Media', default: true},
     {name: 'taxonomy', title: 'Chapter & Topics'},
-    {name: 'versioning', title: 'Edition & Versioning (SNL)', icon: ArchiveIcon},
   ],
   fields: [
+    defineField({
+      name: 'isNewEdition',
+      title: 'Publish as New Official Edition',
+      type: 'boolean',
+      group: 'content',
+      description:
+        'Toggle ON only when publishing substantive scientific revisions that require a new immutable edition tag.',
+      initialValue: false,
+    }),
+    defineField({
+      name: 'versionChangelog',
+      title: 'Edition Changelog Notes',
+      type: 'text',
+      group: 'content',
+      rows: 3,
+      description:
+        'Summarize the scientific changes for this edition. Required when publishing a new official edition.',
+      hidden: ({document}) => !document?.isNewEdition,
+      validation: (rule) =>
+        rule.custom((value, context) => {
+          if (
+            context.document?.isNewEdition &&
+            (!value || typeof value !== 'string' || !value.trim())
+          ) {
+            return 'Changelog notes are required when publishing a new official edition.'
+          }
+          return true
+        }),
+    }),
+    defineField({
+      name: 'versionNumber',
+      title: 'Current Edition',
+      type: 'number',
+      group: 'content',
+      readOnly: true,
+      initialValue: 1,
+      description:
+        'Official edition number (automatically incremented upon publishing a new edition).',
+    }),
+    defineField({
+      name: 'publishedAt',
+      title: 'Last Published At',
+      type: 'datetime',
+      group: 'content',
+      readOnly: true,
+      initialValue: () => new Date().toISOString(),
+      description: 'Timestamp of the latest published edition.',
+    }),
     defineField({
       name: 'title',
       title: 'Title',
@@ -94,41 +140,6 @@ export const article = defineType({
       group: 'taxonomy',
       description: 'Highlight this entry in the landing page showcase.',
       initialValue: false,
-    }),
-    defineField({
-      name: 'publishedAt',
-      title: 'Published At',
-      type: 'datetime',
-      group: 'versioning',
-    }),
-    defineField({
-      name: 'versionNumber',
-      title: 'Edition / Version Number',
-      type: 'number',
-      group: 'versioning',
-      description:
-        'Official scientific edition number (e.g. 1 for v1, 2 for v2). Increment only for substantive protocol changes.',
-      initialValue: 1,
-      validation: (rule) => rule.integer().positive(),
-    }),
-    defineField({
-      name: 'isNewEdition',
-      title: 'Publish as New Edition',
-      type: 'boolean',
-      group: 'versioning',
-      description:
-        'When publishing substantive scientific revisions, enable this to increment the official edition number and record an archival snapshot.',
-      initialValue: false,
-    }),
-    defineField({
-      name: 'versionChangelog',
-      title: 'Edition Changelog Notes',
-      type: 'text',
-      group: 'versioning',
-      rows: 2,
-      description:
-        'Summary of scientific changes for this edition (e.g. updated reagent concentrations, revised temperatures).',
-      hidden: ({document}) => !document?.isNewEdition,
     }),
     defineField({
       name: 'coverEtching',

@@ -6,6 +6,7 @@ import {schemaTypes} from './schemaTypes'
 import {resolve} from './src/presentation/resolve'
 import {structure, defaultDocumentNode} from './src/structure'
 import {RecordVersionSnapshotAction} from './src/actions/recordSnapshotAction'
+import {createPublishWithSnapshotAction} from './src/actions/publishWithSnapshot'
 
 const studioEnv = (
   globalThis as {process?: {env?: Record<string, string | undefined>}}
@@ -39,7 +40,12 @@ export default defineConfig({
   document: {
     actions: (prev, context) => {
       if (context.schemaType === 'article') {
-        return [...prev, RecordVersionSnapshotAction]
+        const withCustomPublish = prev.map((originalAction) =>
+          originalAction.action === 'publish'
+            ? createPublishWithSnapshotAction(originalAction)
+            : originalAction
+        )
+        return [...withCustomPublish, RecordVersionSnapshotAction]
       }
       return prev
     },

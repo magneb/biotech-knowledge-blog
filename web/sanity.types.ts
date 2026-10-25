@@ -258,6 +258,10 @@ export type Article = {
   _createdAt: string;
   _updatedAt: string;
   _rev: string;
+  isNewEdition?: boolean;
+  versionChangelog?: string;
+  versionNumber?: number;
+  publishedAt?: string;
   title?: string;
   slug?: Slug;
   contentType?: "article" | "guide" | "protocol" | "research-note";
@@ -270,10 +274,6 @@ export type Article = {
     } & TopicReference
   >;
   featured?: boolean;
-  publishedAt?: string;
-  versionNumber?: number;
-  isNewEdition?: boolean;
-  versionChangelog?: string;
   coverEtching?: {
     asset?: SanityImageAssetReference;
     media?: unknown;

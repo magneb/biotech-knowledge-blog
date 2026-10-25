@@ -75,7 +75,7 @@ export function ArticleHistoryView({documentId, document}: ArticleHistoryViewPro
           <Flex justify="space-between" align="center" wrap="wrap" gap={3}>
             <Stack gap={2}>
               <Flex align="center" gap={2}>
-                <Heading size={2}>Store Norske Leksikon Edition Timeline</Heading>
+                <Heading size={2}>Official Edition Timeline</Heading>
                 <Badge tone="positive" fontSize={1} padding={2}>
                   Current: v{currentVersion}
                 </Badge>
@@ -194,7 +194,7 @@ export function ArticleHistoryView({documentId, document}: ArticleHistoryViewPro
                   {snap.changeSummary && (
                     <Card tone="transparent" padding={2} radius={2} border>
                       <Text size={1}>
-                        <strong>Endringslogg / Changelog: </strong>
+                        <strong>Edition Changelog: </strong>
                         {snap.changeSummary}
                       </Text>
                     </Card>

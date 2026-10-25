@@ -95,7 +95,7 @@ export const RecordVersionSnapshotAction: DocumentActionComponent = (props: Docu
           onClose: () => {
             if (!isSubmitting) setDialogOpen(false)
           },
-          header: 'Record Archival Protocol Edition (Store Norske Leksikon Model)',
+          header: 'Record Archival Protocol Edition',
           content: (
             <Card padding={4}>
               <Stack gap={4}>
@@ -122,7 +122,7 @@ export const RecordVersionSnapshotAction: DocumentActionComponent = (props: Docu
 
                 <Stack gap={2}>
                   <Text size={1} weight="semibold">
-                    Scientific Changelog Notes (Endringslogg)
+                    Scientific Changelog Notes
                   </Text>
                   <Text size={1} muted>
                     Summarize substantive changes (e.g. updated reagent concentrations, incubation temperatures, or revised control steps):

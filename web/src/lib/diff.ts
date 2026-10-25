@@ -1,5 +1,5 @@
 /**
- * Zero-dependency Word & Block Diff Engine for Store Norske Leksikon-Style Protocol Versioning
+ * Zero-dependency Word & Block Diff Engine for Scholarly Protocol Versioning
  *
  * Implements Longest Common Subsequence (LCS) diffing for words and blocks,
  * preserving whitespace and formatting for Victorian copperplate rendering.

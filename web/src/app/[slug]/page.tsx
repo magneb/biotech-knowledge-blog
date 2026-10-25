@@ -324,14 +324,14 @@ export default async function ArticlePage({
             )}
           </div>
 
-          {/* ── Reader Footer & Full-Width References & SNL Audit ── */}
+          {/* ── Reader Footer & Full-Width References & Archival Audit ── */}
           <footer className={styles.footer}>
             <StarDivider variant={1} />
 
-            {/* Store Norske Leksikon-style audit line */}
+            {/* Archival audit record */}
             <div className={styles.auditSection}>
               <div>
-                <span>Sist oppdatert / Recorded: </span>
+                <span>Archival Record &amp; Last Revised: </span>
                 <strong>
                   {article.publishedAt
                     ? formatDate(stegaClean(article.publishedAt), "long")
@@ -343,7 +343,7 @@ export default async function ArticlePage({
                 <Link
                   href={`/${slug}/versions/`}
                   className={styles.auditLink}
-                  title="View Store Norske Leksikon-style edition timeline and visual diffs"
+                  title="View edition timeline and visual diffs"
                 >
                   History &amp; Diffs &rarr;
                 </Link>

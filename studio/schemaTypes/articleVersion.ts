@@ -39,7 +39,7 @@ export const articleVersion = defineType({
       title: 'Edition Changelog Notes',
       type: 'text',
       rows: 3,
-      description: 'Store Norske Leksikon-style summary of scientific changes for this edition.',
+      description: 'Summary of scientific changes for this edition.',
     }),
     defineField({
       name: 'snapshotTitle',

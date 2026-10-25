@@ -162,7 +162,7 @@ export function ArticleUtilities({
             <Link
               href={`/${slug}/versions/`}
               className={styles.actionButton}
-              title="Inspect Store Norske Leksikon-style edition timeline and visual diffs"
+              title="Inspect edition timeline and visual diffs"
             >
               <Icon name="diamond" size={12} />
               History &amp; Diffs (v{versionNumber || 1})

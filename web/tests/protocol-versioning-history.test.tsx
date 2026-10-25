@@ -194,7 +194,7 @@ describe("Protocol Versioning History & Archival Pages (WP-8B)", () => {
       expect(meta.other?.["DC.type"]).toBe("Text.Protocol.Archival");
     });
 
-    it("renders frozen snapshot data and Store Norske Leksikon archival banner for historical edition (v1)", async () => {
+    it("renders frozen snapshot data and archival banner for historical edition (v1)", async () => {
       const jsx = await HistoricalArticlePage({
         params: Promise.resolve({ slug: "crispr-knockout", version: "v1" }),
       });
@@ -230,6 +230,13 @@ describe("Protocol Versioning History & Archival Pages (WP-8B)", () => {
     it("calls notFound when version param is malformed or invalid", async () => {
       await HistoricalArticlePage({
         params: Promise.resolve({ slug: "crispr-knockout", version: "invalid-version" }),
+      });
+      expect(notFound).toHaveBeenCalled();
+    });
+
+    it("calls notFound when version exceeds live edition and no snapshot exists (v99)", async () => {
+      await HistoricalArticlePage({
+        params: Promise.resolve({ slug: "crispr-knockout", version: "v99" }),
       });
       expect(notFound).toHaveBeenCalled();
     });

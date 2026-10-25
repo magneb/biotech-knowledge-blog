@@ -85,16 +85,15 @@ export function VersionHistoryDiffViewer({
 
   return (
     <div className={styles.container}>
-      {/* ── 1. Store Norske Leksikon-Style Timeline of All Editions ── */}
+      {/* ── 1. Official Timeline of All Editions ── */}
       <section className={styles.timelineSection} aria-labelledby="timeline-heading">
         <h2 id="timeline-heading" className={styles.timelineHeading}>
           <Icon name="diamond" size={13} />
           Treatise Edition Timeline &amp; Changelogs
         </h2>
         <p className={styles.timelineIntro}>
-          In accordance with the Store Norske Leksikon editorial model, substantive scientific
-          revisions are permanently frozen as immutable editions to maintain reproducible
-          citations in wet-lab research. Minor typographic adjustments remain active in-place.
+          Substantive scientific revisions are permanently frozen as immutable editions to maintain
+          reproducible citations in wet-lab research. Minor typographic adjustments remain active in-place.
         </p>
 
         <ol className={styles.timelineList}>
@@ -157,7 +156,7 @@ export function VersionHistoryDiffViewer({
 
                   {ed.changeSummary && (
                     <p className={styles.changelogText}>
-                      <strong>Endringslogg / Changelog: </strong>
+                      <strong>Edition Changelog: </strong>
                       {ed.changeSummary}
                     </p>
                   )}
