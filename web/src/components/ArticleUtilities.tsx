@@ -43,6 +43,14 @@ export interface ArticleUtilitiesProps {
   downloadablePdfs?: PdfAttachment[] | null;
 }
 
+function formatFileSize(bytes?: number | null): string {
+  if (!bytes || bytes <= 0) return "";
+  if (bytes < 1024 * 1024) {
+    return `${(bytes / 1024).toFixed(1)} KB`;
+  }
+  return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
+}
+
 export function ArticleUtilities({
   title,
   author = "Oliver",
@@ -73,7 +81,47 @@ export function ArticleUtilities({
   return (
     <>
       <aside className={styles.rail} aria-label="Scholarly actions and attachments">
-        {/* Actions Card */}
+        {/* ── Downloadable PDFs (Matches reference layout at top right) ── */}
+        {hasPdfs && (
+          <div className={styles.card}>
+            <h3 className={styles.cardTitle}>
+              <Icon name="bookmark-ribbon" size={13} />
+              PDFs
+            </h3>
+
+            <ul className={styles.pdfList}>
+              {downloadablePdfs.map((pdf, idx) => {
+                const url = pdf?.file?.asset?.url;
+                if (!url) return null;
+                const sizeStr = formatFileSize(pdf?.file?.asset?.size);
+
+                return (
+                  <li key={idx} className={styles.pdfItem}>
+                    <div className={styles.pdfMeta}>
+                      <span className={styles.pdfTitle}>{pdf.title || "Protocol PDF"}</span>
+                      {sizeStr && <span className={styles.pdfSubtitle}>PDF • {sizeStr}</span>}
+                      {pdf.description && (
+                        <p className={styles.pdfDescription}>{pdf.description}</p>
+                      )}
+                    </div>
+                    <a
+                      href={url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className={styles.pdfDownloadBtn}
+                      title={`Download ${pdf.title || "PDF"}`}
+                      download
+                    >
+                      <Icon name="arrow-right" size={12} style={{ transform: "rotate(90deg)" }} />
+                    </a>
+                  </li>
+                );
+              })}
+            </ul>
+          </div>
+        )}
+
+        {/* ── Actions Card ── */}
         <div className={styles.card}>
           <h3 className={styles.cardTitle}>
             <Icon name="gear" size={13} />
@@ -110,42 +158,7 @@ export function ArticleUtilities({
           </div>
         </div>
 
-        {/* Downloadable PDFs */}
-        {hasPdfs && (
-          <div className={styles.card}>
-            <h3 className={styles.cardTitle}>
-              <Icon name="star-flourish" size={13} />
-              Bench Sheets &amp; PDFs
-            </h3>
-
-            <ul className={styles.pdfList}>
-              {downloadablePdfs.map((pdf, idx) => {
-                const url = pdf?.file?.asset?.url;
-                if (!url) return null;
-
-                return (
-                  <li key={idx} className={styles.pdfItem}>
-                    <a
-                      href={url}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className={styles.pdfLink}
-                      download
-                    >
-                      <Icon name="arrow-right" size={10} />
-                      {pdf.title || "Download Protocol PDF"}
-                    </a>
-                    {pdf.description && (
-                      <p className={styles.pdfDescription}>{pdf.description}</p>
-                    )}
-                  </li>
-                );
-              })}
-            </ul>
-          </div>
-        )}
-
-        {/* Edition & Taxonomies Metadata Card */}
+        {/* ── Compendium Entry & Taxonomy ── */}
         <div className={styles.card}>
           <h3 className={styles.cardTitle}>
             <Icon name="diamond" size={11} />
@@ -179,21 +192,25 @@ export function ArticleUtilities({
           )}
 
           {hasTopics && (
-            <div className={styles.topicRow}>
-              {topics.map((t, idx) => (
-                <ElementalPill
-                  key={t.slug || idx}
-                  symbol={t.symbol || "Tx"}
-                  label={t.name || undefined}
-                  href={t.slug ? `/contents?topic=${t.slug}` : undefined}
-                />
-              ))}
+            <div className={styles.topicsBlock}>
+              <span className={styles.metaLabel}>Topics:</span>
+              <div className={styles.pillsRow}>
+                {topics.map((t, idx) => (
+                  <ElementalPill
+                    key={idx}
+                    symbol={t.symbol || "Tx"}
+                    label={t.name || undefined}
+                    href={t.slug ? `/contents?topic=${t.slug}` : undefined}
+                    size="sm"
+                  />
+                ))}
+              </div>
             </div>
           )}
         </div>
       </aside>
 
-      {/* Citation Modal */}
+      {/* ── APA7 / BibTeX Citation Modal ── */}
       <CitationModal
         isOpen={isCitationOpen}
         onClose={() => setIsCitationOpen(false)}
@@ -204,8 +221,11 @@ export function ArticleUtilities({
         slug={slug}
       />
 
-      {/* Notice Toast */}
-      <NoticeToast notice={notice} onDismiss={() => setNotice(null)} />
+      {/* ── Toast Feedback Notification ── */}
+      <NoticeToast
+        notice={notice}
+        onDismiss={() => setNotice(null)}
+      />
     </>
   );
 }

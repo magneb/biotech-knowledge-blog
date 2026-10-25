@@ -8,9 +8,16 @@ import styles from "./ArticleToc.module.css";
 export interface ArticleTocProps {
   headings: TocHeading[];
   hasReferences?: boolean;
+  isCollapsed?: boolean;
+  onToggle?: () => void;
 }
 
-export function ArticleToc({ headings, hasReferences = false }: ArticleTocProps) {
+export function ArticleToc({
+  headings,
+  hasReferences = false,
+  isCollapsed = false,
+  onToggle,
+}: ArticleTocProps) {
   const [activeId, setActiveId] = useState<string>("");
 
   useEffect(() => {
@@ -21,7 +28,6 @@ export function ArticleToc({ headings, hasReferences = false }: ArticleTocProps)
 
     const observer = new IntersectionObserver(
       (entries) => {
-        // Find visible headings
         const visibleEntries = entries.filter((e) => e.isIntersecting);
         if (visibleEntries.length > 0) {
           setActiveId(visibleEntries[0].target.id);
@@ -60,6 +66,27 @@ export function ArticleToc({ headings, hasReferences = false }: ArticleTocProps)
     return null;
   }
 
+  if (isCollapsed) {
+    return (
+      <aside
+        className={`${styles.wrapper} ${styles.wrapperCollapsed}`}
+        aria-label="Table of contents (collapsed)"
+      >
+        <button
+          type="button"
+          className={styles.collapsedTrigger}
+          onClick={onToggle}
+          title="Expand Table of Contents"
+          aria-label="Expand Table of Contents"
+          aria-expanded={false}
+        >
+          <Icon name="bookmark-ribbon" size={14} />
+          <span className={styles.collapsedLabel}>Contents</span>
+        </button>
+      </aside>
+    );
+  }
+
   return (
     <aside className={styles.wrapper} aria-label="Table of contents">
       <div className={styles.header}>
@@ -67,6 +94,17 @@ export function ArticleToc({ headings, hasReferences = false }: ArticleTocProps)
           <Icon name="bookmark-ribbon" size={13} />
           Contents
         </h3>
+        {onToggle && (
+          <button
+            type="button"
+            className={styles.toggleButton}
+            onClick={onToggle}
+            aria-label="Hide Table of Contents"
+            aria-expanded={true}
+          >
+            Hide
+          </button>
+        )}
       </div>
 
       <nav className={styles.nav}>
@@ -84,7 +122,7 @@ export function ArticleToc({ headings, hasReferences = false }: ArticleTocProps)
                   onClick={(e) => handleScrollTo(e, heading.id)}
                 >
                   <span className={styles.indicator}>{isActive ? "◆" : "◇"}</span>
-                  <span>{heading.text}</span>
+                  <span className={styles.linkText}>{heading.text}</span>
                 </a>
               </li>
             );
@@ -98,12 +136,23 @@ export function ArticleToc({ headings, hasReferences = false }: ArticleTocProps)
                 onClick={(e) => handleScrollTo(e, "references")}
               >
                 <span className={styles.indicator}>{activeId === "references" ? "◆" : "◇"}</span>
-                <span>References &amp; Citations</span>
+                <span className={styles.linkText}>References &amp; Citations</span>
               </a>
             </li>
           )}
         </ol>
       </nav>
+
+      {/* ── Victorian Etching Watermark in the Margin ── */}
+      <div className={styles.watermark} aria-hidden="true">
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          src="/art/media/leather-folio.svg"
+          alt=""
+          className={styles.watermarkImg}
+          loading="lazy"
+        />
+      </div>
     </aside>
   );
 }

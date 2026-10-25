@@ -8,6 +8,7 @@ import {
 import { extractTocHeadings, slugifyHeading } from "@/lib/toc";
 import { resolveSiteMetadata, DEFAULT_SITE_METADATA } from "@/sanity/siteSettings";
 import { ArticleToc } from "@/components/ArticleToc";
+import { ArticleClientLayout } from "@/components/ArticleClientLayout";
 import { CitationModal } from "@/components/CitationModal";
 import { PrintHeader, PrintFooter } from "@/components/PrintFolio";
 import { ArticleUtilities } from "@/components/ArticleUtilities";
@@ -229,6 +230,63 @@ describe("Scholarly UI Components", () => {
     expect(screen.getByText("References & Citations")).toBeDefined();
     expect(container.querySelector("a[href='#intro']")).toBeDefined();
     expect(container.querySelector("a[href='#references']")).toBeDefined();
+  });
+
+  it("handles ArticleToc collapsible toggle and collapsed trigger", () => {
+    const headings = [{ id: "intro", text: "Introduction", level: 2 }];
+    const onToggle = vi.fn();
+
+    const { rerender } = render(
+      <ArticleToc
+        headings={headings}
+        isCollapsed={false}
+        onToggle={onToggle}
+      />
+    );
+
+    // Click Hide button
+    const hideBtn = screen.getByRole("button", { name: /Hide Table of Contents/i });
+    expect(hideBtn).toBeDefined();
+    fireEvent.click(hideBtn);
+    expect(onToggle).toHaveBeenCalledTimes(1);
+
+    // Rerender as collapsed
+    rerender(
+      <ArticleToc
+        headings={headings}
+        isCollapsed={true}
+        onToggle={onToggle}
+      />
+    );
+
+    // Shows collapsed trigger
+    const expandBtn = screen.getByRole("button", { name: /Expand Table of Contents/i });
+    expect(expandBtn).toBeDefined();
+    fireEvent.click(expandBtn);
+    expect(onToggle).toHaveBeenCalledTimes(2);
+  });
+
+  it("renders ArticleClientLayout toggling between expanded and collapsed layout modes", () => {
+    const headings = [
+      { id: "s1", text: "Section 1", level: 2 },
+    ];
+
+    const { container } = render(
+      <ArticleClientLayout headings={headings} hasReferences>
+        <main>Article Content</main>
+      </ArticleClientLayout>
+    );
+
+    expect(screen.getByText("Contents")).toBeDefined();
+    expect(screen.getByText("Article Content")).toBeDefined();
+
+    // Toggle collapse
+    const hideBtn = screen.getByRole("button", { name: /Hide Table of Contents/i });
+    fireEvent.click(hideBtn);
+
+    // Collapsed state renders
+    expect(screen.getByRole("button", { name: /Expand Table of Contents/i })).toBeDefined();
+    expect(container.firstChild).toBeDefined();
   });
 
   it("renders PrintHeader and PrintFooter with generation date and version", () => {

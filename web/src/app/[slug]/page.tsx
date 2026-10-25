@@ -11,7 +11,7 @@ import { formatApa7Citation, getVersionPermalink } from "@/lib/citation";
 import { extractTocHeadings } from "@/lib/toc";
 import { buildSanityImageUrl } from "@/sanity/image";
 import { resolveSiteMetadata } from "@/sanity/siteSettings";
-import { ArticleToc } from "@/components/ArticleToc";
+import { ArticleClientLayout } from "@/components/ArticleClientLayout";
 import { ArticleUtilities } from "@/components/ArticleUtilities";
 import { scholarlyPortableTextComponents } from "@/components/PortableTextComponents";
 import { PrintHeader, PrintFooter } from "@/components/PrintFolio";
@@ -224,12 +224,9 @@ export default async function ArticlePage({
         </Link>
       </nav>
 
-      <div className={styles.layout}>
-        {/* ── Left Column: Table of Contents ── */}
-        <ArticleToc headings={headings} hasReferences />
-
-        {/* ── Center Column: Scholarly Reader ── */}
-        <main className={`${styles.reader} paper`}>
+      {/* ── 2-Column Responsive Reader with Collapsible Contents ── */}
+      <ArticleClientLayout headings={headings} hasReferences>
+        <main className={styles.reader}>
           {/* Print Masthead (visible only in @media print) */}
           <PrintHeader
             title={articleTitle}
@@ -240,24 +237,38 @@ export default async function ArticlePage({
             slug={slug}
           />
 
-          {/* Screen Article Header */}
+          {/* ── Top-Right Floated Action & Utility Rail ── */}
+          <div className={styles.utilitiesFloated}>
+            <ArticleUtilities
+              title={articleTitle}
+              author={siteMeta.authorName}
+              publishedAt={article.publishedAt}
+              versionNumber={version}
+              slug={slug}
+              chapter={article.chapter}
+              topics={article.topics}
+              downloadablePdfs={article.downloadablePdfs}
+            />
+          </div>
+
+          {/* ── Screen Article Header (Left-aligned, Victorian Typographic Rule) ── */}
           <header className={`${styles.header} paper-header`}>
-            <div className={styles.badges}>
+            <h1 className={`${styles.title} paper-title`}>{articleTitle}</h1>
+
+            <div className={styles.subtitleRow}>
               {article.contentType && (
                 <span className={`${styles.categoryBadge} paper-category`}>
                   {formatCategory(stegaClean(article.contentType))}
                 </span>
               )}
+              <span className={styles.glyphFlourish}>✦</span>
               <span className={styles.versionBadge}>Edition v{version}</span>
-            </div>
-
-            <h1 className={`${styles.title} paper-title`}>{articleTitle}</h1>
-
-            <div className={styles.metaRow}>
-              <span>Penned by <strong>{siteMeta.authorName}</strong></span>
+              <span className={styles.metaAuthor}>
+                — Penned by <strong>{siteMeta.authorName}</strong>
+              </span>
               {article.publishedAt && (
-                <span>
-                  Recorded on{" "}
+                <span className={styles.metaDate}>
+                  &bull; Recorded on{" "}
                   <time className="paper-date" dateTime={article.publishedAt}>
                     {formatDate(stegaClean(article.publishedAt), "long")}
                   </time>
@@ -265,8 +276,10 @@ export default async function ArticlePage({
               )}
             </div>
 
+            <StarDivider variant={1} />
+
             {article.summary && (
-              <div className={styles.summaryBox}>
+              <div className={styles.summaryLead}>
                 <p style={{ margin: 0 }}>{article.summary}</p>
               </div>
             )}
@@ -295,7 +308,7 @@ export default async function ArticlePage({
             )}
           </header>
 
-          {/* Article Body with Custom Victorian Serializers */}
+          {/* ── Article Body with Custom Victorian Serializers ── */}
           <div className={`${styles.body} paper-body`}>
             {Array.isArray(article.body) && (
               <PortableText
@@ -305,7 +318,7 @@ export default async function ArticlePage({
             )}
           </div>
 
-          {/* Reader Footer & SNL Audit Notice */}
+          {/* ── Reader Footer & Full-Width References & SNL Audit ── */}
           <footer className={styles.footer}>
             <StarDivider variant={1} />
 
@@ -355,19 +368,7 @@ export default async function ArticlePage({
             slug={slug}
           />
         </main>
-
-        {/* ── Right Column: Utilities, PDFs & Taxonomies ── */}
-        <ArticleUtilities
-          title={articleTitle}
-          author={siteMeta.authorName}
-          publishedAt={article.publishedAt}
-          versionNumber={version}
-          slug={slug}
-          chapter={article.chapter}
-          topics={article.topics}
-          downloadablePdfs={article.downloadablePdfs}
-        />
-      </div>
+      </ArticleClientLayout>
     </div>
   );
 }

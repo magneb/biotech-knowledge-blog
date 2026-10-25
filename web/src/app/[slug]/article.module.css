@@ -1,8 +1,8 @@
 .container {
   width: 100%;
-  max-width: var(--paper-max-width, 1180px);
+  max-width: 100%;
   margin: 0 auto;
-  padding: 1.5rem 1rem 4rem;
+  padding: 1rem 1.75rem 4rem;
 }
 
 .backNav {
@@ -28,94 +28,118 @@
   background: rgba(244, 238, 225, 0.5);
 }
 
+/* ── 2-Column Responsive Layout ── */
 .layout {
   display: grid;
-  grid-template-columns: 220px minmax(0, 1fr) 250px;
-  gap: 2rem;
+  grid-template-columns: 200px minmax(0, 1fr);
+  gap: 2.5rem;
   align-items: start;
+  transition: grid-template-columns 0.2s ease;
 }
 
+.layoutNoToc {
+  grid-template-columns: 1fr;
+}
+
+.layoutTocCollapsed {
+  grid-template-columns: 36px minmax(0, 1fr);
+  gap: 1.5rem;
+}
+
+/* ── Main Reading Area (No inner boxed card, sits on folio sheet) ── */
 .reader {
-  background: var(--parchment, #f4eee1);
-  border: 1px solid var(--sepia-light, #c4b59d);
-  box-shadow:
-    0 4px 20px rgba(0, 0, 0, 0.08),
-    inset 0 0 40px rgba(92, 77, 60, 0.03);
-  padding: 2.5rem 3rem;
-  font-family: var(--font-cormorant, "Cormorant Garamond", Georgia, serif);
+  background: transparent;
+  border: none;
+  box-shadow: none;
+  padding: 0 0 2rem;
   min-width: 0;
+  font-family: var(--font-cormorant, "Cormorant Garamond", Georgia, serif);
 }
 
+/* ── Top-Right Floated Action & PDF Rail ── */
+.utilitiesFloated {
+  float: right;
+  width: 270px;
+  margin: 0 0 1.75rem 2.25rem;
+  position: relative;
+  z-index: 2;
+}
+
+/* ── Left-Aligned Header ── */
 .header {
-  margin-bottom: 2rem;
-  text-align: center;
-}
-
-.badges {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-wrap: wrap;
-  gap: 0.75rem;
-  margin-bottom: 1rem;
-}
-
-.categoryBadge {
-  font-size: 0.75rem;
-  text-transform: uppercase;
-  letter-spacing: 0.15em;
-  color: var(--sepia-dark, #5c4d3c);
-  font-weight: 700;
-  border: 1px solid var(--sepia-light, #c4b59d);
-  padding: 0.2rem 0.5rem;
-  background: var(--parchment-light, #faf6ee);
-}
-
-.versionBadge {
-  font-size: 0.75rem;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
-  color: #3b2e21;
-  background: rgba(92, 77, 60, 0.1);
-  padding: 0.2rem 0.5rem;
+  margin-bottom: 1.5rem;
+  text-align: left;
 }
 
 .title {
   font-size: 2.85rem;
   font-weight: 600;
   color: var(--ink, #2a241e);
-  margin: 0.5rem 0 1rem;
+  margin: 0 0 0.5rem;
   line-height: 1.15;
   letter-spacing: -0.01em;
 }
 
-.metaRow {
+.subtitleRow {
   display: flex;
-  justify-content: center;
   align-items: center;
-  gap: 1.25rem;
-  font-size: 1rem;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  font-size: 1.05rem;
   font-style: italic;
   color: var(--sepia-dark, #5c4d3c);
-  margin-bottom: 1.5rem;
+  margin-bottom: 1.15rem;
 }
 
-.summaryBox {
-  margin: 1.5rem 0 2rem;
-  padding: 1.25rem 1.5rem;
-  background: rgba(250, 246, 238, 0.7);
-  border-top: 1px solid var(--sepia-light, #c4b59d);
-  border-bottom: 1px solid var(--sepia-light, #c4b59d);
-  font-size: 1.15rem;
+.categoryBadge {
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--sepia-dark, #5c4d3c);
+  font-weight: 700;
+  font-style: normal;
+  border: 1px solid var(--sepia-light, #c4b59d);
+  padding: 0.15rem 0.5rem;
+  background: var(--parchment-light, #faf6ee);
+}
+
+.glyphFlourish {
+  color: var(--sepia-mid, #8c7860);
+  font-size: 0.85rem;
+}
+
+.versionBadge {
+  font-size: 0.78rem;
+  font-weight: 700;
+  font-style: normal;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #3b2e21;
+  background: rgba(92, 77, 60, 0.1);
+  padding: 0.15rem 0.5rem;
+}
+
+.metaAuthor {
+  font-size: 0.95rem;
+  color: var(--sepia-dark, #5c4d3c);
+}
+
+.metaDate {
+  font-size: 0.95rem;
+  color: var(--sepia-dark, #5c4d3c);
+}
+
+.summaryLead {
+  margin: 1.25rem 0 1.75rem;
+  font-size: 1.25rem;
   line-height: 1.6;
   font-style: italic;
-  color: #403428;
+  color: #3b2e21;
   text-align: justify;
 }
 
 .coverContainer {
-  margin: 2rem 0 2.5rem;
+  margin: 1.5rem 0 2rem;
   text-align: center;
 }
 
@@ -125,7 +149,7 @@
   border: 2px solid var(--sepia-dark, #5c4d3c);
   padding: 0.5rem;
   background: var(--parchment-light, #faf6ee);
-  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.08);
 }
 
 .coverImage {
@@ -135,28 +159,31 @@
 }
 
 .coverCaption {
-  margin-top: 0.6rem;
+  margin-top: 0.5rem;
   font-size: 0.92rem;
   font-style: italic;
   color: var(--sepia-dark, #5c4d3c);
 }
 
+/* ── Body Typography ── */
 .body {
   font-size: 1.15rem;
   line-height: 1.75;
   color: var(--ink, #2a241e);
 }
 
+/* ── Full-Width Footer & References ── */
 .footer {
+  clear: both;
   margin-top: 3.5rem;
   padding-top: 2rem;
   border-top: 1px solid var(--sepia-light, #c4b59d);
 }
 
 .auditSection {
-  margin-top: 2rem;
+  margin-top: 1.75rem;
   padding: 1rem 1.25rem;
-  background: rgba(92, 77, 60, 0.06);
+  background: rgba(92, 77, 60, 0.05);
   border: 1px dashed var(--sepia-light, #c4b59d);
   font-size: 0.92rem;
   color: var(--sepia-dark, #5c4d3c);
@@ -174,7 +201,7 @@
 }
 
 .referencesSection {
-  margin-top: 2.5rem;
+  margin-top: 2.25rem;
   padding-top: 1.5rem;
   border-top: 1px solid var(--sepia-light, #c4b59d);
 }
@@ -188,24 +215,30 @@
 
 .referencesList {
   font-size: 1rem;
-  line-height: 1.5;
+  line-height: 1.55;
   color: var(--sepia-dark, #5c4d3c);
   padding-left: 1.25rem;
 }
 
-@media (max-width: 1100px) {
-  .layout {
-    grid-template-columns: minmax(0, 1fr) 250px;
-  }
-}
-
+/* ── Tablet & Mobile Responsiveness ── */
 @media (max-width: 860px) {
+  .container {
+    padding: 1rem 1rem 3rem;
+  }
+
   .layout {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+
+  .layoutTocCollapsed {
     grid-template-columns: 1fr;
   }
 
-  .reader {
-    padding: 1.75rem 1.25rem;
+  .utilitiesFloated {
+    float: none;
+    width: 100%;
+    margin: 1.5rem 0;
   }
 
   .title {
@@ -213,6 +246,7 @@
   }
 }
 
+/* ── Print Media Optimization ── */
 @media print {
   .container {
     max-width: 100% !important;
@@ -233,6 +267,10 @@
     box-shadow: none !important;
     padding: 0 !important;
     background: transparent !important;
+  }
+
+  .utilitiesFloated {
+    display: none !important;
   }
 
   .header {
