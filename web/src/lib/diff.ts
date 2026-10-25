@@ -21,6 +21,7 @@ export interface DiffStats {
 export interface SectionDiff {
   id: string;
   title: string;
+  titleDiff?: DiffToken[];
   type: "heading" | "paragraph" | "reagents" | "figure" | "generic";
   tokens: DiffToken[];
   stats: DiffStats;
@@ -186,6 +187,8 @@ interface PortableTextBlockLike {
   _type?: string;
   _key?: string;
   style?: string;
+  listItem?: string;
+  level?: number;
   children?: Array<{ text?: string }>;
   title?: string;
   formulaNote?: string;
@@ -196,6 +199,9 @@ interface PortableTextBlockLike {
 
 /**
  * Extracts normalized textual sections from Portable Text blocks.
+ * Headings (h2, h3, h4) establish genuine section boundaries.
+ * All paragraphs, lists, and special blocks under a heading belong to that section.
+ * If the treatise has introductory text before any heading, it is grouped as an intro section with an empty title.
  */
 export function extractBlockSections(blocks: unknown[]): Array<{
   id: string;
@@ -203,69 +209,95 @@ export function extractBlockSections(blocks: unknown[]): Array<{
   type: SectionDiff["type"];
   text: string;
 }> {
-  if (!Array.isArray(blocks)) return [];
+  if (!Array.isArray(blocks) || blocks.length === 0) return [];
 
-  const sections: Array<{
+  const rawSections: Array<{
     id: string;
     title: string;
     type: SectionDiff["type"];
-    text: string;
+    contentBlocks: string[];
   }> = [];
 
-  let currentHeading = "Preamble & Methods";
-  let sectionIndex = 0;
+  let currentSection: {
+    id: string;
+    title: string;
+    type: SectionDiff["type"];
+    contentBlocks: string[];
+  } = {
+    id: "sec-0",
+    title: "",
+    type: "generic",
+    contentBlocks: [],
+  };
+
+  let sectionCounter = 1;
 
   for (const rawBlock of blocks) {
     if (!rawBlock || typeof rawBlock !== "object") continue;
     const block = rawBlock as PortableTextBlockLike;
 
     if (block._type === "block") {
-      const isHeading = block.style === "h2" || block.style === "h3" || block.style === "h4";
-      const text = extractPlainTextFromBlock(block);
+      const isHeading =
+        block.style === "h2" || block.style === "h3" || block.style === "h4";
+      const text = extractPlainTextFromBlock(block).trim();
 
-      if (isHeading && text.trim()) {
-        currentHeading = text.trim();
-        sections.push({
-          id: `heading-${sectionIndex++}`,
-          title: currentHeading,
+      if (isHeading && text) {
+        // If current section has any content or has a title, save it
+        if (currentSection.contentBlocks.length > 0 || currentSection.title) {
+          rawSections.push(currentSection);
+        }
+        // Start a new section establishing this heading boundary
+        currentSection = {
+          id: `sec-${sectionCounter++}`,
+          title: text,
           type: "heading",
-          text,
-        });
-      } else if (text.trim()) {
-        sections.push({
-          id: `para-${sectionIndex++}`,
-          title: currentHeading,
-          type: "paragraph",
-          text,
-        });
+          contentBlocks: [],
+        };
+      } else if (text) {
+        const line =
+          block.listItem === "number"
+            ? `1. ${text}`
+            : block.listItem
+              ? `• ${text}`
+              : text;
+        currentSection.contentBlocks.push(line);
       }
     } else if (block._type === "formulaReagents") {
       const title = block.title || "Reagents & Apparatus";
-      const note = block.formulaNote ? `\nNote: ${block.formulaNote}` : "";
+      const note = block.formulaNote ? `Note: ${block.formulaNote}` : "";
       const items = Array.isArray(block.items)
         ? block.items
-            .map((item) => `- ${item.name || "Item"}: ${item.quantity || "—"} (${item.note || "std"})`)
+            .map(
+              (item) =>
+                `- ${item.name || "Item"}: ${item.quantity || "—"} (${item.note || "std"})`
+            )
             .join("\n")
         : "";
-      sections.push({
-        id: `reagents-${sectionIndex++}`,
-        title: `${currentHeading} — ${title}`,
-        type: "reagents",
-        text: `${title}${note}\n${items}`.trim(),
-      });
+      const formatted = [title, note, items].filter(Boolean).join("\n");
+      if (formatted.trim()) {
+        currentSection.contentBlocks.push(formatted.trim());
+      }
     } else if (block._type === "figureCallout") {
       const figLabel = block.figureNumber ? `[${block.figureNumber}] ` : "";
       const caption = block.caption || "";
-      sections.push({
-        id: `figure-${sectionIndex++}`,
-        title: `${currentHeading} — Figure`,
-        type: "figure",
-        text: `${figLabel}${caption}`.trim(),
-      });
+      const formatted = `${figLabel}${caption}`.trim();
+      if (formatted) {
+        currentSection.contentBlocks.push(formatted);
+      }
     }
   }
 
-  return sections;
+  // Push the final section if it has content or a title
+  if (currentSection.contentBlocks.length > 0 || currentSection.title) {
+    rawSections.push(currentSection);
+  }
+
+  return rawSections.map((s) => ({
+    id: s.id,
+    title: s.title,
+    type: s.type,
+    text: s.contentBlocks.join("\n\n"),
+  }));
 }
 
 /**
@@ -299,21 +331,65 @@ export function diffTreatiseEditions(
   const targetSections = extractBlockSections(target.body || []);
 
   const sections: SectionDiff[] = [];
-  const maxLen = Math.max(baseSections.length, targetSections.length);
+  const usedBaseIndices = new Set<number>();
 
   let totalWordsAdded = titleDiff.stats.wordsAdded + summaryDiff.stats.wordsAdded;
   let totalWordsRemoved = titleDiff.stats.wordsRemoved + summaryDiff.stats.wordsRemoved;
   let totalWordsUnchanged = titleDiff.stats.wordsUnchanged + summaryDiff.stats.wordsUnchanged;
 
-  for (let k = 0; k < maxLen; k++) {
-    const sA = baseSections[k];
-    const sB = targetSections[k];
+  for (let j = 0; j < targetSections.length; j++) {
+    const sB = targetSections[j];
+    let matchedBaseIndex = -1;
 
-    if (sA && sB) {
+    // 1. Match by heading title if non-empty
+    if (sB.title?.trim()) {
+      matchedBaseIndex = baseSections.findIndex(
+        (sA, i) =>
+          !usedBaseIndices.has(i) &&
+          sA.title?.trim().toLowerCase() === sB.title.trim().toLowerCase()
+      );
+    } else if (
+      j === 0 &&
+      baseSections.length > 0 &&
+      !baseSections[0].title?.trim() &&
+      !usedBaseIndices.has(0)
+    ) {
+      // Intro section at position 0
+      matchedBaseIndex = 0;
+    }
+
+    // 2. If both have only 1 section (e.g. simple document with no headings or same structure)
+    if (
+      matchedBaseIndex === -1 &&
+      targetSections.length === 1 &&
+      baseSections.length === 1 &&
+      !usedBaseIndices.has(0)
+    ) {
+      matchedBaseIndex = 0;
+    }
+
+    // 3. Fallback to positional match if base has an unused section at index j
+    if (matchedBaseIndex === -1 && j < baseSections.length && !usedBaseIndices.has(j)) {
+      matchedBaseIndex = j;
+    }
+
+    if (matchedBaseIndex !== -1) {
+      usedBaseIndices.add(matchedBaseIndex);
+      const sA = baseSections[matchedBaseIndex];
       const diff = diffWords(sA.text, sB.text);
+
+      let titleDiffTokens: DiffToken[] | undefined;
+      if (sA.title !== sB.title && (sA.title || sB.title)) {
+        const td = diffWords(sA.title || "", sB.title || "");
+        titleDiffTokens = td.tokens;
+        totalWordsAdded += td.stats.wordsAdded;
+        totalWordsRemoved += td.stats.wordsRemoved;
+      }
+
       sections.push({
         id: sB.id || sA.id,
         title: sB.title || sA.title,
+        titleDiff: titleDiffTokens,
         type: sB.type || sA.type,
         tokens: diff.tokens,
         stats: diff.stats,
@@ -321,8 +397,8 @@ export function diffTreatiseEditions(
       totalWordsAdded += diff.stats.wordsAdded;
       totalWordsRemoved += diff.stats.wordsRemoved;
       totalWordsUnchanged += diff.stats.wordsUnchanged;
-    } else if (sB) {
-      // Added section in target
+    } else {
+      // Newly added section in target edition
       const diff = diffWords("", sB.text);
       sections.push({
         id: sB.id,
@@ -332,8 +408,16 @@ export function diffTreatiseEditions(
         stats: diff.stats,
       });
       totalWordsAdded += diff.stats.wordsAdded;
-    } else if (sA) {
-      // Removed section in target
+      if (sB.title?.trim()) {
+        totalWordsAdded += tokenizeWords(sB.title).filter(isWordToken).length;
+      }
+    }
+  }
+
+  // 4. Any remaining base sections were removed in target edition
+  for (let i = 0; i < baseSections.length; i++) {
+    if (!usedBaseIndices.has(i)) {
+      const sA = baseSections[i];
       const diff = diffWords(sA.text, "");
       sections.push({
         id: sA.id,
@@ -343,6 +427,9 @@ export function diffTreatiseEditions(
         stats: diff.stats,
       });
       totalWordsRemoved += diff.stats.wordsRemoved;
+      if (sA.title?.trim()) {
+        totalWordsRemoved += tokenizeWords(sA.title).filter(isWordToken).length;
+      }
     }
   }
 

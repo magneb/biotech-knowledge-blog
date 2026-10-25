@@ -315,9 +315,11 @@
 
 .diffContentParagraph {
   font-size: 1.15rem;
-  line-height: 1.7;
+  line-height: 1.8;
   color: var(--ink, #2a241e);
   margin: 0 0 1rem;
+  white-space: pre-wrap;
+  word-break: break-word;
 }
 
 /* ── Inline Diff Token Highlighting ── */
@@ -327,6 +329,7 @@
   border-bottom: 1.5px solid #2e7d32;
   text-decoration: none;
   padding: 0.05rem 0.2rem;
+  border-radius: 2px;
 }
 
 .diffTokenRemoved {
@@ -334,6 +337,7 @@
   color: #8b1e1e;
   text-decoration: line-through;
   padding: 0.05rem 0.2rem;
+  border-radius: 2px;
 }
 
 .diffTokenUnchanged {

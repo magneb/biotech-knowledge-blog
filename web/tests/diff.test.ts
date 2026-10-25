@@ -158,14 +158,34 @@ describe("Victorian Protocol Diff Engine (web/src/lib/diff.ts)", () => {
       },
     ];
 
-    it("extracts structured sections from Portable Text blocks", () => {
+    it("extracts structured sections from Portable Text blocks without splitting paragraphs into separate cards", () => {
       const sections = extractBlockSections(v1Blocks);
-      expect(sections).toHaveLength(3);
-      expect(sections[0].type).toBe("heading");
-      expect(sections[0].text).toBe("Preparation of Reagents");
-      expect(sections[1].type).toBe("paragraph");
-      expect(sections[2].type).toBe("reagents");
-      expect(sections[2].text).toContain("NaCl: 5g");
+      expect(sections).toHaveLength(1);
+      expect(sections[0].title).toBe("Preparation of Reagents");
+      expect(sections[0].text).toContain("Dissolve 5g sodium chloride in 500 mL ultrapure water.");
+      expect(sections[0].text).toContain("NaCl: 5g");
+    });
+
+    it("extracts body with no headings as a single section with empty title (no artificial headings)", () => {
+      const plainBlocks = [
+        {
+          _type: "block",
+          style: "normal",
+          children: [{ text: "First paragraph on CRISPR." }],
+        },
+        {
+          _type: "block",
+          style: "normal",
+          children: [{ text: "Second paragraph after pressing Enter." }],
+        },
+      ];
+
+      const sections = extractBlockSections(plainBlocks);
+      expect(sections).toHaveLength(1);
+      expect(sections[0].title).toBe("");
+      expect(sections[0].text).toBe(
+        "First paragraph on CRISPR.\n\nSecond paragraph after pressing Enter."
+      );
     });
 
     it("computes end-to-end treatise diff between Version 1 and Version 2", () => {
@@ -191,11 +211,12 @@ describe("Victorian Protocol Diff Engine (web/src/lib/diff.ts)", () => {
       // Title changed
       expect(diffResult.titleDiff.some((t) => t.type === "added" && t.value.includes("Revised"))).toBe(true);
 
-      // Section diffs include both paragraph changes and reagents changes
-      expect(diffResult.sections.length).toBeGreaterThanOrEqual(3);
-      const reagentDiff = diffResult.sections.find((s) => s.type === "reagents");
-      expect(reagentDiff).toBeDefined();
-      expect(reagentDiff?.tokens.some((t) => t.type === "added" && t.value.includes("KCl"))).toBe(true);
+      // Section diff includes both paragraph and reagent changes within the section
+      expect(diffResult.sections.length).toBe(1);
+      const section = diffResult.sections[0];
+      expect(section).toBeDefined();
+      expect(section.tokens.some((t) => t.type === "added" && t.value.includes("potassium"))).toBe(true);
+      expect(section.tokens.some((t) => t.type === "added" && t.value.includes("KCl"))).toBe(true);
     });
 
     it("returns hasChanges: false when comparing identical treatises", () => {

@@ -311,7 +311,15 @@ export function VersionHistoryDiffViewer({
               {/* Sections Diff */}
               {diffResult.sections.map((sec) => (
                 <div key={sec.id} className={styles.diffSectionBlock}>
-                  <h3 className={styles.diffSectionHeading}>{sec.title}</h3>
+                  {sec.title?.trim() && (
+                    <h3 className={styles.diffSectionHeading}>
+                      {sec.titleDiff && sec.titleDiff.some((t) => t.type !== "unchanged")
+                        ? sec.titleDiff.map((tok, i) => (
+                            <DiffTokenSpan key={i} token={tok} />
+                          ))
+                        : sec.title}
+                    </h3>
+                  )}
                   <div className={styles.diffContentParagraph}>
                     {sec.tokens.map((tok, i) => (
                       <DiffTokenSpan key={i} token={tok} />
@@ -352,12 +360,14 @@ export function VersionHistoryDiffViewer({
                   );
                   return (
                     <div key={`side-base-${sec.id}`} className={styles.diffSectionBlock}>
-                      <h3 className={styles.diffSectionHeading}>{sec.title}</h3>
-                      <p className={styles.diffContentParagraph}>
+                      {sec.title?.trim() && (
+                        <h3 className={styles.diffSectionHeading}>{sec.title}</h3>
+                      )}
+                      <div className={styles.diffContentParagraph}>
                         {baseTokens.map((tok, i) => (
                           <DiffTokenSpan key={i} token={tok} />
                         ))}
-                      </p>
+                      </div>
                     </div>
                   );
                 })}
@@ -392,12 +402,14 @@ export function VersionHistoryDiffViewer({
                   );
                   return (
                     <div key={`side-target-${sec.id}`} className={styles.diffSectionBlock}>
-                      <h3 className={styles.diffSectionHeading}>{sec.title}</h3>
-                      <p className={styles.diffContentParagraph}>
+                      {sec.title?.trim() && (
+                        <h3 className={styles.diffSectionHeading}>{sec.title}</h3>
+                      )}
+                      <div className={styles.diffContentParagraph}>
                         {targetTokens.map((tok, i) => (
                           <DiffTokenSpan key={i} token={tok} />
                         ))}
-                      </p>
+                      </div>
                     </div>
                   );
                 })}
