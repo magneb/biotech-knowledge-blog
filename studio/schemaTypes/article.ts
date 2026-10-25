@@ -87,6 +87,32 @@ export const article = defineType({
       type: 'datetime',
     }),
     defineField({
+      name: 'versionNumber',
+      title: 'Edition / Version Number',
+      type: 'number',
+      description:
+        'Official scientific edition number (e.g. 1 for v1, 2 for v2). Increment only for substantive protocol changes.',
+      initialValue: 1,
+      validation: (rule) => rule.integer().positive(),
+    }),
+    defineField({
+      name: 'isNewEdition',
+      title: 'Publish as New Edition',
+      type: 'boolean',
+      description:
+        'When publishing substantive scientific revisions, enable this to increment the official edition number and record an archival snapshot.',
+      initialValue: false,
+    }),
+    defineField({
+      name: 'versionChangelog',
+      title: 'Edition Changelog Notes',
+      type: 'text',
+      rows: 2,
+      description:
+        'Summary of scientific changes for this edition (e.g. updated reagent concentrations, revised temperatures).',
+      hidden: ({document}) => !document?.isNewEdition,
+    }),
+    defineField({
       name: 'coverEtching',
       title: 'Cover Etching',
       type: 'image',
@@ -156,7 +182,7 @@ export const article = defineType({
             annotations: [
               defineArrayMember({
                 name: 'link',
-                title: 'Link',
+                title: 'External Link',
                 type: 'object',
                 icon: LinkIcon,
                 fields: [
@@ -169,6 +195,49 @@ export const article = defineType({
                         allowRelative: true,
                         scheme: ['http', 'https', 'mailto'],
                       }),
+                  }),
+                ],
+              }),
+              defineArrayMember({
+                name: 'internalLink',
+                title: 'Internal Treatise Reference',
+                type: 'object',
+                icon: DocumentTextIcon,
+                fields: [
+                  defineField({
+                    name: 'linkType',
+                    title: 'Reference Status',
+                    type: 'string',
+                    initialValue: 'resolved',
+                    options: {
+                      list: [
+                        {title: 'Existing Treatise, Chapter or Topic', value: 'resolved'},
+                        {title: 'Planned Treatise (Treatise in Preparation)', value: 'planned'},
+                      ],
+                      layout: 'radio',
+                    },
+                    validation: (rule) => rule.required(),
+                  }),
+                  defineField({
+                    name: 'reference',
+                    title: 'Referenced Document',
+                    type: 'reference',
+                    to: [{type: 'article'}, {type: 'chapter'}, {type: 'topic'}],
+                    hidden: ({parent}) => parent?.linkType !== 'resolved',
+                  }),
+                  defineField({
+                    name: 'plannedTitle',
+                    title: 'Planned Treatise Title',
+                    type: 'string',
+                    description: 'e.g. "Differential Centrifugation Protocol"',
+                    hidden: ({parent}) => parent?.linkType !== 'planned',
+                  }),
+                  defineField({
+                    name: 'plannedNote',
+                    title: 'Preparation Note',
+                    type: 'string',
+                    description: 'e.g. "Planned for Chapter III: Reagents & Separation"',
+                    hidden: ({parent}) => parent?.linkType !== 'planned',
                   }),
                 ],
               }),

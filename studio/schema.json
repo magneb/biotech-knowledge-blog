@@ -759,6 +759,27 @@
         },
         "optional": true
       },
+      "versionNumber": {
+        "type": "objectAttribute",
+        "value": {
+          "type": "number"
+        },
+        "optional": true
+      },
+      "isNewEdition": {
+        "type": "objectAttribute",
+        "value": {
+          "type": "boolean"
+        },
+        "optional": true
+      },
+      "versionChangelog": {
+        "type": "objectAttribute",
+        "value": {
+          "type": "string"
+        },
+        "optional": true
+      },
       "coverEtching": {
         "type": "objectAttribute",
         "value": {
@@ -1032,6 +1053,81 @@
                                 "value": {
                                   "type": "string",
                                   "value": "link"
+                                }
+                              }
+                            },
+                            "rest": {
+                              "type": "object",
+                              "attributes": {
+                                "_key": {
+                                  "type": "objectAttribute",
+                                  "value": {
+                                    "type": "string"
+                                  }
+                                }
+                              }
+                            }
+                          },
+                          {
+                            "type": "object",
+                            "attributes": {
+                              "linkType": {
+                                "type": "objectAttribute",
+                                "value": {
+                                  "type": "union",
+                                  "of": [
+                                    {
+                                      "type": "string",
+                                      "value": "resolved"
+                                    },
+                                    {
+                                      "type": "string",
+                                      "value": "planned"
+                                    }
+                                  ]
+                                },
+                                "optional": true
+                              },
+                              "reference": {
+                                "type": "objectAttribute",
+                                "value": {
+                                  "type": "union",
+                                  "of": [
+                                    {
+                                      "type": "inline",
+                                      "name": "article.reference"
+                                    },
+                                    {
+                                      "type": "inline",
+                                      "name": "chapter.reference"
+                                    },
+                                    {
+                                      "type": "inline",
+                                      "name": "topic.reference"
+                                    }
+                                  ]
+                                },
+                                "optional": true
+                              },
+                              "plannedTitle": {
+                                "type": "objectAttribute",
+                                "value": {
+                                  "type": "string"
+                                },
+                                "optional": true
+                              },
+                              "plannedNote": {
+                                "type": "objectAttribute",
+                                "value": {
+                                  "type": "string"
+                                },
+                                "optional": true
+                              },
+                              "_type": {
+                                "type": "objectAttribute",
+                                "value": {
+                                  "type": "string",
+                                  "value": "internalLink"
                                 }
                               }
                             },

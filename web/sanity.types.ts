@@ -135,6 +135,9 @@ export type Article = {
   >;
   featured?: boolean;
   publishedAt?: string;
+  versionNumber?: number;
+  isNewEdition?: boolean;
+  versionChangelog?: string;
   coverEtching?: {
     asset?: SanityImageAssetReference;
     media?: unknown;
@@ -170,6 +173,14 @@ export type Article = {
           | {
               href?: string;
               _type: "link";
+              _key: string;
+            }
+          | {
+              linkType?: "resolved" | "planned";
+              reference?: ArticleReference | ChapterReference | TopicReference;
+              plannedTitle?: string;
+              plannedNote?: string;
+              _type: "internalLink";
               _key: string;
             }
           | {
@@ -400,6 +411,14 @@ export type ARTICLE_QUERY_RESULT = {
               definition?: string;
               symbol?: string;
               _type: "annotatedTerm";
+              _key: string;
+            }
+          | {
+              linkType?: "planned" | "resolved";
+              reference?: ArticleReference | ChapterReference | TopicReference;
+              plannedTitle?: string;
+              plannedNote?: string;
+              _type: "internalLink";
               _key: string;
             }
           | {
