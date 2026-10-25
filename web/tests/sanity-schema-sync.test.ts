@@ -126,10 +126,10 @@ function parseStudioSchemas(): {
 }
 
 describe("Sanity Studio Schemas, Client Config & Dynamic TypeGen Sync", () => {
-  it("registers chapter, topic, article, and homePage schemas in studio/schemaTypes", () => {
+  it("registers chapter, topic, article, homePage, and aboutPage schemas in studio/schemaTypes", () => {
     const { registeredExports, schemas } = parseStudioSchemas();
     expect(registeredExports).toEqual(
-      expect.arrayContaining(["chapter", "topic", "article", "homePage"])
+      expect.arrayContaining(["chapter", "topic", "article", "homePage", "aboutPage"])
     );
 
     const chapterSchema = schemas.find((s) => s.name === "chapter");
@@ -176,17 +176,38 @@ describe("Sanity Studio Schemas, Client Config & Dynamic TypeGen Sync", () => {
         "mottoBanner",
         "mediaChannels",
         "contactEmail",
+        "siteTitle",
+        "authorName",
+        "publisher",
+      ])
+    );
+
+    const aboutSchema = schemas.find((s) => s.name === "aboutPage");
+    expect(aboutSchema).toBeDefined();
+    expect(aboutSchema?.fields).toEqual(
+      expect.arrayContaining([
+        "title",
+        "authorName",
+        "authorAffiliation",
+        "bio",
+        "portraitEtching",
+        "siteTitle",
+        "publisher",
+        "siteDescription",
+        "canonicalDomain",
+        "contactEmail",
       ])
     );
   });
 
-  it("organizes Studio Structure with Home Page singleton, Chapters & Content, Topics / Taxonomies, and bibliography slot", () => {
+  it("organizes Studio Structure with Home Page singleton, About & Metadata singleton, Chapters & Content, Topics / Taxonomies, and bibliography slot", () => {
     const structureSource = fs.readFileSync(
       path.join(REPO_ROOT, "studio/src/structure/index.ts"),
       "utf-8"
     );
 
     expect(structureSource).toContain("documentId('homePage')");
+    expect(structureSource).toContain("documentId('aboutPage')");
     expect(structureSource).toContain("Chapters & Content");
     expect(structureSource).toContain("Articles by Chapter");
     expect(structureSource).toContain("Topics / Taxonomies");

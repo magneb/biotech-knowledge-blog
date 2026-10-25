@@ -2,9 +2,10 @@ import {BookIcon} from '@sanity/icons/Book'
 import {DocumentTextIcon} from '@sanity/icons/DocumentText'
 import {HomeIcon} from '@sanity/icons/Home'
 import {TagIcon} from '@sanity/icons/Tag'
+import {UserIcon} from '@sanity/icons/User'
 import type {StructureResolver} from 'sanity/structure'
 
-const SINGLETONS = ['homePage']
+const SINGLETONS = ['homePage', 'aboutPage']
 const MANAGED_DOCUMENT_TYPES = [...SINGLETONS, 'chapter', 'article', 'topic']
 
 export const structure: StructureResolver = (S) =>
@@ -16,6 +17,17 @@ export const structure: StructureResolver = (S) =>
         .title('Home Page')
         .icon(HomeIcon)
         .child(S.document().schemaType('homePage').documentId('homePage').title('Home Page')),
+
+      // 2. About & Metadata Settings (Singleton)
+      S.listItem()
+        .title('About & Metadata Settings')
+        .icon(UserIcon)
+        .child(
+          S.document()
+            .schemaType('aboutPage')
+            .documentId('aboutPage')
+            .title('About & Metadata Settings'),
+        ),
 
       S.divider(),
 

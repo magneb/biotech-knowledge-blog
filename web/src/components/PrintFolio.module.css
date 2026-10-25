@@ -1,0 +1,86 @@
+.printHeader {
+  display: none;
+}
+
+.printFooter {
+  display: none;
+}
+
+@media print {
+  .printHeader {
+    display: block !important;
+    border-bottom: 2px solid #2a241e;
+    padding-bottom: 1.25rem;
+    margin-bottom: 2rem;
+  }
+
+  .printMasthead {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    font-size: 9pt;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    color: #555;
+    margin-bottom: 0.75rem;
+    border-bottom: 1px solid #aaa;
+    padding-bottom: 0.35rem;
+  }
+
+  .printTitle {
+    font-size: 24pt;
+    font-weight: 700;
+    color: #000;
+    margin: 0.5rem 0;
+    line-height: 1.15;
+  }
+
+  .printMeta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+    font-size: 10pt;
+    font-style: italic;
+    color: #333;
+    margin-top: 0.5rem;
+  }
+
+  .printTimestamp {
+    font-size: 8.5pt;
+    font-style: italic;
+    color: #666;
+    margin-top: 0.5rem;
+  }
+
+  .printFooter {
+    display: block !important;
+    margin-top: 3rem;
+    padding-top: 1rem;
+    border-top: 1px solid #777;
+    font-size: 9pt;
+    color: #444;
+    page-break-inside: avoid;
+  }
+
+  .printCitationTitle {
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    font-size: 8pt;
+    margin-bottom: 0.25rem;
+  }
+
+  .printCitationText {
+    font-size: 9pt;
+    line-height: 1.35;
+    margin-bottom: 0.5rem;
+  }
+
+  .printMotto {
+    text-align: center;
+    font-style: italic;
+    font-size: 8pt;
+    color: #666;
+    margin-top: 0.75rem;
+  }
+}

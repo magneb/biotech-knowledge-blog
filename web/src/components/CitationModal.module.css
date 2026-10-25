@@ -1,0 +1,186 @@
+.backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem;
+  background: rgba(22, 19, 16, 0.75);
+  backdrop-filter: blur(4px);
+  animation: fadeIn 0.2s ease-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.modal {
+  position: relative;
+  width: 100%;
+  max-width: 620px;
+  max-height: 90vh;
+  overflow-y: auto;
+  background: var(--parchment, #f4eee1);
+  color: var(--ink, #2a241e);
+  border: 2px solid var(--sepia-dark, #5c4d3c);
+  box-shadow:
+    0 12px 36px rgba(0, 0, 0, 0.45),
+    inset 0 0 0 1px var(--sepia-light, #c4b59d);
+  padding: 2rem 2.25rem;
+  font-family: var(--font-cormorant, "Cormorant Garamond", Georgia, serif);
+}
+
+.closeButton {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  background: transparent;
+  border: 1px solid transparent;
+  color: var(--sepia-mid, #8c7860);
+  cursor: pointer;
+  padding: 0.35rem;
+  line-height: 1;
+  border-radius: 2px;
+  transition: all 0.15s ease;
+}
+
+.closeButton:hover {
+  color: var(--ink, #2a241e);
+  border-color: var(--sepia-light, #c4b59d);
+  background: rgba(0, 0, 0, 0.03);
+}
+
+.header {
+  text-align: center;
+  margin-bottom: 1.5rem;
+}
+
+.badge {
+  display: inline-block;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  color: var(--sepia-dark, #5c4d3c);
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+
+.title {
+  font-size: 1.75rem;
+  font-weight: 600;
+  color: var(--ink, #2a241e);
+  margin: 0 0 0.5rem;
+  line-height: 1.2;
+}
+
+.subtitle {
+  font-size: 1rem;
+  font-style: italic;
+  color: var(--sepia-mid, #705f4c);
+  margin: 0;
+}
+
+.tabList {
+  display: flex;
+  gap: 0.5rem;
+  border-bottom: 1px solid var(--sepia-light, #c4b59d);
+  margin-bottom: 1.25rem;
+}
+
+.tabButton {
+  background: none;
+  border: none;
+  border-bottom: 2px solid transparent;
+  padding: 0.5rem 0.75rem;
+  font-family: inherit;
+  font-size: 0.95rem;
+  letter-spacing: 0.05em;
+  color: var(--sepia-mid, #705f4c);
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.tabButton:hover {
+  color: var(--ink, #2a241e);
+}
+
+.tabButtonActive {
+  color: var(--ink, #2a241e);
+  font-weight: 600;
+  border-bottom-color: var(--sepia-dark, #5c4d3c);
+}
+
+.citationBox {
+  position: relative;
+  background: var(--parchment-light, #faf6ee);
+  border: 1px solid var(--sepia-light, #c4b59d);
+  padding: 1rem 1.25rem;
+  margin-bottom: 1.25rem;
+  font-size: 1.05rem;
+  line-height: 1.5;
+  color: var(--ink, #2a241e);
+  word-break: break-word;
+  white-space: pre-wrap;
+  font-family: inherit;
+}
+
+.citationBoxMono {
+  font-family: ui-monospace, "Cascadia Code", "Source Code Pro", Menlo, Consolas, monospace;
+  font-size: 0.85rem;
+  line-height: 1.45;
+  background: #f1ebd9;
+  border-color: #baa990;
+  max-height: 220px;
+  overflow-y: auto;
+}
+
+.actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.75rem;
+  align-items: center;
+}
+
+.copyButton {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.55rem 1.25rem;
+  font-family: inherit;
+  font-size: 0.95rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  background: var(--sepia-dark, #5c4d3c);
+  color: var(--parchment-light, #faf6ee);
+  border: 1px solid #3d3327;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.15);
+}
+
+.copyButton:hover {
+  background: var(--ink, #2a241e);
+}
+
+.copyButtonCopied {
+  background: #2b5434;
+  border-color: #1e3b25;
+}
+
+.permalinkInfo {
+  margin-top: 1rem;
+  padding-top: 0.75rem;
+  border-top: 1px dashed var(--sepia-light, #c4b59d);
+  font-size: 0.85rem;
+  font-style: italic;
+  color: var(--sepia-mid, #705f4c);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}

@@ -117,6 +117,53 @@ export const homePage = defineType({
         'Used by the "Contact" link in the site footer. Leave empty to hide the link.',
       validation: (rule) => rule.email(),
     }),
+    defineField({
+      name: 'siteTitle',
+      title: 'Compendium / Site Title',
+      type: 'string',
+      description:
+        'Global publication title for metadata, citations, and headers (default: "Oliver\'s Guide To Everything").',
+    }),
+    defineField({
+      name: 'authorName',
+      title: 'Lead Author / Creator Name',
+      type: 'string',
+      description:
+        'Author name used in Dublin Core (DC.creator), Google Scholar, and APA citations (default: "Oliver").',
+    }),
+    defineField({
+      name: 'authorAffiliation',
+      title: 'Author Affiliation / Laboratory',
+      type: 'string',
+      description:
+        'Academic laboratory or institutional affiliation for scholarly metadata.',
+    }),
+    defineField({
+      name: 'publisher',
+      title: 'Publisher Entity',
+      type: 'string',
+      description:
+        'Publisher name used in Dublin Core (DC.publisher) and academic indexes.',
+    }),
+    defineField({
+      name: 'siteDescription',
+      title: 'Compendium Description',
+      type: 'text',
+      rows: 2,
+      description:
+        'Default publication summary used in Dublin Core metadata and search engine descriptions.',
+    }),
+    defineField({
+      name: 'canonicalDomain',
+      title: 'Canonical Domain / Base URL',
+      type: 'url',
+      description:
+        'Base URL for persistent edition permalinks (e.g. "https://oliversguide.com").',
+      validation: (rule) =>
+        rule.uri({
+          scheme: ['http', 'https'],
+        }),
+    }),
   ],
   preview: {
     prepare() {
