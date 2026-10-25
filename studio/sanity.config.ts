@@ -4,7 +4,8 @@ import {structureTool} from 'sanity/structure'
 import {visionTool} from '@sanity/vision'
 import {schemaTypes} from './schemaTypes'
 import {resolve} from './src/presentation/resolve'
-import {structure} from './src/structure'
+import {structure, defaultDocumentNode} from './src/structure'
+import {RecordVersionSnapshotAction} from './src/actions/recordSnapshotAction'
 
 const studioEnv = (
   globalThis as {process?: {env?: Record<string, string | undefined>}}
@@ -21,7 +22,7 @@ export default defineConfig({
   dataset: 'production',
 
   plugins: [
-    structureTool({structure}),
+    structureTool({structure, defaultDocumentNode}),
     presentationTool({
       resolve,
       previewUrl: {
@@ -34,6 +35,15 @@ export default defineConfig({
     }),
     visionTool(),
   ],
+
+  document: {
+    actions: (prev, context) => {
+      if (context.schemaType === 'article') {
+        return [...prev, RecordVersionSnapshotAction]
+      }
+      return prev
+    },
+  },
 
   schema: {
     types: schemaTypes,

@@ -1,3 +1,4 @@
+import {ArchiveIcon} from '@sanity/icons/Archive'
 import {BottleIcon} from '@sanity/icons/Bottle'
 import {DocumentPdfIcon} from '@sanity/icons/DocumentPdf'
 import {DocumentTextIcon} from '@sanity/icons/DocumentText'
@@ -11,17 +12,24 @@ export const article = defineType({
   title: 'Article',
   type: 'document',
   icon: DocumentTextIcon,
+  groups: [
+    {name: 'content', title: 'Content & Media', default: true},
+    {name: 'taxonomy', title: 'Chapter & Topics'},
+    {name: 'versioning', title: 'Edition & Versioning (SNL)', icon: ArchiveIcon},
+  ],
   fields: [
     defineField({
       name: 'title',
       title: 'Title',
       type: 'string',
+      group: 'content',
       validation: (rule) => rule.required(),
     }),
     defineField({
       name: 'slug',
       title: 'Slug',
       type: 'slug',
+      group: 'content',
       options: {source: 'title', maxLength: 96},
       validation: (rule) => rule.required(),
     }),
@@ -29,6 +37,7 @@ export const article = defineType({
       name: 'contentType',
       title: 'Content Type',
       type: 'string',
+      group: 'content',
       initialValue: 'article',
       options: {
         list: [
@@ -45,12 +54,14 @@ export const article = defineType({
       name: 'summary',
       title: 'Summary',
       type: 'text',
+      group: 'content',
       rows: 3,
     }),
     defineField({
       name: 'chapter',
       title: 'Chapter',
       type: 'reference',
+      group: 'taxonomy',
       to: [{type: 'chapter'}],
       description: 'Book chapter this entry belongs to (entries can be published out of order).',
     }),
@@ -58,6 +69,7 @@ export const article = defineType({
       name: 'chapterOrder',
       title: 'Order Within Chapter',
       type: 'number',
+      group: 'taxonomy',
       description: 'Numeric reading order inside the selected chapter (e.g., 1, 2, 3).',
       validation: (rule) => rule.integer().positive(),
     }),
@@ -65,6 +77,7 @@ export const article = defineType({
       name: 'topics',
       title: 'Topics',
       type: 'array',
+      group: 'taxonomy',
       description: 'Elemental taxonomy tags associated with this entry.',
       of: [
         defineArrayMember({
@@ -78,6 +91,7 @@ export const article = defineType({
       name: 'featured',
       title: 'Featured Showcase',
       type: 'boolean',
+      group: 'taxonomy',
       description: 'Highlight this entry in the landing page showcase.',
       initialValue: false,
     }),
@@ -85,11 +99,13 @@ export const article = defineType({
       name: 'publishedAt',
       title: 'Published At',
       type: 'datetime',
+      group: 'versioning',
     }),
     defineField({
       name: 'versionNumber',
       title: 'Edition / Version Number',
       type: 'number',
+      group: 'versioning',
       description:
         'Official scientific edition number (e.g. 1 for v1, 2 for v2). Increment only for substantive protocol changes.',
       initialValue: 1,
@@ -99,6 +115,7 @@ export const article = defineType({
       name: 'isNewEdition',
       title: 'Publish as New Edition',
       type: 'boolean',
+      group: 'versioning',
       description:
         'When publishing substantive scientific revisions, enable this to increment the official edition number and record an archival snapshot.',
       initialValue: false,
@@ -107,6 +124,7 @@ export const article = defineType({
       name: 'versionChangelog',
       title: 'Edition Changelog Notes',
       type: 'text',
+      group: 'versioning',
       rows: 2,
       description:
         'Summary of scientific changes for this edition (e.g. updated reagent concentrations, revised temperatures).',
@@ -116,6 +134,7 @@ export const article = defineType({
       name: 'coverEtching',
       title: 'Cover Etching',
       type: 'image',
+      group: 'content',
       description: 'Primary copperplate illustration displayed on cards and the article header.',
       options: {hotspot: true},
       fields: [
@@ -135,6 +154,7 @@ export const article = defineType({
       name: 'downloadablePdfs',
       title: 'Downloadable PDFs',
       type: 'array',
+      group: 'content',
       description: 'Protocol summaries, bench worksheets, or reference PDFs.',
       of: [
         defineArrayMember({
@@ -175,6 +195,7 @@ export const article = defineType({
       name: 'body',
       title: 'Body',
       type: 'array',
+      group: 'content',
       of: [
         defineArrayMember({
           type: 'block',

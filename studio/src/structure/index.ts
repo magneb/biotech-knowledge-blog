@@ -4,7 +4,8 @@ import {DocumentTextIcon} from '@sanity/icons/DocumentText'
 import {HomeIcon} from '@sanity/icons/Home'
 import {TagIcon} from '@sanity/icons/Tag'
 import {UserIcon} from '@sanity/icons/User'
-import type {StructureResolver} from 'sanity/structure'
+import type {DefaultDocumentNodeResolver, StructureResolver} from 'sanity/structure'
+import {ArticleHistoryView} from '../components/ArticleHistoryView'
 
 const SINGLETONS = ['homePage', 'aboutPage']
 const MANAGED_DOCUMENT_TYPES = [
@@ -14,6 +15,19 @@ const MANAGED_DOCUMENT_TYPES = [
   'articleVersion',
   'topic',
 ]
+
+export const defaultDocumentNode: DefaultDocumentNodeResolver = (S, {schemaType}) => {
+  if (schemaType === 'article') {
+    return S.document().views([
+      S.view.form().title('Edit Protocol'),
+      S.view
+        .component(ArticleHistoryView)
+        .title('Version History & Snapshots')
+        .icon(ArchiveIcon),
+    ])
+  }
+  return S.document().views([S.view.form()])
+}
 
 export const structure: StructureResolver = (S) =>
   S.list()
