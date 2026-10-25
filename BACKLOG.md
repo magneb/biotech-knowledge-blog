@@ -193,7 +193,7 @@ Every work package must satisfy the 3-tier verification gate before commit/push:
 
 ---
 
-## WP-7: Home Page Sections & Dynamic Feeds
+## WP-7: Home Page Sections & Dynamic Feeds [COMPLETED]
 * **Objective:** Assemble the complete Victorian newspaper/journal landing page based on client mockups.
 * **Scope:**
   - **Dual Hero Feature Grid:** Two ornate engraved cards showcasing the latest guide and featured protocol.
@@ -205,8 +205,8 @@ Every work package must satisfy the 3-tier verification gate before commit/push:
   - Data fetched via a single optimized GROQ query using `defineQuery` with field projections.
   - Image URLs built via `@sanity/image-url` specifying exact dimensions, modern WebP/AVIF formats, and automatic quality.
 * **Acceptance Criteria:**
-  - Matches the aesthetic feel of the high-fidelity mockups in `.files/`.
-  - All homepage sections are manageable through the `homePage` singleton document in Sanity Studio.
+  - [x] Matches the aesthetic feel of the high-fidelity mockups in `.files/`.
+  - [x] All homepage sections are manageable through the `homePage` singleton document in Sanity Studio.
 
 ---
 

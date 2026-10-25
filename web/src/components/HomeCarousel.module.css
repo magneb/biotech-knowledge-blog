@@ -1,0 +1,121 @@
+.carouselWrapper {
+  position: relative;
+  width: 100%;
+}
+
+.trackContainer {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  position: relative;
+}
+
+.navButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.1rem;
+  height: 2.35rem;
+  flex-shrink: 0;
+  padding: 0;
+  background: linear-gradient(
+    180deg,
+    var(--parchment-light) 0%,
+    var(--parchment) 55%,
+    var(--parchment-dark) 100%
+  );
+  border: 1px solid var(--sepia-faint);
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 250, 240, 0.55),
+    0 2px 4px rgba(31, 18, 8, 0.08);
+  color: var(--ink-light);
+  font-family: var(--font-main);
+  font-size: 1.15rem;
+  font-weight: 700;
+  line-height: 1;
+  cursor: pointer;
+  user-select: none;
+  transition:
+    background-color var(--transition-fast),
+    border-color var(--transition-fast),
+    color var(--transition-fast),
+    transform var(--transition-fast);
+}
+
+.navButton:hover:not(:disabled) {
+  border-color: var(--gold);
+  color: var(--rust);
+  background: var(--parchment-light);
+}
+
+.navButton:active:not(:disabled) {
+  transform: translateY(1px);
+}
+
+.navButton:focus-visible {
+  outline: 2px solid var(--gold);
+  outline-offset: 2px;
+}
+
+.navButton:disabled {
+  opacity: 0.45;
+  cursor: default;
+}
+
+.viewport {
+  flex: 1;
+  min-width: 0;
+  overflow-x: auto;
+  scroll-behavior: smooth;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  padding: 0.25rem 0.1rem;
+}
+
+.viewport::-webkit-scrollbar {
+  display: none;
+}
+
+.dotsRow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  margin-top: 0.85rem;
+}
+
+.dot {
+  width: 0.55rem;
+  height: 0.55rem;
+  padding: 0;
+  border-radius: 999px;
+  border: 1px solid var(--sepia-muted);
+  background: transparent;
+  cursor: pointer;
+  transition:
+    background-color var(--transition-fast),
+    border-color var(--transition-fast),
+    transform var(--transition-fast);
+}
+
+.dot:hover {
+  border-color: var(--rust);
+  transform: scale(1.15);
+}
+
+.dotActive {
+  background: var(--sepia-mid);
+  border-color: var(--ink);
+}
+
+@media (max-width: 640px) {
+  .navButton {
+    width: 1.75rem;
+    height: 2rem;
+    font-size: 1rem;
+  }
+
+  .trackContainer {
+    gap: 0.35rem;
+  }
+}

@@ -1,4 +1,4 @@
-import { render } from "@testing-library/react";
+import { fireEvent, render } from "@testing-library/react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
 const { mockFetch, mockSanityFetch, mockNotFound } = vi.hoisted(() => {
@@ -33,10 +33,17 @@ vi.mock("next/navigation", () => ({
 }));
 
 import { HandDrawnArrow, Icon } from "@/components/ui/Icon";
+import { HomeCarousel } from "@/components/HomeCarousel";
 import SiteFooter from "@/components/SiteFooter";
 import HomePage from "@/app/page";
 import ArticlePage, { generateStaticParams } from "@/app/[slug]/page";
 import { formatCategory, formatDate } from "@/lib/format";
+import {
+  buildSanityImageUrl,
+  getArticleEtching,
+  getChapterVignette,
+  getMediaVignette,
+} from "@/sanity/image";
 
 describe("Formatting Utilities (format.ts)", () => {
   it("formats hyphenated categories into Title Case", () => {
@@ -119,8 +126,12 @@ describe("HomePage Server Component", () => {
     mockFetch.mockReset();
   });
 
-  it("renders fallback heading, tagline, and empty state when Sanity has no documents", async () => {
-    mockFetch.mockResolvedValueOnce(null).mockResolvedValueOnce([]);
+  it("renders fallback heading, tagline, hero cards, categories, motto banner, media channels, and empty state when Sanity has no documents", async () => {
+    mockFetch.mockResolvedValueOnce({
+      home: null,
+      chapters: [],
+      articles: [],
+    });
     const ui = await HomePage();
     const { container } = render(ui);
 
@@ -131,19 +142,57 @@ describe("HomePage Server Component", () => {
       "Biotech & cancer research protocols"
     );
     expect(container.textContent).toContain(
+      "Knowledge for a More Curious World"
+    );
+    expect(container.textContent).toContain("Popular Categories");
+    expect(container.textContent).toContain("Popular Media");
+    expect(container.textContent).toContain("YouTube");
+    expect(container.textContent).toContain("TikTok");
+    expect(container.textContent).toContain("LinkedIn");
+    expect(container.textContent).toContain(
       "No articles yet — add some in the Studio."
     );
   });
 
-  it("renders custom heading and article cards with rotating arrows", async () => {
-    mockFetch
-      .mockResolvedValueOnce({
+  it("renders custom heading, dual hero cards, chapter tarot cards, motto banner, media channels, and chronicle feed", async () => {
+    mockFetch.mockResolvedValueOnce({
+      home: {
         heading: "Custom Compendium",
         subheading: "Oncology & Assay Protocols",
         intro: null,
         logo: null,
-      })
-      .mockResolvedValueOnce([
+        mottoBanner: "Scientia Vincere Tenebras",
+        featuredArticles: [
+          {
+            _id: "art-2",
+            title: "Western Blot Troubleshooting",
+            slug: { current: "western-blot" },
+            summary: "Resolving high background and faint bands.",
+            contentType: "guide",
+            publishedAt: "2026-10-21T00:00:00Z",
+          },
+        ],
+        mediaChannels: [
+          {
+            _key: "m1",
+            platform: "youtube",
+            title: "Oliver Lab YouTube",
+            description: "Bench microscopy dispatches.",
+            url: "https://youtube.com/@oliverlab",
+          },
+        ],
+      },
+      chapters: [
+        {
+          _id: "ch-1",
+          title: "Optical Microscopy",
+          number: 1,
+          slug: { current: "optical-microscopy" },
+          summary: "Compound lenses and specimen illumination.",
+          vignette: null,
+        },
+      ],
+      articles: [
         {
           _id: "art-1",
           title: "CRISPR-Cas9 Knockout Protocol",
@@ -151,6 +200,14 @@ describe("HomePage Server Component", () => {
           summary: "Step-by-step guide for mammalian cell lines.",
           contentType: "protocol",
           publishedAt: "2026-10-20T00:00:00Z",
+          topics: [
+            {
+              _id: "t-1",
+              name: "Genomics",
+              symbol: "Ge",
+              slug: { current: "genomics" },
+            },
+          ],
         },
         {
           _id: "art-2",
@@ -159,8 +216,10 @@ describe("HomePage Server Component", () => {
           summary: "Resolving high background and faint bands.",
           contentType: "research-note",
           publishedAt: "2026-10-21T00:00:00Z",
+          topics: [],
         },
-      ]);
+      ],
+    });
 
     const ui = await HomePage();
     const { container } = render(ui);
@@ -168,6 +227,10 @@ describe("HomePage Server Component", () => {
     expect(container.querySelector("h1")?.textContent).toBe(
       "Custom Compendium"
     );
+    expect(container.textContent).toContain("Scientia Vincere Tenebras");
+    expect(container.textContent).toContain("Optical Microscopy");
+    expect(container.textContent).toContain("Oliver Lab YouTube");
+
     const cards = container.querySelectorAll("a.article-card");
     expect(cards).toHaveLength(2);
     expect(cards[0].getAttribute("href")).toBe("/crispr-knockout");
@@ -175,6 +238,51 @@ describe("HomePage Server Component", () => {
     expect(cards[0].textContent).toContain("Oct 20, 2026");
     expect(cards[1].getAttribute("href")).toBe("/western-blot");
     expect(cards[1].textContent).toContain("Research Note");
+  });
+
+  it("filters chronicle feed when topic searchParam is provided", async () => {
+    mockFetch.mockResolvedValueOnce({
+      home: null,
+      chapters: [],
+      articles: [
+        {
+          _id: "art-1",
+          title: "CRISPR-Cas9 Knockout Protocol",
+          slug: { current: "crispr-knockout" },
+          summary: "Step-by-step guide for mammalian cell lines.",
+          contentType: "protocol",
+          publishedAt: "2026-10-20T00:00:00Z",
+          topics: [
+            {
+              _id: "t-1",
+              name: "Genomics",
+              symbol: "Ge",
+              slug: { current: "genomics" },
+            },
+          ],
+        },
+        {
+          _id: "art-2",
+          title: "Western Blot Troubleshooting",
+          slug: { current: "western-blot" },
+          summary: "Resolving high background and faint bands.",
+          contentType: "research-note",
+          publishedAt: "2026-10-21T00:00:00Z",
+          topics: [],
+        },
+      ],
+    });
+
+    const ui = await HomePage({
+      searchParams: Promise.resolve({ topic: "genomics" }),
+    });
+    const { container } = render(ui);
+
+    expect(container.textContent).toContain("Filtered Inscriptions");
+    expect(container.textContent).toContain("[ Ge ] Genomics");
+    const cards = container.querySelectorAll("a.article-card");
+    expect(cards).toHaveLength(1);
+    expect(cards[0].getAttribute("href")).toBe("/crispr-knockout");
   });
 });
 
@@ -245,5 +353,56 @@ describe("ArticlePage Server Component & generateStaticParams", () => {
     expect(container.querySelector(".paper-body")?.textContent).toContain(
       "Fluorophore spillover compensation principles."
     );
+  });
+});
+
+describe("Sanity Image & Copperplate Etching Helpers (sanity/image.ts)", () => {
+  it("resolves chapter vignettes and article etchings with deterministic copperplate fallbacks", () => {
+    expect(buildSanityImageUrl(null, { width: 300 })).toBeNull();
+    expect(
+      buildSanityImageUrl(
+        { asset: { url: "/art/chapters/microscopy.svg" } },
+        { width: 300 }
+      )
+    ).toBe("/art/chapters/microscopy.svg");
+
+    const microChapter = getChapterVignette({
+      title: "Optical Microscopy",
+      number: 1,
+    });
+    expect(microChapter.src).toBe("/art/chapters/microscopy.svg");
+
+    const reagentArticle = getArticleEtching({
+      title: "Buffer Preparation",
+      contentType: "protocol",
+    });
+    expect(reagentArticle.src).toBe("/art/chapters/reagents.svg");
+
+    expect(getMediaVignette("youtube").src).toBe("/art/media/projector.svg");
+    expect(getMediaVignette("tiktok").src).toBe("/art/media/pocket-lens.svg");
+    expect(getMediaVignette("linkedin").src).toBe(
+      "/art/media/leather-folio.svg"
+    );
+  });
+});
+
+describe("HomeCarousel Client Component", () => {
+  it("updates active pagination dot when Next/Previous buttons or dots are clicked", () => {
+    const { getByLabelText } = render(
+      <HomeCarousel ariaLabel="Popular Categories" dotCount={4}>
+        <div>Slide Content</div>
+      </HomeCarousel>
+    );
+
+    const dot1 = getByLabelText("Popular Categories page 1");
+    const dot2 = getByLabelText("Popular Categories page 2");
+    const nextBtn = getByLabelText("Next Popular Categories");
+
+    expect(dot1.getAttribute("aria-selected")).toBe("true");
+    fireEvent.click(nextBtn);
+    expect(dot2.getAttribute("aria-selected")).toBe("true");
+
+    fireEvent.click(dot1);
+    expect(dot1.getAttribute("aria-selected")).toBe("true");
   });
 });
