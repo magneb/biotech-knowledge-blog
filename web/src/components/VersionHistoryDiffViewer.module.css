@@ -1,0 +1,396 @@
+/* ── Store Norske Leksikon-Style Version History & Visual Diff Viewer ── */
+
+.container {
+  font-family: var(--font-cormorant, "Cormorant Garamond", Georgia, serif);
+  color: var(--ink, #2a241e);
+  margin-top: 1.5rem;
+}
+
+/* ── Section: Timeline of Historical Editions ── */
+.timelineSection {
+  margin-bottom: 3rem;
+}
+
+.timelineHeading {
+  font-size: 1.65rem;
+  font-weight: 600;
+  color: var(--ink, #2a241e);
+  margin: 0 0 0.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.timelineIntro {
+  font-size: 1.05rem;
+  line-height: 1.55;
+  color: var(--sepia-dark, #5c4d3c);
+  margin: 0 0 1.5rem;
+}
+
+.timelineList {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  border-left: 2px solid var(--sepia-light, #c4b59d);
+  padding-left: 1.5rem;
+  position: relative;
+}
+
+.timelineItem {
+  position: relative;
+  margin-bottom: 2rem;
+  padding-bottom: 0.5rem;
+}
+
+.timelineItem:last-child {
+  margin-bottom: 0;
+}
+
+.timelineDot {
+  position: absolute;
+  left: -1.95rem;
+  top: 0.35rem;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: var(--parchment, #f4eee1);
+  border: 2px solid var(--sepia-dark, #5c4d3c);
+  transition: all 0.2s ease;
+}
+
+.timelineDotActive {
+  background: var(--sepia-dark, #5c4d3c);
+  box-shadow: 0 0 0 3px rgba(92, 77, 60, 0.2);
+}
+
+.editionCard {
+  background: var(--parchment-light, #faf6ee);
+  border: 1px solid var(--sepia-light, #c4b59d);
+  padding: 1.25rem 1.5rem;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.04);
+}
+
+.editionCardHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-bottom: 0.75rem;
+}
+
+.editionMetaTitle {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  flex-wrap: wrap;
+}
+
+.editionVersionBadge {
+  font-size: 0.85rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  padding: 0.15rem 0.55rem;
+  background: var(--sepia-dark, #5c4d3c);
+  color: var(--parchment, #f4eee1);
+}
+
+.activeTag {
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: #1b5e20;
+  background: rgba(46, 125, 50, 0.12);
+  border: 1px solid rgba(46, 125, 50, 0.35);
+  padding: 0.15rem 0.5rem;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.editionDate {
+  font-size: 0.95rem;
+  color: var(--sepia-dark, #5c4d3c);
+  font-style: italic;
+}
+
+.editionActions {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.editionButton {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-family: inherit;
+  font-size: 0.88rem;
+  font-weight: 600;
+  padding: 0.35rem 0.75rem;
+  background: var(--parchment, #f4eee1);
+  border: 1px solid var(--sepia-light, #c4b59d);
+  color: var(--ink, #2a241e);
+  cursor: pointer;
+  text-decoration: none;
+  transition: all 0.15s ease;
+}
+
+.editionButton:hover {
+  background: var(--sepia-dark, #5c4d3c);
+  color: var(--parchment, #f4eee1);
+}
+
+.editionButtonPrimary {
+  background: var(--sepia-dark, #5c4d3c);
+  color: var(--parchment, #f4eee1);
+}
+
+.editionButtonPrimary:hover {
+  background: var(--ink, #2a241e);
+}
+
+.changelogText {
+  font-size: 0.98rem;
+  line-height: 1.5;
+  color: var(--ink, #2a241e);
+  background: rgba(92, 77, 60, 0.04);
+  border-left: 2px solid var(--sepia-dark, #5c4d3c);
+  padding: 0.5rem 0.75rem;
+  margin: 0.5rem 0 0;
+  font-style: italic;
+}
+
+/* ── Section: Visual Diff Viewer ── */
+.diffViewerSection {
+  margin-top: 3rem;
+  border-top: 1px solid var(--sepia-light, #c4b59d);
+  padding-top: 2.5rem;
+}
+
+.diffHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1.25rem;
+  margin-bottom: 1.5rem;
+}
+
+.diffTitle {
+  font-size: 1.85rem;
+  font-weight: 600;
+  color: var(--ink, #2a241e);
+  margin: 0;
+}
+
+.diffControlsBar {
+  background: var(--parchment-light, #faf6ee);
+  border: 1px solid var(--sepia-light, #c4b59d);
+  padding: 1.25rem 1.5rem;
+  margin-bottom: 1.5rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+}
+
+.selectorGroup {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.selectorLabel {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--sepia-dark, #5c4d3c);
+}
+
+.selectInput {
+  font-family: inherit;
+  font-size: 0.95rem;
+  padding: 0.4rem 0.75rem;
+  background: var(--parchment, #f4eee1);
+  border: 1px solid var(--sepia-light, #c4b59d);
+  color: var(--ink, #2a241e);
+  outline: none;
+  cursor: pointer;
+}
+
+.swapButton {
+  font-family: inherit;
+  font-size: 1.1rem;
+  line-height: 1;
+  padding: 0.35rem 0.65rem;
+  background: var(--parchment, #f4eee1);
+  border: 1px solid var(--sepia-light, #c4b59d);
+  color: var(--sepia-dark, #5c4d3c);
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.swapButton:hover {
+  background: var(--sepia-dark, #5c4d3c);
+  color: var(--parchment, #f4eee1);
+}
+
+.viewModeToggle {
+  display: flex;
+  border: 1px solid var(--sepia-light, #c4b59d);
+}
+
+.viewModeBtn {
+  font-family: inherit;
+  font-size: 0.88rem;
+  font-weight: 600;
+  padding: 0.4rem 0.85rem;
+  background: var(--parchment, #f4eee1);
+  border: none;
+  color: var(--sepia-dark, #5c4d3c);
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.viewModeBtnActive {
+  background: var(--sepia-dark, #5c4d3c);
+  color: var(--parchment, #f4eee1);
+}
+
+/* ── Metrics Bar ── */
+.metricsBar {
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+  flex-wrap: wrap;
+  padding: 0.75rem 1.25rem;
+  background: rgba(92, 77, 60, 0.05);
+  border: 1px dashed var(--sepia-light, #c4b59d);
+  margin-bottom: 2rem;
+  font-size: 0.95rem;
+}
+
+.metricBadgeAdded {
+  font-weight: 600;
+  color: #1b5e20;
+}
+
+.metricBadgeRemoved {
+  font-weight: 600;
+  color: #8b1e1e;
+}
+
+.metricBadgeNeutral {
+  color: var(--sepia-dark, #5c4d3c);
+}
+
+/* ── Diff Display Canvas ── */
+.diffCanvas {
+  background: var(--parchment-light, #faf6ee);
+  border: 1px solid var(--sepia-light, #c4b59d);
+  padding: 2rem 2.5rem;
+  box-shadow: inset 0 0 0 1px rgba(92, 77, 60, 0.06);
+}
+
+.diffSectionBlock {
+  margin-bottom: 2rem;
+  padding-bottom: 1.5rem;
+  border-bottom: 1px dashed rgba(196, 181, 157, 0.6);
+}
+
+.diffSectionBlock:last-child {
+  border-bottom: none;
+  margin-bottom: 0;
+  padding-bottom: 0;
+}
+
+.diffSectionHeading {
+  font-size: 1.35rem;
+  font-weight: 600;
+  color: var(--sepia-dark, #5c4d3c);
+  margin: 0 0 0.85rem;
+}
+
+.diffContentParagraph {
+  font-size: 1.15rem;
+  line-height: 1.7;
+  color: var(--ink, #2a241e);
+  margin: 0 0 1rem;
+}
+
+/* ── Inline Diff Token Highlighting ── */
+.diffTokenAdded {
+  background: rgba(46, 125, 50, 0.12);
+  color: #1b5e20;
+  border-bottom: 1.5px solid #2e7d32;
+  text-decoration: none;
+  padding: 0.05rem 0.2rem;
+}
+
+.diffTokenRemoved {
+  background: rgba(183, 28, 28, 0.10);
+  color: #8b1e1e;
+  text-decoration: line-through;
+  padding: 0.05rem 0.2rem;
+}
+
+.diffTokenUnchanged {
+  color: inherit;
+}
+
+/* ── Side-by-Side Diff Layout ── */
+.sideBySideGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+  align-items: start;
+}
+
+.sideColumn {
+  min-width: 0;
+  background: rgba(244, 238, 225, 0.4);
+  border: 1px solid var(--sepia-light, #c4b59d);
+  padding: 1.25rem 1.5rem;
+}
+
+.sideColumnHeader {
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: var(--sepia-dark, #5c4d3c);
+  border-bottom: 1px solid var(--sepia-light, #c4b59d);
+  padding-bottom: 0.5rem;
+  margin-bottom: 1rem;
+  display: flex;
+  justify-content: space-between;
+}
+
+.noChangesNote {
+  padding: 2rem;
+  text-align: center;
+  font-size: 1.1rem;
+  font-style: italic;
+  color: var(--sepia-dark, #5c4d3c);
+}
+
+/* ── Mobile Responsiveness ── */
+@media (max-width: 860px) {
+  .diffControlsBar {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .selectorGroup {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .diffCanvas {
+    padding: 1.25rem;
+  }
+
+  .sideBySideGrid {
+    grid-template-columns: 1fr;
+  }
+}

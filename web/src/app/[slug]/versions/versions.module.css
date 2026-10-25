@@ -1,0 +1,125 @@
+.container {
+  width: 100%;
+  max-width: 1020px;
+  margin: 0 auto;
+  padding: 1.5rem 1.75rem 5rem;
+  font-family: var(--font-cormorant, "Cormorant Garamond", Georgia, serif);
+}
+
+.backNav {
+  margin-bottom: 2rem;
+}
+
+.backLink {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--sepia-dark, #5c4d3c);
+  text-decoration: none;
+  padding: 0.35rem 0.65rem;
+  border: 1px solid transparent;
+  transition: all 0.15s ease;
+}
+
+.backLink:hover {
+  color: var(--ink, #2a241e);
+  border-color: var(--sepia-light, #c4b59d);
+  background: rgba(244, 238, 225, 0.5);
+}
+
+.header {
+  margin-bottom: 2.5rem;
+}
+
+.topMetaRow {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+  font-size: 1rem;
+  font-style: italic;
+  color: var(--sepia-dark, #5c4d3c);
+  margin-bottom: 0.75rem;
+}
+
+.categoryBadge {
+  font-size: 0.85rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--ink, #2a241e);
+}
+
+.glyphFlourish {
+  color: var(--gold-muted, #93723c);
+  font-size: 0.75rem;
+}
+
+.versionCountBadge {
+  padding: 0.15rem 0.55rem;
+  background: rgba(92, 77, 60, 0.08);
+  border: 1px solid var(--sepia-light, #c4b59d);
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--ink, #2a241e);
+}
+
+.title {
+  font-size: 2.85rem;
+  font-weight: 600;
+  color: var(--ink, #2a241e);
+  margin: 0 0 0.5rem;
+  line-height: 1.15;
+}
+
+.subtitle {
+  font-size: 1.25rem;
+  line-height: 1.5;
+  color: var(--sepia-dark, #5c4d3c);
+  margin: 0 0 1.25rem;
+}
+
+.headerRule {
+  height: 2px;
+  background: linear-gradient(
+    90deg,
+    var(--sepia-light, #c4b59d) 0%,
+    var(--gold-muted, #93723c) 50%,
+    transparent 100%
+  );
+  margin-top: 1rem;
+}
+
+.footer {
+  margin-top: 4rem;
+  padding-top: 2rem;
+}
+
+.footerAudit {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+  font-size: 0.95rem;
+  color: var(--sepia-dark, #5c4d3c);
+  margin-top: 1.5rem;
+}
+
+.footerLink {
+  color: var(--ink, #2a241e);
+  font-weight: 600;
+  text-decoration: underline;
+}
+
+@media (max-width: 860px) {
+  .container {
+    padding: 1rem 1rem 3rem;
+  }
+
+  .title {
+    font-size: 2.15rem;
+  }
+}

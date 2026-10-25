@@ -158,6 +158,15 @@ export function ArticleUtilities({
               <Icon name="cartouche-oval" size={14} />
               Bookmark Protocol
             </button>
+
+            <Link
+              href={`/${slug}/versions/`}
+              className={styles.actionButton}
+              title="Inspect Store Norske Leksikon-style edition timeline and visual diffs"
+            >
+              <Icon name="diamond" size={12} />
+              History &amp; Diffs (v{versionNumber || 1})
+            </Link>
           </div>
         </div>
 

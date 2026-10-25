@@ -126,10 +126,17 @@ function parseStudioSchemas(): {
 }
 
 describe("Sanity Studio Schemas, Client Config & Dynamic TypeGen Sync", () => {
-  it("registers chapter, topic, article, homePage, and aboutPage schemas in studio/schemaTypes", () => {
+  it("registers chapter, topic, article, articleVersion, homePage, and aboutPage schemas in studio/schemaTypes", () => {
     const { registeredExports, schemas } = parseStudioSchemas();
     expect(registeredExports).toEqual(
-      expect.arrayContaining(["chapter", "topic", "article", "homePage", "aboutPage"])
+      expect.arrayContaining([
+        "chapter",
+        "topic",
+        "article",
+        "articleVersion",
+        "homePage",
+        "aboutPage",
+      ])
     );
 
     const chapterSchema = schemas.find((s) => s.name === "chapter");
@@ -163,6 +170,22 @@ describe("Sanity Studio Schemas, Client Config & Dynamic TypeGen Sync", () => {
       ])
     );
     expect(articleSchema?.fields).not.toContain("category");
+
+    const articleVersionSchema = schemas.find((s) => s.name === "articleVersion");
+    expect(articleVersionSchema).toBeDefined();
+    expect(articleVersionSchema?.fields).toEqual(
+      expect.arrayContaining([
+        "article",
+        "versionNumber",
+        "publishedAt",
+        "changeSummary",
+        "snapshotTitle",
+        "snapshotContentType",
+        "snapshotSummary",
+        "snapshotCoverEtching",
+        "snapshotBody",
+      ])
+    );
 
     const homeSchema = schemas.find((s) => s.name === "homePage");
     expect(homeSchema).toBeDefined();

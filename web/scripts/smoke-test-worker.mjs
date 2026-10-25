@@ -250,6 +250,16 @@ async function main() {
     }
     log("runtime", "✓ GET /__non_existent_smoke_slug_404__ -> 404 Not Found");
 
+    // Assertion D2: Unknown article version returns 404
+    const notFoundVersionRes = await fetch(`${baseUrl}/__non_existent_smoke_slug_404__/v1`);
+    if (notFoundVersionRes.status !== 404) {
+      fail(
+        "runtime",
+        `GET /__non_existent_smoke_slug_404__/v1 returned status ${notFoundVersionRes.status} (expected 404)`
+      );
+    }
+    log("runtime", "✓ GET /__non_existent_smoke_slug_404__/v1 -> 404 Not Found");
+
     // Assertion E: Draft Mode disable route redirects safely to /
     const disableRes = await fetch(
       `${baseUrl}/api/draft-mode/disable?redirect=/`,

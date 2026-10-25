@@ -339,7 +339,14 @@ export default async function ArticlePage({
                 </strong>
                 <span> &bull; Penned by {siteMeta.authorName} &bull; Edition v{version}</span>
               </div>
-              <div>
+              <div style={{ display: "flex", gap: "1rem", flexWrap: "wrap" }}>
+                <Link
+                  href={`/${slug}/versions/`}
+                  className={styles.auditLink}
+                  title="View Store Norske Leksikon-style edition timeline and visual diffs"
+                >
+                  History &amp; Diffs &rarr;
+                </Link>
                 <a
                   href={permalink}
                   className={styles.auditLink}

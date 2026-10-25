@@ -248,8 +248,8 @@ Every work package must satisfy the 3-tier verification gate before commit/push:
 
 ---
 
-## WP-8B: Protocol Versioning History, Snapshot Engine & Visual Diffs (Store Norske Leksikon Model)
-* **Objective:** Implement full editorial version control, Content Lake snapshot archival, persistent immutable routing (`/[slug]/v{N}/`), and an interactive visual diff viewer based on the Store Norske Leksikon reference model (Decision 015).
+## WP-8B: Protocol Versioning History, Snapshot Engine & Visual Diffs (Store Norske Leksikon Model) [COMPLETED]
+* **Objective:** Implement full editorial version control, Content Lake snapshot archival, persistent immutable routing (`/[slug]/v{N}/`), and an interactive visual diff viewer based on the Store Norske Leksikon reference model (Decisions 015, 016).
 * **Scope:**
   - **Sanity Content Model for Versioning:**
     - New Document Type `articleVersion` (`studio/schemaTypes/articleVersion.ts`):
@@ -257,25 +257,26 @@ Every work package must satisfy the 3-tier verification gate before commit/push:
       - `versionNumber`: integer (`1, 2, 3...`).
       - `publishedAt`: datetime (immutable timestamp of this edition).
       - `changeSummary`: string (e.g. *"Adjusted annealing temperature; added control step"*).
-      - `snapshotTitle`, `snapshotContentType`, `snapshotBody` (frozen Portable Text data).
+      - `snapshotTitle`, `snapshotContentType`, `snapshotSummary`, `snapshotCoverEtching`, `snapshotBody` (frozen Portable Text data).
     - Refactor `article` schema (`studio/schemaTypes/article.ts`):
       - Version control fieldset: `versionNumber` (integer), `isNewEdition` (boolean), `versionChangelog` (text).
       - Typo fixes, minor formatting, and link tweaks update in-place without bumping `versionNumber`.
       - Toggling `isNewEdition: true` increments the version number and records a new `articleVersion` snapshot.
   - **Routes & Immutable Archival Pages:**
-    - Historical edition route: `/[slug]/v[version]/page.tsx` (e.g., `/crispr-knockout/v1/`).
+    - Historical edition route: `web/src/app/[slug]/[version]/page.tsx` (e.g., `/crispr-knockout/v1/`).
     - Archival alert banner on historical versions: *"You are viewing an archival edition (Version 1) of this protocol recorded on [Date]. [Return to current live edition →]"*.
-    - Edge Caching: Cloudflare Workers serves historical editions with `Cache-Control: public, max-age=31536000, immutable`.
-  - **Version History & Visual Diff Viewer (`/[slug]/versions/` or footer drawer):**
+    - Edge Caching: Cloudflare Workers serves historical editions with `Cache-Control: public, max-age=31536000, immutable` in `web/next.config.ts`.
+  - **Version History & Visual Diff Viewer (`web/src/app/[slug]/versions/page.tsx` & `VersionHistoryDiffViewer.tsx`):**
     - Timeline listing all historical editions with dates, authors, and changelog notes.
-    - Interactive text diff viewer comparing two editions, rendering additions and deletions in copperplate ink and parchment tones.
+    - Zero-dependency LCS word & block diff engine (`web/src/lib/diff.ts`).
+    - Interactive text diff viewer comparing two editions, rendering additions and deletions in copperplate ink and parchment tones with inline and side-by-side modes.
 * **Sanity Best Practice Alignment:**
   - Immutable historical documents are first-class Sanity documents queryable via standard GROQ CDN, avoiding native History API rate limits and 30-day retention pruning.
 * **Acceptance Criteria:**
-  - Oliver can make minor typo edits without triggering version increments.
-  - Publishing a new edition creates a permanent snapshot and increments the version.
-  - Historical permalinks (`/[slug]/v1/`) render the frozen snapshot reliably with immutable edge caching.
-  - The visual diff view highlights changes between protocol editions clearly.
+  - [x] Oliver can make minor typo edits without triggering version increments.
+  - [x] Publishing a new edition creates a permanent snapshot and increments the version.
+  - [x] Historical permalinks (`/[slug]/v1/`) render the frozen snapshot reliably with immutable edge caching.
+  - [x] The visual diff view highlights changes between protocol editions clearly in inline and side-by-side modes.
 
 ---
 

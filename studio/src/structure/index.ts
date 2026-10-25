@@ -1,3 +1,4 @@
+import {ArchiveIcon} from '@sanity/icons/Archive'
 import {BookIcon} from '@sanity/icons/Book'
 import {DocumentTextIcon} from '@sanity/icons/DocumentText'
 import {HomeIcon} from '@sanity/icons/Home'
@@ -6,7 +7,13 @@ import {UserIcon} from '@sanity/icons/User'
 import type {StructureResolver} from 'sanity/structure'
 
 const SINGLETONS = ['homePage', 'aboutPage']
-const MANAGED_DOCUMENT_TYPES = [...SINGLETONS, 'chapter', 'article', 'topic']
+const MANAGED_DOCUMENT_TYPES = [
+  ...SINGLETONS,
+  'chapter',
+  'article',
+  'articleVersion',
+  'topic',
+]
 
 export const structure: StructureResolver = (S) =>
   S.list()
@@ -31,7 +38,7 @@ export const structure: StructureResolver = (S) =>
 
       S.divider(),
 
-      // 2. Chapters & Content
+      // 3. Chapters & Content
       S.listItem()
         .title('Chapters & Content')
         .icon(BookIcon)
@@ -43,6 +50,9 @@ export const structure: StructureResolver = (S) =>
               S.documentTypeListItem('article')
                 .title('All Articles, Guides & Protocols')
                 .icon(DocumentTextIcon),
+              S.documentTypeListItem('articleVersion')
+                .title('Archival Edition Snapshots')
+                .icon(ArchiveIcon),
               S.divider(),
               S.listItem()
                 .title('Articles by Chapter')
@@ -66,7 +76,7 @@ export const structure: StructureResolver = (S) =>
             ]),
         ),
 
-      // 3. Topics / Taxonomies
+      // 4. Topics / Taxonomies
       S.listItem()
         .title('Topics / Taxonomies')
         .icon(TagIcon)

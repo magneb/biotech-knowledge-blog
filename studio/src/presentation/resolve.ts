@@ -31,7 +31,10 @@ export const resolve: PresentationPluginOptions['resolve'] = {
       resolve: (doc) => ({
         locations: [
           {
-            title: doc?.number != null ? `Chapter ${doc.number}: ${doc?.title || 'Untitled'}` : doc?.title || 'Chapter',
+            title:
+              doc?.number != null
+                ? `Chapter ${doc.number}: ${doc?.title || 'Untitled'}`
+                : doc?.title || 'Chapter',
             href: '/contents',
           },
         ],
@@ -48,11 +51,15 @@ export const resolve: PresentationPluginOptions['resolve'] = {
           ...(doc?.slug
             ? [
                 {
-                  title: doc.symbol ? `[ ${doc.symbol} ] ${doc.name || ''} (Contents)` : 'Topic (Contents)',
+                  title: doc.symbol
+                    ? `[ ${doc.symbol} ] ${doc.name || ''} (Contents)`
+                    : 'Topic (Contents)',
                   href: `/contents?topic=${encodeURIComponent(doc.slug)}`,
                 },
                 {
-                  title: doc.symbol ? `[ ${doc.symbol} ] ${doc.name || ''} (Home)` : 'Topic (Home)',
+                  title: doc.symbol
+                    ? `[ ${doc.symbol} ] ${doc.name || ''} (Home)`
+                    : 'Topic (Home)',
                   href: `/?topic=${encodeURIComponent(doc.slug)}`,
                 },
               ]
@@ -78,6 +85,10 @@ export const resolve: PresentationPluginOptions['resolve'] = {
                   title: doc?.title || 'Untitled Article',
                   href: `/${doc.slug}`,
                 },
+                {
+                  title: 'Version History & Diffs',
+                  href: `/${doc.slug}/versions`,
+                },
               ]
             : []),
           {
@@ -88,6 +99,33 @@ export const resolve: PresentationPluginOptions['resolve'] = {
             title: 'Home Page',
             href: '/',
           },
+        ],
+      }),
+    }),
+    articleVersion: defineLocations({
+      select: {
+        title: 'snapshotTitle',
+        version: 'versionNumber',
+        slug: 'article.slug.current',
+      },
+      resolve: (doc) => ({
+        locations: [
+          ...(doc?.slug && doc?.version != null
+            ? [
+                {
+                  title: `Edition v${doc.version}: ${doc.title || 'Treatise'}`,
+                  href: `/${doc.slug}/v${doc.version}`,
+                },
+                {
+                  title: 'Version History & Diffs',
+                  href: `/${doc.slug}/versions`,
+                },
+                {
+                  title: `${doc.title || 'Treatise'} (Live Active Edition)`,
+                  href: `/${doc.slug}`,
+                },
+              ]
+            : []),
         ],
       }),
     }),
