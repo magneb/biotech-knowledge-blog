@@ -15,10 +15,11 @@ graph TD
     WP4 --> WP6[WP-6: Global Shell, Navigation & Book Table of Contents]
     WP5 --> WP6
     WP6 --> WP7[WP-7: Home Page Sections & Dynamic Feeds]
-    WP6 --> WP8[WP-8: Article Detail Page, Reader Layout & Dynamic TOC]
-    WP4 --> WP9[WP-9: Studio Bibliography Pipeline & Render-Time Citations]
-    WP8 --> WP9
-    WP9 --> WP10[WP-10: Client-Side Bookmarks, Local Storage & Utilities]
+    WP6 --> WP8[WP-8: Scholarly Reader, Planned Links, APA7 Citations & PDF Engine]
+    WP8 --> WP8B[WP-8B: Store Norske Leksikon Versioning, Snapshot Engine & Visual Diffs]
+    WP8 --> WP9[WP-9: Studio Bibliography Pipeline & In-Text Citations]
+    WP8B --> WP10[WP-10: Client-Side Bookmarks, Local Storage & Utilities]
+    WP9 --> WP10
     WP4 -. Future .-> WP11[WP-11: Word .docx Ingestion Tool]
     WP10 -. Future .-> WP12[WP-12: Social / Patreon Auth & Content Gating]
 ```
@@ -210,23 +211,69 @@ Every work package must satisfy the 3-tier verification gate before commit/push:
 
 ---
 
-## WP-8: Article Detail Page, Reader Layout & Dynamic TOC
-* **Objective:** Implement the three-column scholarly journal reading layout.
+## WP-8: Scholarly 3-Column Reader, Planned Links, APA7 Citations & Paged-Media PDF
+* **Objective:** Implement the three-column scholarly journal reading layout, dynamic anchor Table of Contents, resilient internal and planned links, visitor-facing APA7/BibTeX citation generator, Dublin Core metadata, and Paged-Media PDF export engine (Decision 015).
 * **Scope:**
-  - **Left Column:** Sticky collapsible Table of Contents with active heading observer and faint copperplate margin watermark.
-  - **Center Column:** Main article reader:
+  - **Left Column:** Sticky collapsible Table of Contents with active heading observer (H2/H3), anchor sanitization with `stegaClean`, and faint copperplate margin watermark.
+  - **Center Column (Main Reader):**
     - Drop caps on opening paragraphs (`.drop-cap`).
     - Justified body text with hyphenation controls.
-    - Custom Portable Text serializers for section headings (with `id` anchors), pull-quotes, callout boxes, and figures.
-  - **Right Column:** Downloadable PDFs widget (`[ 📄 Protocol Summary • 2.4 MB 📥 ]`) and floating figure annotations.
+    - Custom Portable Text serializers:
+      - Section headings with stable sanitized `id` anchors for the TOC.
+      - Scientific figures (`figureCallout`), reagent boxes (`formulaReagents`), and pull-quotes.
+      - Annotated scientific terms (`annotatedTerm`).
+      - Rich `internalLink` mark component: dynamically links to resolved articles, chapters, and topics via GROQ, or renders Victorian "In prep" flourishes (`Centrifugation✦`) and tooltip for planned treatises without broken links or 404s.
+    - Reader footer: "Last updated" timestamp, author attribution, and anchor slot for Store Norske Leksikon version history and references.
+  - **Right Column (Scholarly Utilities & Media):**
+    - **APA7 / BibTeX Citation Generator & Modal:** `[ 📜 Cite Protocol ]` generating copyable APA 7th Edition citation and BibTeX record targeting the persistent edition URL (`/[slug]/v{N}/`).
+    - **Downloadable PDFs widget:** Direct download links for curated Sanity file attachments (`[ 📄 Protocol Summary • 2.4 MB 📥 ]`).
+    - **Paged-Media PDF Engine:** `[ ⎙ Save / Export PDF ]` button invoking the Victorian `@media print` CSS engine with `<PrintHeader>` and `<PrintFooter>` blocks injecting print date, version number, canonical URL, and A4 running folios.
+    - Sticky floating figure annotations.
   - **Selected Images Gallery:** Multi-column grid of scientific illustrations with engraved borders and captions.
+  - **Metadata Engine:** Dublin Core (`DC.*`) and Google Scholar (`citation_*`) metadata injection via Next.js `generateMetadata` on `/[slug]`.
 * **Sanity Best Practice Alignment:**
   - Custom Portable Text components pass props safely and preserve `_key` values for click-to-edit.
   - Heading slugs sanitized with `stegaClean` so DOM IDs match Table of Contents anchor links in draft mode.
+  - Schema extension: Add `internalLink` mark annotation to `article.body` with dual-mode support (`resolved` reference vs `planned` title).
 * **Acceptance Criteria:**
   - Table of Contents automatically tracks scroll position.
+  - Internal links resolve reliably without breaking on slug changes; planned links display informative hover states.
+  - Visitors can copy a valid APA7 citation and BibTeX record citing the article's edition.
+  - Printing or saving to PDF produces a clean, paginated scientific document with print timestamp, version number, and no web UI clutter.
+  - Dublin Core and Google Scholar meta tags render in page `<head>`.
   - PDFs are downloadable directly from Sanity asset storage.
   - Typography renders with the elegance of an antique medical journal.
+
+---
+
+## WP-8B: Protocol Versioning History, Snapshot Engine & Visual Diffs (Store Norske Leksikon Model)
+* **Objective:** Implement full editorial version control, Content Lake snapshot archival, persistent immutable routing (`/[slug]/v{N}/`), and an interactive visual diff viewer based on the Store Norske Leksikon reference model (Decision 015).
+* **Scope:**
+  - **Sanity Content Model for Versioning:**
+    - New Document Type `articleVersion` (`studio/schemaTypes/articleVersion.ts`):
+      - `article`: reference to parent `article`.
+      - `versionNumber`: integer (`1, 2, 3...`).
+      - `publishedAt`: datetime (immutable timestamp of this edition).
+      - `changeSummary`: string (e.g. *"Adjusted annealing temperature; added control step"*).
+      - `snapshotTitle`, `snapshotContentType`, `snapshotBody` (frozen Portable Text data).
+    - Refactor `article` schema (`studio/schemaTypes/article.ts`):
+      - Version control fieldset: `versionNumber` (integer), `isNewEdition` (boolean), `versionChangelog` (text).
+      - Typo fixes, minor formatting, and link tweaks update in-place without bumping `versionNumber`.
+      - Toggling `isNewEdition: true` increments the version number and records a new `articleVersion` snapshot.
+  - **Routes & Immutable Archival Pages:**
+    - Historical edition route: `/[slug]/v[version]/page.tsx` (e.g., `/crispr-knockout/v1/`).
+    - Archival alert banner on historical versions: *"You are viewing an archival edition (Version 1) of this protocol recorded on [Date]. [Return to current live edition →]"*.
+    - Edge Caching: Cloudflare Workers serves historical editions with `Cache-Control: public, max-age=31536000, immutable`.
+  - **Version History & Visual Diff Viewer (`/[slug]/versions/` or footer drawer):**
+    - Timeline listing all historical editions with dates, authors, and changelog notes.
+    - Interactive text diff viewer comparing two editions, rendering additions and deletions in copperplate ink and parchment tones.
+* **Sanity Best Practice Alignment:**
+  - Immutable historical documents are first-class Sanity documents queryable via standard GROQ CDN, avoiding native History API rate limits and 30-day retention pruning.
+* **Acceptance Criteria:**
+  - Oliver can make minor typo edits without triggering version increments.
+  - Publishing a new edition creates a permanent snapshot and increments the version.
+  - Historical permalinks (`/[slug]/v1/`) render the frozen snapshot reliably with immutable edge caching.
+  - The visual diff view highlights changes between protocol editions clearly.
 
 ---
 

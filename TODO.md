@@ -38,7 +38,10 @@ The previously listed items have been consolidated into formal work packages:
 
 *(Drop new prospective ideas, raw notes, or exploratory questions here before formalizing into work packages)*
 
-- [ ] Users should be able to to generate APA7 citation with persistant link to versioned page. must have.
-- [ ] What can we do with page versioning? is that something we can support? store norske leksicon har gjort dette på en god måte. Neders står sist oppdatert med tidspunkt med link til versjonsside, og en liten diff mellom hver versjon. Tilgang til tidligere versjoner er viktig. nice to have.
-- [ ] what about links to other pages? and links that dont have a page yet. 
+- [x] **Users should be able to generate APA7 citation with persistent link to versioned page (Must Have):** Formalized and incorporated into **WP-8**. Generates copyable APA7 and BibTeX citations targeting immutable version permalinks (`/[slug]/v{N}/`).
+- [x] **Page versioning, Store Norske Leksikon model, changelog, and visual diffs (Nice to Have):** Formalized and sequenced as **WP-8B**. Separates minor editorial maintenance (typo fixes, link tweaks) from official scientific edition bumps (`isNewEdition`), preserving immutable snapshots in Sanity Content Lake (`articleVersion`).
+- [x] **Links to other pages and unwritten/planned pages:** Formalized into **WP-8**. Portable Text `internalLink` mark supports resolving existing articles/chapters dynamically via GROQ while gracefully displaying "Treatise in preparation" Victorian glyphs for unwritten pages without 404ing.
+- [x] **Dublin Core & Academic Crawler Metadata:** Formalized into **WP-8**. Injects Dublin Core (`DC.*`) and Google Scholar (`citation_*`) metadata into `<head>` for scholarly discovery and citation managers (Zotero/Mendeley).
+- [x] **PDF Document Generation with Print Dates & Version Numbers:** Formalized into **WP-8**. 2-tier architecture featuring a bespoke Victorian `@media print` Paged-Media CSS engine (Tier 1) injecting print timestamps, version badges, and running folios, with optional Cloudflare Browser Rendering endpoint (Tier 2).
+ 
 
