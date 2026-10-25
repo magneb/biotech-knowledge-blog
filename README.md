@@ -7,16 +7,28 @@ A personal knowledge base for biotech and cancer research protocols.
 - `studio/` — Sanity Studio (standalone content management)
 - `web/` — Next.js frontend deployed on Cloudflare Workers via `@opennextjs/cloudflare`
 
-## Development
+## Key Routes & Content Architecture
+
+- `/` — **Victorian Frontispiece**: Assembles the Dual Hero Feature Grid (`homePage.featuredArticles` or auto-selected newest/featured dispatches), Popular Categories tarot-card carousel (driven by `chapter` documents with `/contents` category fallbacks), Mid-Page Motto Banner (`homePage.mottoBanner`, `subheading`, `intro`), Popular Media (`homePage.mediaChannels` with YouTube/TikTok/LinkedIn copperplate vignettes), and the "New & Recent" Chronicle Feed.
+- `/contents` — **Master Table of Contents**: Displays ordered book chapters (`chapter.number` in Roman numerals) with nested articles (`article.chapterOrder`), an Appendix for standalone treatises, and URL-driven filtering (`?topic=slug`, `?scope=protocol|guide|article|research-note`, `?q=query`).
+- `/[slug]` — **Article & Protocol Reader**: Renders individual research papers, guides, and laboratory protocols.
+- `/sprites-preview` — **Living Victorian Design Folio**: Interactive catalog of all 28 `/sprites.svg` vector glyphs, copperplate etching plates (`/art/brand/`, `/art/chapters/`, `/art/media/`), typography tokens, and `@/components/ui` specimens.
+
+## Development & Environment Setup
 
 ```bash
-# Enable git hooks once per clone
+# 1. Enable git pre-push hooks once per clone
 npm run prepare
 
-# Start the Studio (http://localhost:3333)
+# 2. Configure local environment secrets for Draft Mode / Visual Editing & Webhooks
+cp web/.env.example web/.env.local
+cp web/.dev.vars.example web/.dev.vars
+# Populate SANITY_API_READ_TOKEN (Viewer token) and SANITY_REVALIDATE_SECRET in both files
+
+# 3. Start the Studio (http://localhost:3333)
 npm run dev:studio
 
-# Start the web app in a separate terminal (http://localhost:3000)
+# 4. Start the web app in a separate terminal (http://localhost:3000)
 npm run dev:web
 ```
 
@@ -52,7 +64,8 @@ npm run dev:web
 3. **Tier 3 — Worker Build, Wrangler Dry-Run & Live `workerd` Smoke Test (`npm run test:smoke`)**
    - Runs `opennextjs-cloudflare build` and verifies `.open-next/worker.js` and static assets are produced.
    - Runs `wrangler deploy --dry-run` to validate Worker bindings and verify the gzipped Worker bundle stays below Cloudflare's `3072 KiB` (3 MiB) Free Tier limit.
-   - Boots the compiled Worker locally inside Cloudflare's `workerd` runtime on an ephemeral port and runs live HTTP assertions (`GET /` → `200`, `GET /sprites.svg` → `200`, `GET /sprites-preview` → `200`, `GET /__non_existent_smoke_slug_404__` → `404`).
+   - Boots the compiled Worker locally inside Cloudflare's `workerd` runtime on an ephemeral port and runs live HTTP assertions (`GET /` → `200`, `GET /sprites.svg` → `200`, `GET /sprites-preview` → `200`, `GET /contents` → `200`, `GET /__non_existent_smoke_slug_404__` → `404`, `GET /api/draft-mode/disable` → `307`, `POST /api/revalidate` → `401`).
+   - *Tip:* If `.open-next/worker.js` is already built and you only want to re-run the dry-run and `workerd` assertions without rebuilding Next.js, run `node web/scripts/smoke-test-worker.mjs --skip-build`.
 
 ### Git Pre-Push Hook
 
