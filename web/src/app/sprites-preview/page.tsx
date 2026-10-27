@@ -8,7 +8,6 @@ import {
   EtchedFigure,
   type IconName,
 } from "@/components/ui";
-import Link from "next/link";
 import Image from "next/image";
 import type { Metadata } from "next";
 
@@ -369,10 +368,15 @@ export default function SpritesPreviewPage() {
 
       {/* ─── Back Nav ─── */}
       <div style={{ textAlign: "center", marginTop: "3rem" }}>
-        <Link href="/" className="back-link">
-          <HandDrawnArrow variant={1} size={14} style={{ transform: "rotate(180deg)" }} />
+        <CopperplateButton
+          href="/"
+          variant="secondary"
+          size="md"
+          arrowPosition="left"
+          arrowVariant={1}
+        >
           Return to Folio Frontispiece
-        </Link>
+        </CopperplateButton>
       </div>
     </article>
   );
