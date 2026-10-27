@@ -52,6 +52,166 @@ export const ARTICLES_SLUGS_QUERY = defineQuery(
   `*[_type == "article" && defined(slug.current)]{ "slug": slug.current }`
 );
 
+export const HOME_PAGE_QUERY = defineQuery(/* groq */ `{
+  "home": *[_id == "homePage"][0]{
+    heading,
+    subheading,
+    intro,
+    logo {
+      asset->{
+        _id,
+        url,
+        metadata {
+          lqip,
+          dimensions
+        }
+      },
+      hotspot,
+      crop
+    },
+    mottoBanner,
+    featuredArticles[]->{
+      _id,
+      title,
+      slug,
+      summary,
+      contentType,
+      featured,
+      publishedAt,
+      coverEtching {
+        asset->{
+          _id,
+          url,
+          metadata {
+            lqip,
+            dimensions
+          }
+        },
+        alt,
+        caption,
+        hotspot,
+        crop
+      },
+      topics[]->{
+        _id,
+        name,
+        symbol,
+        slug
+      }
+    },
+    mediaChannels[]{
+      _key,
+      platform,
+      title,
+      description,
+      url
+    }
+  },
+  "chapters": *[_type == "chapter"] | order(number asc){
+    _id,
+    title,
+    number,
+    slug,
+    summary,
+    vignette {
+      asset->{
+        _id,
+        url,
+        metadata {
+          lqip,
+          dimensions
+        }
+      },
+      alt,
+      hotspot,
+      crop
+    }
+  },
+  "articles": *[_type == "article" && defined(slug.current)] | order(publishedAt desc){
+    _id,
+    title,
+    slug,
+    summary,
+    contentType,
+    featured,
+    publishedAt,
+    coverEtching {
+      asset->{
+        _id,
+        url,
+        metadata {
+          lqip,
+          dimensions
+        }
+      },
+      alt,
+      caption,
+      hotspot,
+      crop
+    },
+    topics[]->{
+      _id,
+      name,
+      symbol,
+      slug
+    }
+  }
+}`);
+
+export const CONTENTS_PAGE_QUERY = defineQuery(
+  `{
+    "chapters": *[_type == "chapter"] | order(number asc){
+      _id,
+      title,
+      number,
+      slug,
+      summary,
+      vignette {
+        asset->{
+          _id,
+          url
+        },
+        alt
+      },
+      "articles": *[_type == "article" && references(^._id) && defined(slug.current)] | order(chapterOrder asc, publishedAt desc){
+        _id,
+        title,
+        slug,
+        contentType,
+        summary,
+        chapterOrder,
+        publishedAt,
+        topics[]->{
+          _id,
+          name,
+          symbol,
+          slug
+        }
+      }
+    },
+    "standaloneArticles": *[_type == "article" && !defined(chapter) && defined(slug.current)] | order(publishedAt desc){
+      _id,
+      title,
+      slug,
+      contentType,
+      summary,
+      publishedAt,
+      topics[]->{
+        _id,
+        name,
+        symbol,
+        slug
+      }
+    },
+    "topics": *[_type == "topic"] | order(name asc){
+      _id,
+      name,
+      symbol,
+      slug
+    }
+  }`
+);
+
 export const VERSIONS_SLUGS_QUERY = defineQuery(
   `*[_type == "article" && defined(slug.current)]{ "slug": slug.current }`
 );

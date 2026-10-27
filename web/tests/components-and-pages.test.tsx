@@ -30,6 +30,8 @@ vi.mock("@/sanity/live", () => ({
 
 vi.mock("next/navigation", () => ({
   notFound: mockNotFound,
+  usePathname: () => "/",
+  useSearchParams: () => new URLSearchParams(""),
 }));
 
 import { HandDrawnArrow, Icon } from "@/components/ui/Icon";
