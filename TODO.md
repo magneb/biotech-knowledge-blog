@@ -45,3 +45,16 @@ The previously listed items have been consolidated into formal work packages:
 - [x] **PDF Document Generation with Print Dates & Version Numbers:** Formalized into **WP-8**. 2-tier architecture featuring a bespoke Victorian `@media print` Paged-Media CSS engine (Tier 1) injecting print timestamps, version badges, and running folios, with optional Cloudflare Browser Rendering endpoint (Tier 2).
  
 
+- Killswitch. Oliver wants a way to turn on maintinance mode site wide at the press of a button. i want to put this toggle in sanity studio so its less stuff for him to deal with, but i do welcome other ideas. So we want some sort of webhook that flips a KV to change a maintinance flag. Then when that has been published, and the webhook successfully activated, all pages should respond with or redirect to 503
+
+- Forced cache invalidation. I need a way to clear the cache manually from my development environment. and by that i mean all the cache. Additionally i want better settings for cache, making sure nothing is cached more than a week, and that browser cache is not more than an hour. if there is a way to invalidate a users cache i want that too. 
+
+- we need the ability to edit previous versions of the articles. we have a system for adding a new version/edition of articles, but we want a way to edit the old documents in case of spelling mistakes or formatting issues. 
+
+- having the "penned by" on every single page is a bit obtuse. its great that the name is published in the metadata but i want to remove the penned by item. it also complicates the website since its fetched from a different page and cahced by cloudflare. 
+
+- date fields for "recorded on" or the publish date must be editable in sanity studio
+
+- work in progress disclaimer banner. in the top bar there should be a notice that stands out, indicating that the website is a work in progress.
+
+- logos in the banner must be filled out. 
