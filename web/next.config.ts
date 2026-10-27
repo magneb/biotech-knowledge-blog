@@ -5,6 +5,11 @@ import { initOpenNextCloudflareForDev } from "@opennextjs/cloudflare";
 // Pages are still prerendered and cached; Sanity webhooks revalidate them on publish.
 // Historical archival versions (/[slug]/v{N}/) receive permanent immutable edge caching.
 const nextConfig: NextConfig = {
+  logging: {
+    fetches: {
+      fullUrl: true,
+    },
+  },
   images: {
     remotePatterns: [
       {
