@@ -1,35 +1,14 @@
-import { defineQuery } from "next-sanity";
 import Image from "next/image";
 import Link from "next/link";
 import { sanityFetch } from "@/sanity/live";
+import { NAVIGATION_QUERY } from "@/sanity/queries";
 import { HeaderDrawer } from "./HeaderDrawer";
 import { HeaderSearchForm } from "./HeaderSearchForm";
 import { HeaderTopicPills } from "./HeaderTopicPills";
 import { HeaderUtilities } from "./HeaderUtilities";
 import styles from "./GlobalHeader.module.css";
 
-export const NAVIGATION_QUERY = defineQuery(
-  `{
-    "topics": *[_type == "topic"] | order(name asc){
-      _id,
-      name,
-      symbol,
-      slug
-    },
-    "chapters": *[_type == "chapter"] | order(number asc){
-      _id,
-      title,
-      number,
-      slug,
-      "articles": *[_type == "article" && references(^._id) && defined(slug.current)] | order(chapterOrder asc, publishedAt desc){
-        _id,
-        title,
-        slug,
-        contentType
-      }
-    }
-  }`
-);
+export { NAVIGATION_QUERY };
 
 export default async function GlobalHeader() {
   const { data } = await sanityFetch({

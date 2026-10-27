@@ -517,7 +517,422 @@ export type AllSanitySchemaTypes =
   | SanityImageAsset
   | Geopoint;
 
-// Source: ../web/src/app/[slug]/[version]/page.tsx
+// Source: ../web/src/app/contents/page.tsx
+// Variable: CONTENTS_PAGE_QUERY
+// Query: {    "chapters": *[_type == "chapter"] | order(number asc){      _id,      title,      number,      slug,      summary,      vignette {        asset->{          _id,          url        },        alt      },      "articles": *[_type == "article" && references(^._id) && defined(slug.current)] | order(chapterOrder asc, publishedAt desc){        _id,        title,        slug,        contentType,        summary,        chapterOrder,        publishedAt,        topics[]->{          _id,          name,          symbol,          slug        }      }    },    "standaloneArticles": *[_type == "article" && !defined(chapter) && defined(slug.current)] | order(publishedAt desc){      _id,      title,      slug,      contentType,      summary,      publishedAt,      topics[]->{        _id,        name,        symbol,        slug      }    },    "topics": *[_type == "topic"] | order(name asc){      _id,      name,      symbol,      slug    }  }
+export type CONTENTS_PAGE_QUERY_RESULT = {
+  chapters: Array<{
+    _id: string;
+    title: string | null;
+    number: number | null;
+    slug: Slug | null;
+    summary: string | null;
+    vignette: {
+      asset: {
+        _id: string;
+        url: string | null;
+      } | null;
+      alt: string | null;
+    } | null;
+    articles: Array<{
+      _id: string;
+      title: string | null;
+      slug: Slug | null;
+      contentType: "article" | "guide" | "protocol" | "research-note" | null;
+      summary: string | null;
+      chapterOrder: number | null;
+      publishedAt: string | null;
+      topics: Array<{
+        _id: string;
+        name: string | null;
+        symbol: string | null;
+        slug: Slug | null;
+      }> | null;
+    }>;
+  }>;
+  standaloneArticles: Array<{
+    _id: string;
+    title: string | null;
+    slug: Slug | null;
+    contentType: "article" | "guide" | "protocol" | "research-note" | null;
+    summary: string | null;
+    publishedAt: string | null;
+    topics: Array<{
+      _id: string;
+      name: string | null;
+      symbol: string | null;
+      slug: Slug | null;
+    }> | null;
+  }>;
+  topics: Array<{
+    _id: string;
+    name: string | null;
+    symbol: string | null;
+    slug: Slug | null;
+  }>;
+};
+
+// Source: ../web/src/app/page.tsx
+// Variable: HOME_PAGE_QUERY
+// Query: {  "home": *[_id == "homePage"][0]{    heading,    subheading,    intro,    logo {      asset->{        _id,        url,        metadata {          lqip,          dimensions        }      },      hotspot,      crop    },    mottoBanner,    featuredArticles[]->{      _id,      title,      slug,      summary,      contentType,      featured,      publishedAt,      coverEtching {        asset->{          _id,          url,          metadata {            lqip,            dimensions          }        },        alt,        caption,        hotspot,        crop      },      topics[]->{        _id,        name,        symbol,        slug      }    },    mediaChannels[]{      _key,      platform,      title,      description,      url    }  },  "chapters": *[_type == "chapter"] | order(number asc){    _id,    title,    number,    slug,    summary,    vignette {      asset->{        _id,        url,        metadata {          lqip,          dimensions        }      },      alt,      hotspot,      crop    }  },  "articles": *[_type == "article" && defined(slug.current)] | order(publishedAt desc){    _id,    title,    slug,    summary,    contentType,    featured,    publishedAt,    coverEtching {      asset->{        _id,        url,        metadata {          lqip,          dimensions        }      },      alt,      caption,      hotspot,      crop    },    topics[]->{      _id,      name,      symbol,      slug    }  }}
+export type HOME_PAGE_QUERY_RESULT = {
+  home:
+    | {
+        heading: null;
+        subheading: null;
+        intro: null;
+        logo: null;
+        mottoBanner: null;
+        featuredArticles: null;
+        mediaChannels: null;
+      }
+    | {
+        heading: string | null;
+        subheading: string | null;
+        intro: Array<{
+          children?: Array<{
+            marks?: Array<string>;
+            text?: string;
+            _type: "span";
+            _key: string;
+          }>;
+          style?:
+            "blockquote" | "h1" | "h2" | "h3" | "h4" | "h5" | "h6" | "normal";
+          listItem?: "bullet" | "number";
+          markDefs?: Array<{
+            href?: string;
+            _type: "link";
+            _key: string;
+          }>;
+          level?: number;
+          _type: "block";
+          _key: string;
+        }> | null;
+        logo: {
+          asset: {
+            _id: string;
+            url: string | null;
+            metadata: {
+              lqip: string | null;
+              dimensions: SanityImageDimensions | null;
+            } | null;
+          } | null;
+          hotspot: SanityImageHotspot | null;
+          crop: SanityImageCrop | null;
+        } | null;
+        mottoBanner: string | null;
+        featuredArticles: Array<{
+          _id: string;
+          title: string | null;
+          slug: Slug | null;
+          summary: string | null;
+          contentType:
+            "article" | "guide" | "protocol" | "research-note" | null;
+          featured: boolean | null;
+          publishedAt: string | null;
+          coverEtching: {
+            asset: {
+              _id: string;
+              url: string | null;
+              metadata: {
+                lqip: string | null;
+                dimensions: SanityImageDimensions | null;
+              } | null;
+            } | null;
+            alt: string | null;
+            caption: string | null;
+            hotspot: SanityImageHotspot | null;
+            crop: SanityImageCrop | null;
+          } | null;
+          topics: Array<{
+            _id: string;
+            name: string | null;
+            symbol: string | null;
+            slug: Slug | null;
+          }> | null;
+        }> | null;
+        mediaChannels: Array<{
+          _key: string;
+          platform: "linkedin" | "other" | "tiktok" | "youtube" | null;
+          title: string | null;
+          description: string | null;
+          url: string | null;
+        }> | null;
+      }
+    | null;
+  chapters: Array<{
+    _id: string;
+    title: string | null;
+    number: number | null;
+    slug: Slug | null;
+    summary: string | null;
+    vignette: {
+      asset: {
+        _id: string;
+        url: string | null;
+        metadata: {
+          lqip: string | null;
+          dimensions: SanityImageDimensions | null;
+        } | null;
+      } | null;
+      alt: string | null;
+      hotspot: SanityImageHotspot | null;
+      crop: SanityImageCrop | null;
+    } | null;
+  }>;
+  articles: Array<{
+    _id: string;
+    title: string | null;
+    slug: Slug | null;
+    summary: string | null;
+    contentType: "article" | "guide" | "protocol" | "research-note" | null;
+    featured: boolean | null;
+    publishedAt: string | null;
+    coverEtching: {
+      asset: {
+        _id: string;
+        url: string | null;
+        metadata: {
+          lqip: string | null;
+          dimensions: SanityImageDimensions | null;
+        } | null;
+      } | null;
+      alt: string | null;
+      caption: string | null;
+      hotspot: SanityImageHotspot | null;
+      crop: SanityImageCrop | null;
+    } | null;
+    topics: Array<{
+      _id: string;
+      name: string | null;
+      symbol: string | null;
+      slug: Slug | null;
+    }> | null;
+  }>;
+};
+
+// Source: ../web/src/components/SiteFooter.tsx
+// Variable: FOOTER_QUERY
+// Query: *[_id == "homePage"][0]{ contactEmail }
+export type FOOTER_QUERY_RESULT =
+  | {
+      contactEmail: null;
+    }
+  | {
+      contactEmail: string | null;
+    }
+  | null;
+
+// Source: ../web/src/sanity/queries.ts
+// Variable: ARTICLES_SLUGS_QUERY
+// Query: *[_type == "article" && defined(slug.current)]{ "slug": slug.current }
+export type ARTICLES_SLUGS_QUERY_RESULT = Array<{
+  slug: string | null;
+}>;
+
+// Source: ../web/src/sanity/queries.ts
+// Variable: VERSIONS_SLUGS_QUERY
+// Query: *[_type == "article" && defined(slug.current)]{ "slug": slug.current }
+export type VERSIONS_SLUGS_QUERY_RESULT = Array<{
+  slug: string | null;
+}>;
+
+// Source: ../web/src/sanity/queries.ts
+// Variable: NAVIGATION_QUERY
+// Query: {    "topics": *[_type == "topic"] | order(name asc){      _id,      name,      symbol,      slug    },    "chapters": *[_type == "chapter"] | order(number asc){      _id,      title,      number,      slug,      "articles": *[_type == "article" && references(^._id) && defined(slug.current)] | order(chapterOrder asc, publishedAt desc){        _id,        title,        slug,        contentType      }    }  }
+export type NAVIGATION_QUERY_RESULT = {
+  topics: Array<{
+    _id: string;
+    name: string | null;
+    symbol: string | null;
+    slug: Slug | null;
+  }>;
+  chapters: Array<{
+    _id: string;
+    title: string | null;
+    number: number | null;
+    slug: Slug | null;
+    articles: Array<{
+      _id: string;
+      title: string | null;
+      slug: Slug | null;
+      contentType: "article" | "guide" | "protocol" | "research-note" | null;
+    }>;
+  }>;
+};
+
+// Source: ../web/src/sanity/queries.ts
+// Variable: ARTICLE_QUERY
+// Query: {    "article": *[_type == "article" && slug.current == $slug][0]{      _id,      title,      "slug": slug.current,      contentType,      summary,      versionNumber,      publishedAt,      coverEtching {        alt,        caption,        asset->      },      downloadablePdfs[] {        title,        description,        file {          asset->{            url,            size          }        }      },      chapter->{        title,        "slug": slug.current,        number      },      topics[]->{        name,        symbol,        "slug": slug.current      },      body[]{        ...,        markDefs[]{          ...,          _type == "internalLink" && linkType == "resolved" => {            "doc": @.reference->{              _type,              "slug": slug.current,              title            }          }        }      }    },    "settings": *[_type in ["aboutPage", "homePage"]]{      _type,      siteTitle,      authorName,      authorAffiliation,      publisher,      siteDescription,      canonicalDomain,      contactEmail    }  }
+export type ARTICLE_QUERY_RESULT = {
+  article: {
+    _id: string;
+    title: string | null;
+    slug: string | null;
+    contentType: "article" | "guide" | "protocol" | "research-note" | null;
+    summary: string | null;
+    versionNumber: number | null;
+    publishedAt: string | null;
+    coverEtching: {
+      alt: string | null;
+      caption: string | null;
+      asset: {
+        _id: string;
+        _type: "sanity.imageAsset";
+        _createdAt: string;
+        _updatedAt: string;
+        _rev: string;
+        originalFilename?: string;
+        label?: string;
+        title?: string;
+        description?: string;
+        altText?: string;
+        sha1hash?: string;
+        extension?: string;
+        mimeType?: string;
+        size?: number;
+        assetId?: string;
+        uploadId?: string;
+        path?: string;
+        url?: string;
+        metadata?: SanityImageMetadata;
+        source?: SanityAssetSourceData;
+      } | null;
+    } | null;
+    downloadablePdfs: Array<{
+      title: string | null;
+      description: string | null;
+      file: {
+        asset: {
+          url: string | null;
+          size: number | null;
+        } | null;
+      } | null;
+    }> | null;
+    chapter: {
+      title: string | null;
+      slug: string | null;
+      number: number | null;
+    } | null;
+    topics: Array<{
+      name: string | null;
+      symbol: string | null;
+      slug: string | null;
+    }> | null;
+    body: Array<
+      | {
+          children?: Array<{
+            marks?: Array<string>;
+            text?: string;
+            _type: "span";
+            _key: string;
+          }>;
+          style?:
+            "blockquote" | "h1" | "h2" | "h3" | "h4" | "h5" | "h6" | "normal";
+          listItem?: "bullet" | "number";
+          markDefs: Array<
+            | {
+                definition?: string;
+                symbol?: string;
+                _type: "annotatedTerm";
+                _key: string;
+              }
+            | {
+                linkType?: "planned" | "resolved";
+                reference?:
+                  ArticleReference | ChapterReference | TopicReference;
+                plannedTitle?: string;
+                plannedNote?: string;
+                _type: "internalLink";
+                _key: string;
+                doc:
+                  | {
+                      _type: "article";
+                      slug: string | null;
+                      title: string | null;
+                    }
+                  | {
+                      _type: "chapter";
+                      slug: string | null;
+                      title: string | null;
+                    }
+                  | {
+                      _type: "topic";
+                      slug: string | null;
+                      title: null;
+                    }
+                  | null;
+              }
+            | {
+                linkType?: "planned" | "resolved";
+                reference?:
+                  ArticleReference | ChapterReference | TopicReference;
+                plannedTitle?: string;
+                plannedNote?: string;
+                _type: "internalLink";
+                _key: string;
+              }
+            | {
+                href?: string;
+                _type: "link";
+                _key: string;
+              }
+          > | null;
+          level?: number;
+          _type: "block";
+          _key: string;
+        }
+      | {
+          figureNumber?: string;
+          image?: FigureCalloutImage;
+          alt?: string;
+          caption?: string;
+          credit?: string;
+          _type: "figureCallout";
+          _key: string;
+          markDefs: null;
+        }
+      | {
+          title?: string;
+          formulaNote?: string;
+          items?: Array<{
+            name?: string;
+            quantity?: string;
+            note?: string;
+            _type: "reagentItem";
+            _key: string;
+          }>;
+          _type: "formulaReagents";
+          _key: string;
+          markDefs: null;
+        }
+    > | null;
+  } | null;
+  settings: Array<
+    | {
+        _type: "aboutPage";
+        siteTitle: string | null;
+        authorName: string | null;
+        authorAffiliation: string | null;
+        publisher: string | null;
+        siteDescription: string | null;
+        canonicalDomain: string | null;
+        contactEmail: string | null;
+      }
+    | {
+        _type: "homePage";
+        siteTitle: string | null;
+        authorName: string | null;
+        authorAffiliation: string | null;
+        publisher: string | null;
+        siteDescription: string | null;
+        canonicalDomain: string | null;
+        contactEmail: string | null;
+      }
+  >;
+};
+
+// Source: ../web/src/sanity/queries.ts
 // Variable: HISTORICAL_PARAMS_QUERY
 // Query: *[_type == "article" && defined(slug.current)]{    "slug": slug.current,    versionNumber,    "snapshots": *[_type == "articleVersion" && article._ref == ^._id]{ versionNumber }  }
 export type HISTORICAL_PARAMS_QUERY_RESULT = Array<{
@@ -528,7 +943,7 @@ export type HISTORICAL_PARAMS_QUERY_RESULT = Array<{
   }>;
 }>;
 
-// Source: ../web/src/app/[slug]/[version]/page.tsx
+// Source: ../web/src/sanity/queries.ts
 // Variable: HISTORICAL_ARTICLE_QUERY
 // Query: {    "article": *[_type == "article" && slug.current == $slug][0]{      _id,      title,      "slug": slug.current,      contentType,      summary,      versionNumber,      publishedAt,      versionChangelog,      coverEtching {        alt,        caption,        asset->      },      downloadablePdfs[] {        title,        description,        file {          asset->{            url,            size          }        }      },      chapter->{        title,        "slug": slug.current,        number      },      topics[]->{        name,        symbol,        "slug": slug.current      },      body[]{        ...,        markDefs[]{          ...,          _type == "internalLink" && linkType == "resolved" => {            "doc": @.reference->{              _type,              "slug": slug.current,              title            }          }        }      }    },    "snapshot": *[_type == "articleVersion" && article->slug.current == $slug && versionNumber == $versionNumber][0]{      _id,      versionNumber,      publishedAt,      changeSummary,      snapshotTitle,      snapshotContentType,      snapshotSummary,      snapshotCoverEtching {        alt,        caption,        asset->      },      snapshotBody[]{        ...,        markDefs[]{          ...,          _type == "internalLink" && linkType == "resolved" => {            "doc": @.reference->{              _type,              "slug": slug.current,              title            }          }        }      }    },    "versionCount": count(*[_type == "articleVersion" && article->slug.current == $slug]),    "settings": *[_type in ["aboutPage", "homePage"]]{      _type,      siteTitle,      authorName,      authorAffiliation,      publisher,      siteDescription,      canonicalDomain,      contactEmail    }  }
 export type HISTORICAL_ARTICLE_QUERY_RESULT = {
@@ -825,192 +1240,7 @@ export type HISTORICAL_ARTICLE_QUERY_RESULT = {
   >;
 };
 
-// Source: ../web/src/app/[slug]/page.tsx
-// Variable: ARTICLES_SLUGS_QUERY
-// Query: *[_type == "article" && defined(slug.current)]{ "slug": slug.current }
-export type ARTICLES_SLUGS_QUERY_RESULT = Array<{
-  slug: string | null;
-}>;
-
-// Source: ../web/src/app/[slug]/page.tsx
-// Variable: ARTICLE_QUERY
-// Query: {    "article": *[_type == "article" && slug.current == $slug][0]{      _id,      title,      "slug": slug.current,      contentType,      summary,      versionNumber,      publishedAt,      coverEtching {        alt,        caption,        asset->      },      downloadablePdfs[] {        title,        description,        file {          asset->{            url,            size          }        }      },      chapter->{        title,        "slug": slug.current,        number      },      topics[]->{        name,        symbol,        "slug": slug.current      },      body[]{        ...,        markDefs[]{          ...,          _type == "internalLink" && linkType == "resolved" => {            "doc": @.reference->{              _type,              "slug": slug.current,              title            }          }        }      }    },    "settings": *[_type in ["aboutPage", "homePage"]]{      _type,      siteTitle,      authorName,      authorAffiliation,      publisher,      siteDescription,      canonicalDomain,      contactEmail    }  }
-export type ARTICLE_QUERY_RESULT = {
-  article: {
-    _id: string;
-    title: string | null;
-    slug: string | null;
-    contentType: "article" | "guide" | "protocol" | "research-note" | null;
-    summary: string | null;
-    versionNumber: number | null;
-    publishedAt: string | null;
-    coverEtching: {
-      alt: string | null;
-      caption: string | null;
-      asset: {
-        _id: string;
-        _type: "sanity.imageAsset";
-        _createdAt: string;
-        _updatedAt: string;
-        _rev: string;
-        originalFilename?: string;
-        label?: string;
-        title?: string;
-        description?: string;
-        altText?: string;
-        sha1hash?: string;
-        extension?: string;
-        mimeType?: string;
-        size?: number;
-        assetId?: string;
-        uploadId?: string;
-        path?: string;
-        url?: string;
-        metadata?: SanityImageMetadata;
-        source?: SanityAssetSourceData;
-      } | null;
-    } | null;
-    downloadablePdfs: Array<{
-      title: string | null;
-      description: string | null;
-      file: {
-        asset: {
-          url: string | null;
-          size: number | null;
-        } | null;
-      } | null;
-    }> | null;
-    chapter: {
-      title: string | null;
-      slug: string | null;
-      number: number | null;
-    } | null;
-    topics: Array<{
-      name: string | null;
-      symbol: string | null;
-      slug: string | null;
-    }> | null;
-    body: Array<
-      | {
-          children?: Array<{
-            marks?: Array<string>;
-            text?: string;
-            _type: "span";
-            _key: string;
-          }>;
-          style?:
-            "blockquote" | "h1" | "h2" | "h3" | "h4" | "h5" | "h6" | "normal";
-          listItem?: "bullet" | "number";
-          markDefs: Array<
-            | {
-                definition?: string;
-                symbol?: string;
-                _type: "annotatedTerm";
-                _key: string;
-              }
-            | {
-                linkType?: "planned" | "resolved";
-                reference?:
-                  ArticleReference | ChapterReference | TopicReference;
-                plannedTitle?: string;
-                plannedNote?: string;
-                _type: "internalLink";
-                _key: string;
-                doc:
-                  | {
-                      _type: "article";
-                      slug: string | null;
-                      title: string | null;
-                    }
-                  | {
-                      _type: "chapter";
-                      slug: string | null;
-                      title: string | null;
-                    }
-                  | {
-                      _type: "topic";
-                      slug: string | null;
-                      title: null;
-                    }
-                  | null;
-              }
-            | {
-                linkType?: "planned" | "resolved";
-                reference?:
-                  ArticleReference | ChapterReference | TopicReference;
-                plannedTitle?: string;
-                plannedNote?: string;
-                _type: "internalLink";
-                _key: string;
-              }
-            | {
-                href?: string;
-                _type: "link";
-                _key: string;
-              }
-          > | null;
-          level?: number;
-          _type: "block";
-          _key: string;
-        }
-      | {
-          figureNumber?: string;
-          image?: FigureCalloutImage;
-          alt?: string;
-          caption?: string;
-          credit?: string;
-          _type: "figureCallout";
-          _key: string;
-          markDefs: null;
-        }
-      | {
-          title?: string;
-          formulaNote?: string;
-          items?: Array<{
-            name?: string;
-            quantity?: string;
-            note?: string;
-            _type: "reagentItem";
-            _key: string;
-          }>;
-          _type: "formulaReagents";
-          _key: string;
-          markDefs: null;
-        }
-    > | null;
-  } | null;
-  settings: Array<
-    | {
-        _type: "aboutPage";
-        siteTitle: string | null;
-        authorName: string | null;
-        authorAffiliation: string | null;
-        publisher: string | null;
-        siteDescription: string | null;
-        canonicalDomain: string | null;
-        contactEmail: string | null;
-      }
-    | {
-        _type: "homePage";
-        siteTitle: string | null;
-        authorName: string | null;
-        authorAffiliation: string | null;
-        publisher: string | null;
-        siteDescription: string | null;
-        canonicalDomain: string | null;
-        contactEmail: string | null;
-      }
-  >;
-};
-
-// Source: ../web/src/app/[slug]/versions/page.tsx
-// Variable: VERSIONS_SLUGS_QUERY
-// Query: *[_type == "article" && defined(slug.current)]{ "slug": slug.current }
-export type VERSIONS_SLUGS_QUERY_RESULT = Array<{
-  slug: string | null;
-}>;
-
-// Source: ../web/src/app/[slug]/versions/page.tsx
+// Source: ../web/src/sanity/queries.ts
 // Variable: ARTICLE_VERSIONS_QUERY
 // Query: {    "article": *[_type == "article" && slug.current == $slug][0]{      _id,      title,      "slug": slug.current,      contentType,      summary,      versionNumber,      publishedAt,      versionChangelog,      coverEtching {        alt,        caption,        asset->      },      body[]{        ...,        markDefs[]{          ...,          _type == "internalLink" && linkType == "resolved" => {            "doc": @.reference->{              _type,              "slug": slug.current,              title            }          }        }      }    },    "snapshots": *[_type == "articleVersion" && article->slug.current == $slug] | order(versionNumber desc){      _id,      versionNumber,      publishedAt,      changeSummary,      snapshotTitle,      snapshotContentType,      snapshotSummary,      snapshotCoverEtching {        alt,        caption,        asset->      },      snapshotBody[]{        ...,        markDefs[]{          ...,          _type == "internalLink" && linkType == "resolved" => {            "doc": @.reference->{              _type,              "slug": slug.current,              title            }          }        }      }    },    "settings": *[_type in ["aboutPage", "homePage"]]{      _type,      siteTitle,      authorName,      authorAffiliation,      publisher,      siteDescription,      canonicalDomain,      contactEmail    }  }
 export type ARTICLE_VERSIONS_QUERY_RESULT = {
@@ -1286,236 +1516,6 @@ export type ARTICLE_VERSIONS_QUERY_RESULT = {
   >;
 };
 
-// Source: ../web/src/app/contents/page.tsx
-// Variable: CONTENTS_PAGE_QUERY
-// Query: {    "chapters": *[_type == "chapter"] | order(number asc){      _id,      title,      number,      slug,      summary,      vignette {        asset->{          _id,          url        },        alt      },      "articles": *[_type == "article" && references(^._id) && defined(slug.current)] | order(chapterOrder asc, publishedAt desc){        _id,        title,        slug,        contentType,        summary,        chapterOrder,        publishedAt,        topics[]->{          _id,          name,          symbol,          slug        }      }    },    "standaloneArticles": *[_type == "article" && !defined(chapter) && defined(slug.current)] | order(publishedAt desc){      _id,      title,      slug,      contentType,      summary,      publishedAt,      topics[]->{        _id,        name,        symbol,        slug      }    },    "topics": *[_type == "topic"] | order(name asc){      _id,      name,      symbol,      slug    }  }
-export type CONTENTS_PAGE_QUERY_RESULT = {
-  chapters: Array<{
-    _id: string;
-    title: string | null;
-    number: number | null;
-    slug: Slug | null;
-    summary: string | null;
-    vignette: {
-      asset: {
-        _id: string;
-        url: string | null;
-      } | null;
-      alt: string | null;
-    } | null;
-    articles: Array<{
-      _id: string;
-      title: string | null;
-      slug: Slug | null;
-      contentType: "article" | "guide" | "protocol" | "research-note" | null;
-      summary: string | null;
-      chapterOrder: number | null;
-      publishedAt: string | null;
-      topics: Array<{
-        _id: string;
-        name: string | null;
-        symbol: string | null;
-        slug: Slug | null;
-      }> | null;
-    }>;
-  }>;
-  standaloneArticles: Array<{
-    _id: string;
-    title: string | null;
-    slug: Slug | null;
-    contentType: "article" | "guide" | "protocol" | "research-note" | null;
-    summary: string | null;
-    publishedAt: string | null;
-    topics: Array<{
-      _id: string;
-      name: string | null;
-      symbol: string | null;
-      slug: Slug | null;
-    }> | null;
-  }>;
-  topics: Array<{
-    _id: string;
-    name: string | null;
-    symbol: string | null;
-    slug: Slug | null;
-  }>;
-};
-
-// Source: ../web/src/app/page.tsx
-// Variable: HOME_PAGE_QUERY
-// Query: {  "home": *[_id == "homePage"][0]{    heading,    subheading,    intro,    logo {      asset->{        _id,        url,        metadata {          lqip,          dimensions        }      },      hotspot,      crop    },    mottoBanner,    featuredArticles[]->{      _id,      title,      slug,      summary,      contentType,      featured,      publishedAt,      coverEtching {        asset->{          _id,          url,          metadata {            lqip,            dimensions          }        },        alt,        caption,        hotspot,        crop      },      topics[]->{        _id,        name,        symbol,        slug      }    },    mediaChannels[]{      _key,      platform,      title,      description,      url    }  },  "chapters": *[_type == "chapter"] | order(number asc){    _id,    title,    number,    slug,    summary,    vignette {      asset->{        _id,        url,        metadata {          lqip,          dimensions        }      },      alt,      hotspot,      crop    }  },  "articles": *[_type == "article" && defined(slug.current)] | order(publishedAt desc){    _id,    title,    slug,    summary,    contentType,    featured,    publishedAt,    coverEtching {      asset->{        _id,        url,        metadata {          lqip,          dimensions        }      },      alt,      caption,      hotspot,      crop    },    topics[]->{      _id,      name,      symbol,      slug    }  }}
-export type HOME_PAGE_QUERY_RESULT = {
-  home:
-    | {
-        heading: null;
-        subheading: null;
-        intro: null;
-        logo: null;
-        mottoBanner: null;
-        featuredArticles: null;
-        mediaChannels: null;
-      }
-    | {
-        heading: string | null;
-        subheading: string | null;
-        intro: Array<{
-          children?: Array<{
-            marks?: Array<string>;
-            text?: string;
-            _type: "span";
-            _key: string;
-          }>;
-          style?:
-            "blockquote" | "h1" | "h2" | "h3" | "h4" | "h5" | "h6" | "normal";
-          listItem?: "bullet" | "number";
-          markDefs?: Array<{
-            href?: string;
-            _type: "link";
-            _key: string;
-          }>;
-          level?: number;
-          _type: "block";
-          _key: string;
-        }> | null;
-        logo: {
-          asset: {
-            _id: string;
-            url: string | null;
-            metadata: {
-              lqip: string | null;
-              dimensions: SanityImageDimensions | null;
-            } | null;
-          } | null;
-          hotspot: SanityImageHotspot | null;
-          crop: SanityImageCrop | null;
-        } | null;
-        mottoBanner: string | null;
-        featuredArticles: Array<{
-          _id: string;
-          title: string | null;
-          slug: Slug | null;
-          summary: string | null;
-          contentType:
-            "article" | "guide" | "protocol" | "research-note" | null;
-          featured: boolean | null;
-          publishedAt: string | null;
-          coverEtching: {
-            asset: {
-              _id: string;
-              url: string | null;
-              metadata: {
-                lqip: string | null;
-                dimensions: SanityImageDimensions | null;
-              } | null;
-            } | null;
-            alt: string | null;
-            caption: string | null;
-            hotspot: SanityImageHotspot | null;
-            crop: SanityImageCrop | null;
-          } | null;
-          topics: Array<{
-            _id: string;
-            name: string | null;
-            symbol: string | null;
-            slug: Slug | null;
-          }> | null;
-        }> | null;
-        mediaChannels: Array<{
-          _key: string;
-          platform: "linkedin" | "other" | "tiktok" | "youtube" | null;
-          title: string | null;
-          description: string | null;
-          url: string | null;
-        }> | null;
-      }
-    | null;
-  chapters: Array<{
-    _id: string;
-    title: string | null;
-    number: number | null;
-    slug: Slug | null;
-    summary: string | null;
-    vignette: {
-      asset: {
-        _id: string;
-        url: string | null;
-        metadata: {
-          lqip: string | null;
-          dimensions: SanityImageDimensions | null;
-        } | null;
-      } | null;
-      alt: string | null;
-      hotspot: SanityImageHotspot | null;
-      crop: SanityImageCrop | null;
-    } | null;
-  }>;
-  articles: Array<{
-    _id: string;
-    title: string | null;
-    slug: Slug | null;
-    summary: string | null;
-    contentType: "article" | "guide" | "protocol" | "research-note" | null;
-    featured: boolean | null;
-    publishedAt: string | null;
-    coverEtching: {
-      asset: {
-        _id: string;
-        url: string | null;
-        metadata: {
-          lqip: string | null;
-          dimensions: SanityImageDimensions | null;
-        } | null;
-      } | null;
-      alt: string | null;
-      caption: string | null;
-      hotspot: SanityImageHotspot | null;
-      crop: SanityImageCrop | null;
-    } | null;
-    topics: Array<{
-      _id: string;
-      name: string | null;
-      symbol: string | null;
-      slug: Slug | null;
-    }> | null;
-  }>;
-};
-
-// Source: ../web/src/components/GlobalHeader.tsx
-// Variable: NAVIGATION_QUERY
-// Query: {    "topics": *[_type == "topic"] | order(name asc){      _id,      name,      symbol,      slug    },    "chapters": *[_type == "chapter"] | order(number asc){      _id,      title,      number,      slug,      "articles": *[_type == "article" && references(^._id) && defined(slug.current)] | order(chapterOrder asc, publishedAt desc){        _id,        title,        slug,        contentType      }    }  }
-export type NAVIGATION_QUERY_RESULT = {
-  topics: Array<{
-    _id: string;
-    name: string | null;
-    symbol: string | null;
-    slug: Slug | null;
-  }>;
-  chapters: Array<{
-    _id: string;
-    title: string | null;
-    number: number | null;
-    slug: Slug | null;
-    articles: Array<{
-      _id: string;
-      title: string | null;
-      slug: Slug | null;
-      contentType: "article" | "guide" | "protocol" | "research-note" | null;
-    }>;
-  }>;
-};
-
-// Source: ../web/src/components/SiteFooter.tsx
-// Variable: FOOTER_QUERY
-// Query: *[_id == "homePage"][0]{ contactEmail }
-export type FOOTER_QUERY_RESULT =
-  | {
-      contactEmail: null;
-    }
-  | {
-      contactEmail: string | null;
-    }
-  | null;
-
 // Source: ../web/src/sanity/siteSettings.ts
 // Variable: SITE_SETTINGS_QUERY
 // Query: *[_type in ["aboutPage", "homePage"]]{    _id,    _type,    siteTitle,    authorName,    authorAffiliation,    publisher,    siteDescription,    canonicalDomain,    contactEmail  }
@@ -1547,16 +1547,16 @@ export type SITE_SETTINGS_QUERY_RESULT = Array<
 // Query TypeMap
 declare global {
   interface SanityQueries {
-    '*[_type == "article" && defined(slug.current)]{\n    "slug": slug.current,\n    versionNumber,\n    "snapshots": *[_type == "articleVersion" && article._ref == ^._id]{ versionNumber }\n  }': HISTORICAL_PARAMS_QUERY_RESULT;
-    '{\n    "article": *[_type == "article" && slug.current == $slug][0]{\n      _id,\n      title,\n      "slug": slug.current,\n      contentType,\n      summary,\n      versionNumber,\n      publishedAt,\n      versionChangelog,\n      coverEtching {\n        alt,\n        caption,\n        asset->\n      },\n      downloadablePdfs[] {\n        title,\n        description,\n        file {\n          asset->{\n            url,\n            size\n          }\n        }\n      },\n      chapter->{\n        title,\n        "slug": slug.current,\n        number\n      },\n      topics[]->{\n        name,\n        symbol,\n        "slug": slug.current\n      },\n      body[]{\n        ...,\n        markDefs[]{\n          ...,\n          _type == "internalLink" && linkType == "resolved" => {\n            "doc": @.reference->{\n              _type,\n              "slug": slug.current,\n              title\n            }\n          }\n        }\n      }\n    },\n    "snapshot": *[_type == "articleVersion" && article->slug.current == $slug && versionNumber == $versionNumber][0]{\n      _id,\n      versionNumber,\n      publishedAt,\n      changeSummary,\n      snapshotTitle,\n      snapshotContentType,\n      snapshotSummary,\n      snapshotCoverEtching {\n        alt,\n        caption,\n        asset->\n      },\n      snapshotBody[]{\n        ...,\n        markDefs[]{\n          ...,\n          _type == "internalLink" && linkType == "resolved" => {\n            "doc": @.reference->{\n              _type,\n              "slug": slug.current,\n              title\n            }\n          }\n        }\n      }\n    },\n    "versionCount": count(*[_type == "articleVersion" && article->slug.current == $slug]),\n    "settings": *[_type in ["aboutPage", "homePage"]]{\n      _type,\n      siteTitle,\n      authorName,\n      authorAffiliation,\n      publisher,\n      siteDescription,\n      canonicalDomain,\n      contactEmail\n    }\n  }': HISTORICAL_ARTICLE_QUERY_RESULT;
-    '*[_type == "article" && defined(slug.current)]{ "slug": slug.current }':
-      ARTICLES_SLUGS_QUERY_RESULT | VERSIONS_SLUGS_QUERY_RESULT;
-    '{\n    "article": *[_type == "article" && slug.current == $slug][0]{\n      _id,\n      title,\n      "slug": slug.current,\n      contentType,\n      summary,\n      versionNumber,\n      publishedAt,\n      coverEtching {\n        alt,\n        caption,\n        asset->\n      },\n      downloadablePdfs[] {\n        title,\n        description,\n        file {\n          asset->{\n            url,\n            size\n          }\n        }\n      },\n      chapter->{\n        title,\n        "slug": slug.current,\n        number\n      },\n      topics[]->{\n        name,\n        symbol,\n        "slug": slug.current\n      },\n      body[]{\n        ...,\n        markDefs[]{\n          ...,\n          _type == "internalLink" && linkType == "resolved" => {\n            "doc": @.reference->{\n              _type,\n              "slug": slug.current,\n              title\n            }\n          }\n        }\n      }\n    },\n    "settings": *[_type in ["aboutPage", "homePage"]]{\n      _type,\n      siteTitle,\n      authorName,\n      authorAffiliation,\n      publisher,\n      siteDescription,\n      canonicalDomain,\n      contactEmail\n    }\n  }': ARTICLE_QUERY_RESULT;
-    '{\n    "article": *[_type == "article" && slug.current == $slug][0]{\n      _id,\n      title,\n      "slug": slug.current,\n      contentType,\n      summary,\n      versionNumber,\n      publishedAt,\n      versionChangelog,\n      coverEtching {\n        alt,\n        caption,\n        asset->\n      },\n      body[]{\n        ...,\n        markDefs[]{\n          ...,\n          _type == "internalLink" && linkType == "resolved" => {\n            "doc": @.reference->{\n              _type,\n              "slug": slug.current,\n              title\n            }\n          }\n        }\n      }\n    },\n    "snapshots": *[_type == "articleVersion" && article->slug.current == $slug] | order(versionNumber desc){\n      _id,\n      versionNumber,\n      publishedAt,\n      changeSummary,\n      snapshotTitle,\n      snapshotContentType,\n      snapshotSummary,\n      snapshotCoverEtching {\n        alt,\n        caption,\n        asset->\n      },\n      snapshotBody[]{\n        ...,\n        markDefs[]{\n          ...,\n          _type == "internalLink" && linkType == "resolved" => {\n            "doc": @.reference->{\n              _type,\n              "slug": slug.current,\n              title\n            }\n          }\n        }\n      }\n    },\n    "settings": *[_type in ["aboutPage", "homePage"]]{\n      _type,\n      siteTitle,\n      authorName,\n      authorAffiliation,\n      publisher,\n      siteDescription,\n      canonicalDomain,\n      contactEmail\n    }\n  }': ARTICLE_VERSIONS_QUERY_RESULT;
     '{\n    "chapters": *[_type == "chapter"] | order(number asc){\n      _id,\n      title,\n      number,\n      slug,\n      summary,\n      vignette {\n        asset->{\n          _id,\n          url\n        },\n        alt\n      },\n      "articles": *[_type == "article" && references(^._id) && defined(slug.current)] | order(chapterOrder asc, publishedAt desc){\n        _id,\n        title,\n        slug,\n        contentType,\n        summary,\n        chapterOrder,\n        publishedAt,\n        topics[]->{\n          _id,\n          name,\n          symbol,\n          slug\n        }\n      }\n    },\n    "standaloneArticles": *[_type == "article" && !defined(chapter) && defined(slug.current)] | order(publishedAt desc){\n      _id,\n      title,\n      slug,\n      contentType,\n      summary,\n      publishedAt,\n      topics[]->{\n        _id,\n        name,\n        symbol,\n        slug\n      }\n    },\n    "topics": *[_type == "topic"] | order(name asc){\n      _id,\n      name,\n      symbol,\n      slug\n    }\n  }': CONTENTS_PAGE_QUERY_RESULT;
     '{\n  "home": *[_id == "homePage"][0]{\n    heading,\n    subheading,\n    intro,\n    logo {\n      asset->{\n        _id,\n        url,\n        metadata {\n          lqip,\n          dimensions\n        }\n      },\n      hotspot,\n      crop\n    },\n    mottoBanner,\n    featuredArticles[]->{\n      _id,\n      title,\n      slug,\n      summary,\n      contentType,\n      featured,\n      publishedAt,\n      coverEtching {\n        asset->{\n          _id,\n          url,\n          metadata {\n            lqip,\n            dimensions\n          }\n        },\n        alt,\n        caption,\n        hotspot,\n        crop\n      },\n      topics[]->{\n        _id,\n        name,\n        symbol,\n        slug\n      }\n    },\n    mediaChannels[]{\n      _key,\n      platform,\n      title,\n      description,\n      url\n    }\n  },\n  "chapters": *[_type == "chapter"] | order(number asc){\n    _id,\n    title,\n    number,\n    slug,\n    summary,\n    vignette {\n      asset->{\n        _id,\n        url,\n        metadata {\n          lqip,\n          dimensions\n        }\n      },\n      alt,\n      hotspot,\n      crop\n    }\n  },\n  "articles": *[_type == "article" && defined(slug.current)] | order(publishedAt desc){\n    _id,\n    title,\n    slug,\n    summary,\n    contentType,\n    featured,\n    publishedAt,\n    coverEtching {\n      asset->{\n        _id,\n        url,\n        metadata {\n          lqip,\n          dimensions\n        }\n      },\n      alt,\n      caption,\n      hotspot,\n      crop\n    },\n    topics[]->{\n      _id,\n      name,\n      symbol,\n      slug\n    }\n  }\n}': HOME_PAGE_QUERY_RESULT;
-    '{\n    "topics": *[_type == "topic"] | order(name asc){\n      _id,\n      name,\n      symbol,\n      slug\n    },\n    "chapters": *[_type == "chapter"] | order(number asc){\n      _id,\n      title,\n      number,\n      slug,\n      "articles": *[_type == "article" && references(^._id) && defined(slug.current)] | order(chapterOrder asc, publishedAt desc){\n        _id,\n        title,\n        slug,\n        contentType\n      }\n    }\n  }': NAVIGATION_QUERY_RESULT;
     '*[_id == "homePage"][0]{ contactEmail }': FOOTER_QUERY_RESULT;
+    '*[_type == "article" && defined(slug.current)]{ "slug": slug.current }':
+      ARTICLES_SLUGS_QUERY_RESULT | VERSIONS_SLUGS_QUERY_RESULT;
+    '{\n    "topics": *[_type == "topic"] | order(name asc){\n      _id,\n      name,\n      symbol,\n      slug\n    },\n    "chapters": *[_type == "chapter"] | order(number asc){\n      _id,\n      title,\n      number,\n      slug,\n      "articles": *[_type == "article" && references(^._id) && defined(slug.current)] | order(chapterOrder asc, publishedAt desc){\n        _id,\n        title,\n        slug,\n        contentType\n      }\n    }\n  }': NAVIGATION_QUERY_RESULT;
+    '{\n    "article": *[_type == "article" && slug.current == $slug][0]{\n      _id,\n      title,\n      "slug": slug.current,\n      contentType,\n      summary,\n      versionNumber,\n      publishedAt,\n      coverEtching {\n        alt,\n        caption,\n        asset->\n      },\n      downloadablePdfs[] {\n        title,\n        description,\n        file {\n          asset->{\n            url,\n            size\n          }\n        }\n      },\n      chapter->{\n        title,\n        "slug": slug.current,\n        number\n      },\n      topics[]->{\n        name,\n        symbol,\n        "slug": slug.current\n      },\n      body[]{\n        ...,\n        markDefs[]{\n          ...,\n          _type == "internalLink" && linkType == "resolved" => {\n            "doc": @.reference->{\n              _type,\n              "slug": slug.current,\n              title\n            }\n          }\n        }\n      }\n    },\n    "settings": *[_type in ["aboutPage", "homePage"]]{\n      _type,\n      siteTitle,\n      authorName,\n      authorAffiliation,\n      publisher,\n      siteDescription,\n      canonicalDomain,\n      contactEmail\n    }\n  }': ARTICLE_QUERY_RESULT;
+    '*[_type == "article" && defined(slug.current)]{\n    "slug": slug.current,\n    versionNumber,\n    "snapshots": *[_type == "articleVersion" && article._ref == ^._id]{ versionNumber }\n  }': HISTORICAL_PARAMS_QUERY_RESULT;
+    '{\n    "article": *[_type == "article" && slug.current == $slug][0]{\n      _id,\n      title,\n      "slug": slug.current,\n      contentType,\n      summary,\n      versionNumber,\n      publishedAt,\n      versionChangelog,\n      coverEtching {\n        alt,\n        caption,\n        asset->\n      },\n      downloadablePdfs[] {\n        title,\n        description,\n        file {\n          asset->{\n            url,\n            size\n          }\n        }\n      },\n      chapter->{\n        title,\n        "slug": slug.current,\n        number\n      },\n      topics[]->{\n        name,\n        symbol,\n        "slug": slug.current\n      },\n      body[]{\n        ...,\n        markDefs[]{\n          ...,\n          _type == "internalLink" && linkType == "resolved" => {\n            "doc": @.reference->{\n              _type,\n              "slug": slug.current,\n              title\n            }\n          }\n        }\n      }\n    },\n    "snapshot": *[_type == "articleVersion" && article->slug.current == $slug && versionNumber == $versionNumber][0]{\n      _id,\n      versionNumber,\n      publishedAt,\n      changeSummary,\n      snapshotTitle,\n      snapshotContentType,\n      snapshotSummary,\n      snapshotCoverEtching {\n        alt,\n        caption,\n        asset->\n      },\n      snapshotBody[]{\n        ...,\n        markDefs[]{\n          ...,\n          _type == "internalLink" && linkType == "resolved" => {\n            "doc": @.reference->{\n              _type,\n              "slug": slug.current,\n              title\n            }\n          }\n        }\n      }\n    },\n    "versionCount": count(*[_type == "articleVersion" && article->slug.current == $slug]),\n    "settings": *[_type in ["aboutPage", "homePage"]]{\n      _type,\n      siteTitle,\n      authorName,\n      authorAffiliation,\n      publisher,\n      siteDescription,\n      canonicalDomain,\n      contactEmail\n    }\n  }': HISTORICAL_ARTICLE_QUERY_RESULT;
+    '{\n    "article": *[_type == "article" && slug.current == $slug][0]{\n      _id,\n      title,\n      "slug": slug.current,\n      contentType,\n      summary,\n      versionNumber,\n      publishedAt,\n      versionChangelog,\n      coverEtching {\n        alt,\n        caption,\n        asset->\n      },\n      body[]{\n        ...,\n        markDefs[]{\n          ...,\n          _type == "internalLink" && linkType == "resolved" => {\n            "doc": @.reference->{\n              _type,\n              "slug": slug.current,\n              title\n            }\n          }\n        }\n      }\n    },\n    "snapshots": *[_type == "articleVersion" && article->slug.current == $slug] | order(versionNumber desc){\n      _id,\n      versionNumber,\n      publishedAt,\n      changeSummary,\n      snapshotTitle,\n      snapshotContentType,\n      snapshotSummary,\n      snapshotCoverEtching {\n        alt,\n        caption,\n        asset->\n      },\n      snapshotBody[]{\n        ...,\n        markDefs[]{\n          ...,\n          _type == "internalLink" && linkType == "resolved" => {\n            "doc": @.reference->{\n              _type,\n              "slug": slug.current,\n              title\n            }\n          }\n        }\n      }\n    },\n    "settings": *[_type in ["aboutPage", "homePage"]]{\n      _type,\n      siteTitle,\n      authorName,\n      authorAffiliation,\n      publisher,\n      siteDescription,\n      canonicalDomain,\n      contactEmail\n    }\n  }': ARTICLE_VERSIONS_QUERY_RESULT;
     '*[_type in ["aboutPage", "homePage"]]{\n    _id,\n    _type,\n    siteTitle,\n    authorName,\n    authorAffiliation,\n    publisher,\n    siteDescription,\n    canonicalDomain,\n    contactEmail\n  }': SITE_SETTINGS_QUERY_RESULT;
   }
 }

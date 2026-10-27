@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { defineQuery, stegaClean } from "next-sanity";
+import { stegaClean } from "next-sanity";
 import type { ARTICLE_VERSIONS_QUERY_RESULT } from "../../../../sanity.types";
 import { sanityFetch } from "@/sanity/live";
 import { Icon } from "@/components/ui/Icon";
@@ -12,81 +12,10 @@ import {
   VersionHistoryDiffViewer,
   type EditionRecord,
 } from "@/components/VersionHistoryDiffViewer";
+import { ARTICLE_VERSIONS_QUERY, VERSIONS_SLUGS_QUERY } from "@/sanity/queries";
 import styles from "./versions.module.css";
 
-const VERSIONS_SLUGS_QUERY = defineQuery(
-  `*[_type == "article" && defined(slug.current)]{ "slug": slug.current }`
-);
-
-const ARTICLE_VERSIONS_QUERY = defineQuery(
-  `{
-    "article": *[_type == "article" && slug.current == $slug][0]{
-      _id,
-      title,
-      "slug": slug.current,
-      contentType,
-      summary,
-      versionNumber,
-      publishedAt,
-      versionChangelog,
-      coverEtching {
-        alt,
-        caption,
-        asset->
-      },
-      body[]{
-        ...,
-        markDefs[]{
-          ...,
-          _type == "internalLink" && linkType == "resolved" => {
-            "doc": @.reference->{
-              _type,
-              "slug": slug.current,
-              title
-            }
-          }
-        }
-      }
-    },
-    "snapshots": *[_type == "articleVersion" && article->slug.current == $slug] | order(versionNumber desc){
-      _id,
-      versionNumber,
-      publishedAt,
-      changeSummary,
-      snapshotTitle,
-      snapshotContentType,
-      snapshotSummary,
-      snapshotCoverEtching {
-        alt,
-        caption,
-        asset->
-      },
-      snapshotBody[]{
-        ...,
-        markDefs[]{
-          ...,
-          _type == "internalLink" && linkType == "resolved" => {
-            "doc": @.reference->{
-              _type,
-              "slug": slug.current,
-              title
-            }
-          }
-        }
-      }
-    },
-    "settings": *[_type in ["aboutPage", "homePage"]]{
-      _type,
-      siteTitle,
-      authorName,
-      authorAffiliation,
-      publisher,
-      siteDescription,
-      canonicalDomain,
-      contactEmail
-    }
-  }`
-);
+export { ARTICLE_VERSIONS_QUERY, VERSIONS_SLUGS_QUERY };
 
 export async function generateStaticParams() {
   try {
