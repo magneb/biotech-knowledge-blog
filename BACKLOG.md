@@ -17,7 +17,12 @@ graph TD
     WP6 --> WP7[WP-7: Home Page Sections & Dynamic Feeds]
     WP6 --> WP8[WP-8: Scholarly Reader, Planned Links, APA7 Citations & PDF Engine]
     WP8 --> WP8B[WP-8B: Store Norske Leksikon Versioning, Snapshot Engine & Visual Diffs]
-    WP8 --> WP9[WP-9: Studio Bibliography Pipeline & In-Text Citations]
+    WP8B --> WP8C[WP-8C: Cache Policy, Full Revalidation & CLI Purge]
+    WP8C --> WP8D[WP-8D: Site Operations Hub, Worker 503 Killswitch & WIP Banner]
+    WP8C --> WP8E[WP-8E: Studio Onboarding Ergonomics, Editable Dates & Mutable Snapshots]
+    WP8D --> WP8F[WP-8F: Two-Lane Asset Cleanup, Filled Cartouche & Byline Removal]
+    WP8E --> WP9[WP-9: Studio Bibliography Pipeline & In-Text Citations]
+    WP8F --> WP9
     WP8B --> WP10[WP-10: Client-Side Bookmarks, Local Storage & Utilities]
     WP9 --> WP10
     WP4 -. Future .-> WP11[WP-11: Word .docx Ingestion Tool]
@@ -275,8 +280,112 @@ Every work package must satisfy the 3-tier verification gate before commit/push:
 * **Acceptance Criteria:**
   - [x] Oliver can make minor typo edits without triggering version increments.
   - [x] Publishing a new edition creates a permanent snapshot and increments the version.
-  - [x] Historical permalinks (`/[slug]/v1/`) render the frozen snapshot reliably with immutable edge caching.
+  - [x] Historical permalinks (`/[slug]/v1/`) render the frozen snapshot reliably with immutable edge caching *(superseded in WP-8C by bounded revalidating caching)*.
   - [x] The visual diff view highlights changes between protocol editions clearly in inline and side-by-side modes.
+
+---
+
+## WP-8C: Deterministic Cache Policy, Full-Graph Revalidation & Manual Cache Purge
+* **Objective:** Eliminate stuck edge/browser caches, bound maximum cache lifetime to 7 days (10 minutes in browser), fix cross-document webhook invalidation, and give operators a one-command full-cache nuke (Decisions 007, 015, 016).
+* **Key Motivation:** Directly resolves the root cause of the caching incident where 1-year `immutable` headers and partial path revalidation prevented edits and global metadata changes from propagating.
+* **Scope:**
+  - **HTML & ISR Cache Policy (`web/next.config.ts`):**
+    - Remove `Cache-Control: public, max-age=31536000, immutable` from `/:slug/v:version(\\d+)` routes.
+    - Configure HTML responses to emit `Cache-Control: public, max-age=600, s-maxage=604800, must-revalidate` (`private, no-store` when Draft Mode is active; hashed `/_next/static/*` assets retain immutable caching).
+    - Enforce a 7-day (`604800`s) upper bound on ISR/data caching so no cached entry lives longer than one week.
+  - **Full-Graph Webhook Revalidation (`web/src/app/api/revalidate/route.ts`):**
+    - On `article` publish/update/unpublish: revalidate `/`, `/contents`, `/${slug}`, `/${slug}/versions`, and all `/${slug}/v{1..versionNumber}` routes (including previous slug on slug changes).
+    - On `articleVersion` publish/update/delete: resolve parent `article->slug.current` + `versionNumber` and revalidate `/${slug}/v${versionNumber}` and `/${slug}/versions`.
+    - On global singleton (`siteSettings`, `homePage`, `aboutPage`) or taxonomy (`chapter`, `topic`) change: invoke `revalidatePath("/", "layout")` so shared metadata and navigation refresh everywhere.
+    - Support an authenticated `{ purgeAll: true }` payload on `/api/revalidate` (verified via `SANITY_REVALIDATE_SECRET` using constant-time Web Crypto comparison).
+  - **Developer CLI Cache Purge (`npm run cache:purge`):**
+    - Add `web/scripts/purge-cache.mjs` wired to root `package.json`:
+      1. Lists and bulk-deletes all keys in `NEXT_INC_CACHE_KV` via Wrangler.
+      2. Clears `revalidations` rows in `NEXT_TAG_CACHE_D1` via Wrangler D1 execute.
+      3. Triggers `{ purgeAll: true }` against `/api/revalidate` (and calls Cloudflare Zone CDN `purge_everything` if `CLOUDFLARE_ZONE_ID` + `CLOUDFLARE_API_TOKEN` are configured).
+* **Sanity & Cloudflare Best Practice Alignment:**
+  - Separates short client-side `max-age` (`600`s) from edge `s-maxage` (`604800`s) with `must-revalidate`.
+  - Uses constant-time Web Crypto secret comparison (`workers-best-practices`).
+* **Acceptance Criteria:**
+  - [ ] No HTML route emits `immutable` or browser `max-age > 600`, and no server/edge cache TTL exceeds `604800` (7 days).
+  - [ ] Updating an article, archival snapshot, or global singleton invalidates all dependent routes (`/contents`, `/[slug]`, `/[slug]/versions`, `/[slug]/v{N}`).
+  - [ ] Running `npm run cache:purge` from the dev environment deterministically wipes KV, D1 tag state, and edge cache.
+  - [ ] Unit tests cover `/api/revalidate` path/layout invalidation and `{ purgeAll: true }`; `npm run verify` passes.
+
+---
+
+## WP-8D: Unified Site Operations Hub, Worker 503 Killswitch & Dismissible WIP Banner
+* **Objective:** Provide a single "Site Settings & Operations" singleton at the top of Sanity Studio featuring an instant Worker-level `503` Maintenance Mode killswitch, one-click cache purge, and a session-dismissible Work-in-Progress top banner (Decision 018).
+* **Key Motivation:** Restores operational confidence with an emergency brake that runs ahead of OpenNext `enableCacheInterception: true` while still allowing editors to preview fixes in Sanity Draft Mode.
+* **Scope:**
+  - **Unified `siteSettings` Singleton (`studio/schemaTypes/siteSettings.ts` & `studio/src/structure/index.ts`):**
+    - Placed #1 at the top of Sanity Studio (`Site Settings & Operations`), organized into clear tabs/fieldsets:
+      1. **Operations & Status:** `maintenanceMode` (boolean), `maintenanceTitle` & `maintenanceMessage` (customizable copy), `wipBannerEnabled` (boolean, default `true`), and `wipBannerText` (string).
+      2. **Cache Control:** Custom Studio action/pane button (`Purge All Website Caches`) calling `/api/revalidate` with `{ purgeAll: true }`.
+      3. **Global Publication & Scholarly Metadata:** Consolidates `siteTitle`, `authorName`, `authorAffiliation`, `publisher`, `siteDescription`, `canonicalDomain`, and `contactEmail`. Update `resolveSiteMetadata` (`web/src/sanity/siteSettings.ts`) to prioritize `siteSettings` with non-breaking fallback to `aboutPage` / `homePage`, and remove duplicate metadata clutter from `homePage` / `aboutPage`.
+  - **Outer Cloudflare Worker Killswitch Wrapper (`web/worker.ts`):**
+    - Wrap `.open-next/worker.js` so incoming requests evaluate `site:ops:maintenance` in `NEXT_INC_CACHE_KV` **before** OpenNext cache interception runs.
+    - **Dual Trigger (Webhook + CLI):** Publishing `siteSettings` updates the KV flag immediately via webhook; `npm run site:maintenance -- on|off` writes the KV key directly via Wrangler so the killswitch works even if Sanity is unreachable.
+    - **Styled Victorian `503` Folio & Preview Bypass:** Public page routes receive HTTP `503 Service Unavailable` (`Cache-Control: no-store, must-revalidate`, `Retry-After: 3600`) rendering a self-contained Victorian parchment maintenance notice. Automatically bypasses `/api/revalidate`, `/api/draft-mode/*`, static `/art/*` & `/sprites.svg` assets, and active Next.js Draft Mode preview sessions (`__prerender_bypass`).
+    - Update `validateDeploymentConfig` (`web/src/lib/deployment-validator.ts`) and `web/scripts/smoke-test-worker.mjs` to validate the wrapper contract and smoke-test `503` behavior in `workerd`.
+  - **Session-Dismissible WIP Top Banner (`web/src/components/WipBanner.tsx`):**
+    - High-visibility Victorian notice bar rendered above `GlobalHeader` when `wipBannerEnabled` is true.
+    - Dismissible per browser session (`sessionStorage` keyed to a hash of `wipBannerText` so updated notices re-appear), accessible (`role="region"`), and hidden in `@media print` so exported PDFs stay clean.
+* **Sanity & Cloudflare Best Practice Alignment:**
+  - Enforces singletons strictly via Studio Structure (`S.document().documentId('siteSettings')`) per `sanity-best-practices`.
+  - Uses native Worker KV binding directly at the outer fetch handler with zero external REST round-trips (`workers-best-practices`).
+* **Acceptance Criteria:**
+  - [ ] Toggling Maintenance Mode ON in Studio (or running `npm run site:maintenance -- on`) causes all public routes (including previously cached KV pages) to return `503` with the Victorian maintenance folio.
+  - [ ] Sanity Presentation / Draft Mode previews remain accessible to editors while `503` mode is active.
+  - [ ] WIP disclaimer banner stands out at the top of the viewport, dismisses cleanly for the session, and is hidden in `@media print`.
+  - [ ] `npm run typegen && npm run verify` passes all static, schema-sync, and live `workerd` smoke tests.
+
+---
+
+## WP-8E: Sanity Studio Onboarding Ergonomics, Editable Dates & Mutable Snapshots
+* **Objective:** Simplify the Article editing experience in Sanity Studio for Oliver, unlock publication/recording dates, and enable direct editing or deletion of historical `articleVersion` snapshots (Decisions 015, 016).
+* **Key Motivation:** Eliminates the dual-snapshot buttons and top-of-form version toggles that tripped up onboarding and prevented fixing dates or typos in past editions.
+* **Scope:**
+  - **Streamline Article Editor (`studio/schemaTypes/article.ts`):**
+    - Organize into three tabs: `Content & Media` (default), `Chapter & Topics`, and `Versioning & Archival`.
+    - Move `isNewEdition`, `versionChangelog`, and `versionNumber` into `Versioning & Archival` so authors opening an article immediately see `Title`, `Slug`, `Content Type`, `Published / Recorded Date`, `Summary`, and `Body`.
+  - **Consolidate Publish Action (`studio/sanity.config.ts` & `studio/src/actions/publishWithSnapshot.ts`):**
+    - Unmount the duplicate `RecordVersionSnapshotAction` so only the unified Publish button exists.
+  - **Unlock Editable Dates (`publishedAt`):**
+    - Remove `readOnly: true` from `publishedAt` (*"Published / Recorded Date"*) on `article` and keep `publishedAt` editable on `articleVersion`.
+    - Minor edits preserve whatever `publishedAt` date is set; publishing with `isNewEdition: true` updates `publishedAt` to `now` automatically (while remaining freely editable afterward).
+  - **Editable & Recoverable Historical Snapshots (`studio/src/components/ArticleHistoryView.tsx`):**
+    - Add a direct **"Edit Snapshot in Studio"** button (`IntentLink` to `edit` the `articleVersion` document) on each historical card in the `Version History & Snapshots` tab, and update outdated empty-state instructions.
+    - Unlock `versionNumber` recovery (or provide a safe sync action in `ArticleHistoryView`) so deleting an accidental snapshot allows rolling back `versionNumber` cleanly.
+* **Sanity Best Practice Alignment:**
+  - Uses field groups (`groups`) to declutter primary authoring workflows (`references/schema.md`).
+* **Acceptance Criteria:**
+  - [ ] Opening an Article in Studio presents core writing fields first, with a single Publish button and version controls tucked in `Versioning & Archival`.
+  - [ ] Editors can freely edit `publishedAt` on both live articles and historical snapshots; minor edits do not overwrite manual dates.
+  - [ ] Editors can open and edit any `articleVersion` directly from the Article's `Version History & Snapshots` tab to fix typos/formatting, and changes propagate to `/[slug]/v{N}` and `/[slug]/versions`.
+  - [ ] `npm run typegen && npm run check` passes.
+
+---
+
+## WP-8F: Two-Lane Asset Cleanup, Filled Cartouche Emblem & Author Byline Removal
+* **Objective:** Formalize the Two-Lane Asset Architecture, upgrade the top banner cartouche and utility icons to match the filled copperplate aesthetic of the reference render, and remove visible *"Penned by"* bylines across web pages (Decisions 015, 017).
+* **Key Motivation:** Resolves visual polish gaps in the header banner, removes redundant author text on a single-author compendium, and eliminates confusing empty brand-asset fields in Sanity Studio.
+* **Scope:**
+  - **Two-Lane Asset Cleanup (`studio/schemaTypes/homePage.ts` & `web/src/app/page.tsx`):**
+    - Remove the `logo` image field from `homePage` schema so brand emblems remain strictly version-controlled in `web/public/art/brand/` and served via Workers Static Assets (`ASSETS`).
+    - Remove the duplicate visible `<header className={styles.mastheadBar}>` block below `GlobalHeader` on `HomePage` (preserving accessible page `<h1>` semantics).
+  - **Filled Banner Cartouche & Header Icons (`web/public/art/brand/olivers-cartouche.svg`, `web/public/sprites.svg`, `web/src/components/GlobalHeader.tsx`, `web/src/components/GlobalHeader.module.css`):**
+    - Re-illustrate `olivers-cartouche.svg` to match `.files/b08bf2a6-135d-4773-91f8-07ad9c0e1853.jpg`: curved `<textPath>` lettering for *"Oliver's Guide"* and *"Everything"*, shaded copperplate iris/eye center medallion around *"to"*, filled pointed side wings, and top/bottom four-point star finials.
+    - Refine `GlobalHeader` layout so the cartouche renders at full prominence alongside the search bar and elemental pill row (collapsing gracefully on mobile), and fill the header utility glyphs (`home`, `bookmark-ribbon`, `gear`) in `sprites.svg` for solid engraved weight.
+  - **Remove Visible *"Penned by"* Bylines Across Web Pages:**
+    - Remove `— Penned by {author}` and footer `• Penned by {author}` from `web/src/app/[slug]/page.tsx` and `web/src/app/[slug]/[version]/page.tsx`, plus `— Penned by` / `by {author}` in `web/src/app/[slug]/versions/page.tsx` and `web/src/components/VersionHistoryDiffViewer.tsx`.
+    - Retain `authorName` in `<head>` metadata (`DC.creator`, `citation_author`), APA7/BibTeX citations (`CitationModal`), and `@media print` (`PrintHeader` / `PrintFooter`).
+* **Sanity & Cloudflare Best Practice Alignment:**
+  - Serves static brand vectors via Workers Static Assets (`ASSETS`) with zero Worker CPU overhead while reserving Sanity Asset CDN for editorial imagery and PDFs (Decision 017).
+* **Acceptance Criteria:**
+  - [ ] No visible *"Penned by"* text appears on `/[slug]`, `/[slug]/v{N}`, or `/[slug]/versions`, while `<head>` metadata, APA7 citations, and Print/PDF exports still include author attribution.
+  - [ ] Top header displays the richly shaded, curved-text cartouche and filled icons matching the reference render, without a duplicate logo/title strip beneath it on `/`.
+  - [ ] Component tests in `web/tests/components-and-pages.test.tsx` and `npm run typegen && npm run verify` pass.
 
 ---
 
