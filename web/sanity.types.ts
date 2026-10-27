@@ -22,6 +22,14 @@ export type SanityImageAssetReference = {
   [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
 };
 
+export type FigureCalloutImage = {
+  asset?: SanityImageAssetReference;
+  media?: unknown; // Unable to locate the referenced type "media" in schema
+  hotspot?: SanityImageHotspot;
+  crop?: SanityImageCrop;
+  _type: "image";
+};
+
 export type AboutPage = {
   _id: string;
   _type: "aboutPage";
@@ -216,13 +224,7 @@ export type ArticleVersion = {
       }
     | {
         figureNumber?: string;
-        image?: {
-          asset?: SanityImageAssetReference;
-          media?: unknown;
-          hotspot?: SanityImageHotspot;
-          crop?: SanityImageCrop;
-          _type: "image";
-        };
+        image?: FigureCalloutImage;
         alt?: string;
         caption?: string;
         credit?: string;
@@ -332,13 +334,7 @@ export type Article = {
       }
     | {
         figureNumber?: string;
-        image?: {
-          asset?: SanityImageAssetReference;
-          media?: unknown;
-          hotspot?: SanityImageHotspot;
-          crop?: SanityImageCrop;
-          _type: "image";
-        };
+        image?: FigureCalloutImage;
         alt?: string;
         caption?: string;
         credit?: string;
@@ -498,6 +494,7 @@ export type Geopoint = {
 
 export type AllSanitySchemaTypes =
   | SanityImageAssetReference
+  | FigureCalloutImage
   | AboutPage
   | SanityImageCrop
   | SanityImageHotspot
@@ -655,13 +652,7 @@ export type HISTORICAL_ARTICLE_QUERY_RESULT = {
         }
       | {
           figureNumber?: string;
-          image?: {
-            asset?: SanityImageAssetReference;
-            media?: unknown;
-            hotspot?: SanityImageHotspot;
-            crop?: SanityImageCrop;
-            _type: "image";
-          };
+          image?: FigureCalloutImage;
           alt?: string;
           caption?: string;
           credit?: string;
@@ -785,13 +776,7 @@ export type HISTORICAL_ARTICLE_QUERY_RESULT = {
         }
       | {
           figureNumber?: string;
-          image?: {
-            asset?: SanityImageAssetReference;
-            media?: unknown;
-            hotspot?: SanityImageHotspot;
-            crop?: SanityImageCrop;
-            _type: "image";
-          };
+          image?: FigureCalloutImage;
           alt?: string;
           caption?: string;
           credit?: string;
@@ -970,13 +955,7 @@ export type ARTICLE_QUERY_RESULT = {
         }
       | {
           figureNumber?: string;
-          image?: {
-            asset?: SanityImageAssetReference;
-            media?: unknown;
-            hotspot?: SanityImageHotspot;
-            crop?: SanityImageCrop;
-            _type: "image";
-          };
+          image?: FigureCalloutImage;
           alt?: string;
           caption?: string;
           credit?: string;
@@ -1135,13 +1114,7 @@ export type ARTICLE_VERSIONS_QUERY_RESULT = {
         }
       | {
           figureNumber?: string;
-          image?: {
-            asset?: SanityImageAssetReference;
-            media?: unknown;
-            hotspot?: SanityImageHotspot;
-            crop?: SanityImageCrop;
-            _type: "image";
-          };
+          image?: FigureCalloutImage;
           alt?: string;
           caption?: string;
           credit?: string;
@@ -1265,13 +1238,7 @@ export type ARTICLE_VERSIONS_QUERY_RESULT = {
         }
       | {
           figureNumber?: string;
-          image?: {
-            asset?: SanityImageAssetReference;
-            media?: unknown;
-            hotspot?: SanityImageHotspot;
-            crop?: SanityImageCrop;
-            _type: "image";
-          };
+          image?: FigureCalloutImage;
           alt?: string;
           caption?: string;
           credit?: string;

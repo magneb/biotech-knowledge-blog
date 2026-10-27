@@ -30,6 +30,54 @@
     }
   },
   {
+    "type": "type",
+    "name": "figureCallout.image",
+    "value": {
+      "type": "object",
+      "attributes": {
+        "asset": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "inline",
+            "name": "sanity.imageAsset.reference"
+          },
+          "optional": true
+        },
+        "media": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "inline",
+            "name": "media"
+          },
+          "optional": true
+        },
+        "hotspot": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "inline",
+            "name": "sanity.imageHotspot"
+          },
+          "optional": true
+        },
+        "crop": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "inline",
+            "name": "sanity.imageCrop"
+          },
+          "optional": true
+        },
+        "_type": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "string",
+            "value": "image"
+          }
+        }
+      }
+    }
+  },
+  {
     "name": "aboutPage",
     "type": "document",
     "attributes": {
@@ -1430,47 +1478,8 @@
                   "image": {
                     "type": "objectAttribute",
                     "value": {
-                      "type": "object",
-                      "attributes": {
-                        "asset": {
-                          "type": "objectAttribute",
-                          "value": {
-                            "type": "inline",
-                            "name": "sanity.imageAsset.reference"
-                          },
-                          "optional": true
-                        },
-                        "media": {
-                          "type": "objectAttribute",
-                          "value": {
-                            "type": "unknown"
-                          },
-                          "optional": true
-                        },
-                        "hotspot": {
-                          "type": "objectAttribute",
-                          "value": {
-                            "type": "inline",
-                            "name": "sanity.imageHotspot"
-                          },
-                          "optional": true
-                        },
-                        "crop": {
-                          "type": "objectAttribute",
-                          "value": {
-                            "type": "inline",
-                            "name": "sanity.imageCrop"
-                          },
-                          "optional": true
-                        },
-                        "_type": {
-                          "type": "objectAttribute",
-                          "value": {
-                            "type": "string",
-                            "value": "image"
-                          }
-                        }
-                      }
+                      "type": "inline",
+                      "name": "figureCallout.image"
                     },
                     "optional": true
                   },
@@ -2239,47 +2248,8 @@
                   "image": {
                     "type": "objectAttribute",
                     "value": {
-                      "type": "object",
-                      "attributes": {
-                        "asset": {
-                          "type": "objectAttribute",
-                          "value": {
-                            "type": "inline",
-                            "name": "sanity.imageAsset.reference"
-                          },
-                          "optional": true
-                        },
-                        "media": {
-                          "type": "objectAttribute",
-                          "value": {
-                            "type": "unknown"
-                          },
-                          "optional": true
-                        },
-                        "hotspot": {
-                          "type": "objectAttribute",
-                          "value": {
-                            "type": "inline",
-                            "name": "sanity.imageHotspot"
-                          },
-                          "optional": true
-                        },
-                        "crop": {
-                          "type": "objectAttribute",
-                          "value": {
-                            "type": "inline",
-                            "name": "sanity.imageCrop"
-                          },
-                          "optional": true
-                        },
-                        "_type": {
-                          "type": "objectAttribute",
-                          "value": {
-                            "type": "string",
-                            "value": "image"
-                          }
-                        }
-                      }
+                      "type": "inline",
+                      "name": "figureCallout.image"
                     },
                     "optional": true
                   },
