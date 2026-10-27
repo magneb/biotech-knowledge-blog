@@ -8,10 +8,8 @@ import { Icon } from "@/components/ui/Icon";
 import { StarDivider } from "@/components/ui/StarDivider";
 import { formatCategory } from "@/lib/format";
 import { resolveSiteMetadata } from "@/sanity/siteSettings";
-import {
-  VersionHistoryDiffViewer,
-  type EditionRecord,
-} from "@/components/VersionHistoryDiffViewer";
+import { VersionHistoryDiffViewer } from "@/components/VersionHistoryDiffViewer";
+import { buildEditionsTimeline } from "@/lib/diff";
 import { ARTICLE_VERSIONS_QUERY, VERSIONS_SLUGS_QUERY } from "@/sanity/queries";
 import styles from "./versions.module.css";
 
@@ -91,54 +89,7 @@ export default async function ArticleVersionsPage({
   const siteMeta = resolveSiteMetadata(raw?.settings);
   const snapshots = raw?.snapshots || [];
 
-  // Synthesize unified list of editions
-  const editionMap = new Map<number, EditionRecord>();
-
-  // 1. First add all recorded snapshots
-  for (const snap of snapshots) {
-    if (typeof snap.versionNumber === "number") {
-      editionMap.set(snap.versionNumber, {
-        versionNumber: snap.versionNumber,
-        publishedAt: snap.publishedAt,
-        changeSummary: snap.changeSummary,
-        title: snap.snapshotTitle || article.title,
-        contentType: snap.snapshotContentType || article.contentType,
-        summary: snap.snapshotSummary || article.summary,
-        body: snap.snapshotBody || article.body,
-        isCurrentActive: snap.versionNumber === (article.versionNumber || 1),
-      });
-    }
-  }
-
-  // 2. Ensure all editions from 1 up to liveVersion are represented
-  const liveVersion = article.versionNumber || 1;
-  for (let v = 1; v <= liveVersion; v++) {
-    if (!editionMap.has(v)) {
-      editionMap.set(v, {
-        versionNumber: v,
-        publishedAt: v === liveVersion ? article.publishedAt : undefined,
-        changeSummary:
-          v === liveVersion
-            ? article.versionChangelog || "Initial publication or active edition."
-            : `Edition v${v} archival record.`,
-        title: article.title,
-        contentType: article.contentType,
-        summary: article.summary,
-        body: article.body,
-        isCurrentActive: v === liveVersion,
-      });
-    }
-  }
-
-  // 3. Mark the active live edition
-  const activeRecord = editionMap.get(liveVersion);
-  if (activeRecord) {
-    activeRecord.isCurrentActive = true;
-  }
-
-  const editions: EditionRecord[] = Array.from(editionMap.values()).sort(
-    (a, b) => b.versionNumber - a.versionNumber
-  );
+  const editions = buildEditionsTimeline(article, snapshots);
 
   const cleanTitle = article.title || "Untitled Protocol";
 

@@ -40,6 +40,83 @@ export interface TreatiseDiffResult {
   hasChanges: boolean;
 }
 
+export interface EditionRecord {
+  versionNumber: number;
+  publishedAt?: string | null;
+  changeSummary?: string | null;
+  title?: string | null;
+  contentType?: string | null;
+  summary?: string | null;
+  body?: unknown[] | null;
+  isCurrentActive?: boolean;
+}
+
+export function buildEditionsTimeline(
+  article: {
+    versionNumber?: number | null;
+    publishedAt?: string | null;
+    versionChangelog?: string | null;
+    title?: string | null;
+    contentType?: string | null;
+    summary?: string | null;
+    body?: unknown[] | null;
+  },
+  snapshots: Array<{
+    versionNumber?: number | null;
+    publishedAt?: string | null;
+    changeSummary?: string | null;
+    snapshotTitle?: string | null;
+    snapshotContentType?: string | null;
+    snapshotSummary?: string | null;
+    snapshotBody?: unknown[] | null;
+  }> = []
+): EditionRecord[] {
+  const editionMap = new Map<number, EditionRecord>();
+
+  for (const snap of snapshots) {
+    if (typeof snap.versionNumber === "number") {
+      editionMap.set(snap.versionNumber, {
+        versionNumber: snap.versionNumber,
+        publishedAt: snap.publishedAt,
+        changeSummary: snap.changeSummary,
+        title: snap.snapshotTitle || article.title,
+        contentType: snap.snapshotContentType || article.contentType,
+        summary: snap.snapshotSummary || article.summary,
+        body: (snap.snapshotBody as unknown[] | null) || (article.body as unknown[] | null),
+        isCurrentActive: snap.versionNumber === (article.versionNumber || 1),
+      });
+    }
+  }
+
+  const liveVersion = article.versionNumber || 1;
+  for (let v = 1; v <= liveVersion; v++) {
+    if (!editionMap.has(v)) {
+      editionMap.set(v, {
+        versionNumber: v,
+        publishedAt: v === liveVersion ? article.publishedAt : undefined,
+        changeSummary:
+          v === liveVersion
+            ? article.versionChangelog || "Initial publication or active edition."
+            : `Edition v${v} archival record.`,
+        title: article.title,
+        contentType: article.contentType,
+        summary: article.summary,
+        body: article.body as unknown[] | null,
+        isCurrentActive: v === liveVersion,
+      });
+    }
+  }
+
+  const activeRecord = editionMap.get(liveVersion);
+  if (activeRecord) {
+    activeRecord.isCurrentActive = true;
+  }
+
+  return Array.from(editionMap.values()).sort(
+    (a, b) => b.versionNumber - a.versionNumber
+  );
+}
+
 /**
  * Splits text into alternating words and non-word separators (spaces, punctuation).
  */

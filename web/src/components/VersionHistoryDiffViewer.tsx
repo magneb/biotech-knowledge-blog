@@ -8,19 +8,11 @@ import {
   diffTreatiseEditions,
   type DiffToken,
   type TreatiseDiffResult,
+  type EditionRecord,
 } from "@/lib/diff";
 import styles from "./VersionHistoryDiffViewer.module.css";
 
-export interface EditionRecord {
-  versionNumber: number;
-  publishedAt?: string | null;
-  changeSummary?: string | null;
-  title?: string | null;
-  contentType?: string | null;
-  summary?: string | null;
-  body?: unknown[] | null;
-  isCurrentActive?: boolean;
-}
+export type { EditionRecord };
 
 export interface VersionHistoryDiffViewerProps {
   slug: string;
