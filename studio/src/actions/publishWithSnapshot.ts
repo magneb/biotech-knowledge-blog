@@ -40,7 +40,7 @@ export function createPublishWithSnapshotAction(
       title: missingChangelog
         ? 'Please enter changelog notes before publishing a new edition'
         : isNewEdition
-          ? 'Publishes draft and archives an immutable official edition snapshot'
+          ? 'Publishes draft and archives an official edition snapshot'
           : originalResult.title,
       onHandle: async () => {
         if (!draft && !published) return

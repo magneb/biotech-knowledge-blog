@@ -5,7 +5,6 @@ import {visionTool} from '@sanity/vision'
 import {schemaTypes} from './schemaTypes'
 import {resolve} from './src/presentation/resolve'
 import {structure, defaultDocumentNode} from './src/structure'
-import {RecordVersionSnapshotAction} from './src/actions/recordSnapshotAction'
 import {createPublishWithSnapshotAction} from './src/actions/publishWithSnapshot'
 
 const studioEnv = (
@@ -45,7 +44,7 @@ export default defineConfig({
             ? createPublishWithSnapshotAction(originalAction)
             : originalAction
         )
-        return [...withCustomPublish, RecordVersionSnapshotAction]
+        return withCustomPublish
       }
       return prev
     },
