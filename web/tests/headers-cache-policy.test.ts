@@ -83,4 +83,27 @@ describe("HTML & ISR Cache Policy Contract (WP-8C)", () => {
     expect(content).toContain("<span>Official Versioned Record</span>");
     expect(content).not.toContain("<span>Immutable Permanent Edge Archival</span>");
   });
+
+  it("verifies developer cache purge tooling is wired in package.json and web/package.json", () => {
+    const rootPkg = JSON.parse(
+      fs.readFileSync(path.resolve(WEB_ROOT, "..", "package.json"), "utf-8")
+    );
+    const webPkg = JSON.parse(
+      fs.readFileSync(path.join(WEB_ROOT, "package.json"), "utf-8")
+    );
+
+    expect(rootPkg.scripts?.["cache:purge"]).toBe(
+      "npm --prefix web run cache:purge --"
+    );
+    expect(webPkg.scripts?.["cache:purge"]).toBe(
+      "node scripts/purge-cache.mjs"
+    );
+
+    const scriptPath = path.join(WEB_ROOT, "scripts", "purge-cache.mjs");
+    expect(fs.existsSync(scriptPath)).toBe(true);
+    const scriptContent = fs.readFileSync(scriptPath, "utf-8");
+    expect(scriptContent).toContain("NEXT_INC_CACHE_KV");
+    expect(scriptContent).toContain("NEXT_TAG_CACHE_D1");
+    expect(scriptContent).toContain("purgeAll: true");
+  });
 });
