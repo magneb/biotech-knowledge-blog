@@ -287,6 +287,95 @@ async function main() {
     }
     log("runtime", "✓ POST /api/revalidate (unsigned) -> 401 Unauthorized");
 
+    // Assertion G: 503 Killswitch & Maintenance Folio
+    log("maintenance", "Engaging 503 maintenance killswitch via KV in workerd...");
+    execFileSync(
+      "npx",
+      [
+        "wrangler",
+        "kv",
+        "key",
+        "put",
+        "--binding",
+        "NEXT_INC_CACHE_KV",
+        "site:ops:maintenance",
+        JSON.stringify({
+          enabled: true,
+          title: "Smoke Test Scholarly Revision",
+          message: "Compendium is undergoing smoke test revision.",
+          updatedAt: new Date().toISOString(),
+        }),
+        "--local",
+      ],
+      { cwd: WEB_ROOT, stdio: ["ignore", "pipe", "pipe"], env: wranglerEnv }
+    );
+
+    // G1. Public route returns HTTP 503 with Victorian folio
+    const maintRes = await fetch(`${baseUrl}/`);
+    if (maintRes.status !== 503) {
+      fail("maintenance", `GET / returned status ${maintRes.status} (expected 503 during maintenance mode)`);
+    }
+    const maintBody = await maintRes.text();
+    if (!maintBody.includes("Smoke Test Scholarly Revision") || !maintBody.includes("Notice of Maintenance")) {
+      fail("maintenance", "GET / 503 response did not contain expected Victorian maintenance folio title/badge.");
+    }
+    const cacheCtrl = maintRes.headers.get("cache-control") || "";
+    if (!cacheCtrl.includes("no-store")) {
+      fail("maintenance", `503 response Cache-Control ('${cacheCtrl}') missing 'no-store'.`);
+    }
+    const retryAfter = maintRes.headers.get("retry-after") || "";
+    if (retryAfter !== "3600") {
+      fail("maintenance", `503 response Retry-After ('${retryAfter}') expected '3600'.`);
+    }
+    log("maintenance", "✓ GET / -> 503 Service Unavailable (Victorian folio & headers verified)");
+
+    // G2. Static brand assets bypass 503
+    const maintSpriteRes = await fetch(`${baseUrl}/sprites.svg`);
+    if (maintSpriteRes.status !== 200) {
+      fail("maintenance", `GET /sprites.svg returned ${maintSpriteRes.status} under maintenance (expected 200 bypass)`);
+    }
+    log("maintenance", "✓ GET /sprites.svg -> 200 OK (static asset bypasses 503)");
+
+    // G3. Operational API endpoints bypass 503
+    const maintApiRes = await fetch(`${baseUrl}/api/draft-mode/disable?redirect=/`, { redirect: "manual" });
+    if (maintApiRes.status !== 307 && maintApiRes.status !== 302) {
+      fail("maintenance", `GET /api/draft-mode/disable returned ${maintApiRes.status} under maintenance (expected 307 bypass)`);
+    }
+    log("maintenance", "✓ GET /api/draft-mode/disable -> 307 (operational API bypasses 503)");
+
+    // G4. Preview session bypass (__prerender_bypass cookie)
+    const previewResMaint = await fetch(`${baseUrl}/`, {
+      headers: { Cookie: "__prerender_bypass=true" },
+    });
+    if (previewResMaint.status !== 200) {
+      fail("maintenance", `GET / with __prerender_bypass returned ${previewResMaint.status} (expected 200 preview bypass)`);
+    }
+    log("maintenance", "✓ GET / with __prerender_bypass cookie -> 200 OK (preview bypasses 503)");
+
+    // G5. Disengage maintenance mode and restore normal traffic
+    log("maintenance", "Disengaging maintenance mode in KV...");
+    execFileSync(
+      "npx",
+      [
+        "wrangler",
+        "kv",
+        "key",
+        "put",
+        "--binding",
+        "NEXT_INC_CACHE_KV",
+        "site:ops:maintenance",
+        JSON.stringify({ enabled: false }),
+        "--local",
+      ],
+      { cwd: WEB_ROOT, stdio: ["ignore", "pipe", "pipe"], env: wranglerEnv }
+    );
+
+    const restoredRes = await fetch(`${baseUrl}/`);
+    if (restoredRes.status !== 200) {
+      fail("maintenance", `GET / returned ${restoredRes.status} after disabling maintenance (expected 200)`);
+    }
+    log("maintenance", "✓ GET / -> 200 OK (normal site traffic restored)");
+
     log("done", "All Worker build, dry-run, and live runtime smoke checks passed!");
   } catch (err) {
     fail(
@@ -294,6 +383,15 @@ async function main() {
       `${err instanceof Error ? err.message : String(err)}\nworkerd stderr:\n${stderrBuf}`
     );
   } finally {
+    try {
+      execFileSync(
+        "npx",
+        ["wrangler", "kv", "key", "delete", "--binding", "NEXT_INC_CACHE_KV", "site:ops:maintenance", "--local"],
+        { cwd: WEB_ROOT, stdio: ["ignore", "pipe", "pipe"], env: wranglerEnv }
+      );
+    } catch {
+      // Ignore KV cleanup failure
+    }
     try {
       if (child.pid) {
         process.kill(-child.pid, "SIGTERM");

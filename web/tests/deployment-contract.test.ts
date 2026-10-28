@@ -36,6 +36,10 @@ function loadLiveConfig(): ValidationInput {
     path.join(WEB_ROOT, "eslint.config.mjs"),
     "utf-8"
   );
+  const workerPath = path.join(WEB_ROOT, "worker.ts");
+  const workerSource = fs.existsSync(workerPath)
+    ? fs.readFileSync(workerPath, "utf-8")
+    : undefined;
 
   return {
     wranglerConfig: parseJsonc<WranglerConfig>(wranglerRaw),
@@ -43,6 +47,7 @@ function loadLiveConfig(): ValidationInput {
     nextConfigSource,
     packageJson,
     eslintConfigSource,
+    workerSource,
   };
 }
 
@@ -51,6 +56,22 @@ describe("Deployment & Infrastructure Configuration Contract", () => {
     const live = loadLiveConfig();
     const errors = validateDeploymentConfig(live);
     expect(errors).toEqual([]);
+  });
+
+  it("enforces that wrangler.jsonc points 'main' to 'worker.ts' and worker.ts delegates to .open-next/worker.js", () => {
+    const live = loadLiveConfig();
+    expect(live.wranglerConfig.main).toBe("worker.ts");
+
+    const badMain = validateDeploymentConfig({
+      ...live,
+      wranglerConfig: {
+        ...live.wranglerConfig,
+        main: "invalid-worker.js",
+      },
+    });
+    expect(badMain).toEqual(
+      expect.arrayContaining([expect.stringContaining("worker.ts")])
+    );
   });
 
   it("catches missing KV and D1 bindings when open-next.config.ts uses kvIncrementalCache / d1NextTagCache (yesterday's crash #3)", () => {

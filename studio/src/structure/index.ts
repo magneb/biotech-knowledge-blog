@@ -1,5 +1,6 @@
 import {ArchiveIcon} from '@sanity/icons/Archive'
 import {BookIcon} from '@sanity/icons/Book'
+import {CogIcon} from '@sanity/icons/Cog'
 import {DocumentTextIcon} from '@sanity/icons/DocumentText'
 import {HomeIcon} from '@sanity/icons/Home'
 import {TagIcon} from '@sanity/icons/Tag'
@@ -7,7 +8,7 @@ import {UserIcon} from '@sanity/icons/User'
 import type {DefaultDocumentNodeResolver, StructureResolver} from 'sanity/structure'
 import {ArticleHistoryView} from '../components/ArticleHistoryView'
 
-const SINGLETONS = ['homePage', 'aboutPage']
+const SINGLETONS = ['siteSettings', 'homePage', 'aboutPage']
 const MANAGED_DOCUMENT_TYPES = [
   ...SINGLETONS,
   'chapter',
@@ -33,13 +34,24 @@ export const structure: StructureResolver = (S) =>
   S.list()
     .title('Content')
     .items([
-      // 1. Home Page (Singleton)
+      // 1. Site Settings & Operations (Singleton #1)
+      S.listItem()
+        .title('Site Settings & Operations')
+        .icon(CogIcon)
+        .child(
+          S.document()
+            .schemaType('siteSettings')
+            .documentId('siteSettings')
+            .title('Site Settings & Operations'),
+        ),
+
+      // 2. Home Page (Singleton)
       S.listItem()
         .title('Home Page')
         .icon(HomeIcon)
         .child(S.document().schemaType('homePage').documentId('homePage').title('Home Page')),
 
-      // 2. About & Metadata Settings (Singleton)
+      // 3. About & Metadata Settings (Singleton)
       S.listItem()
         .title('About & Metadata Settings')
         .icon(UserIcon)

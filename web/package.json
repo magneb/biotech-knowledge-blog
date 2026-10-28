@@ -17,7 +17,8 @@
     "test:smoke": "node scripts/smoke-test-worker.mjs",
     "check": "npm run typecheck && npm run lint && npm test",
     "verify": "npm run check && npm run test:smoke",
-    "cache:purge": "node scripts/purge-cache.mjs"
+    "cache:purge": "node scripts/purge-cache.mjs",
+    "site:maintenance": "node scripts/site-maintenance.mjs"
   },
   "dependencies": {
     "@opennextjs/cloudflare": "^1.20.13",

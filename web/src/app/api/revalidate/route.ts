@@ -1,7 +1,21 @@
 import { revalidatePath, revalidateTag } from "next/cache";
 import { type NextRequest, NextResponse } from "next/server";
 import { parseBody } from "next-sanity/webhook";
+import { getCloudflareContext } from "@opennextjs/cloudflare";
 import { client } from "@/sanity/client";
+
+export async function OPTIONS() {
+  return new NextResponse(null, {
+    status: 204,
+    headers: {
+      "Access-Control-Allow-Origin": "*",
+      "Access-Control-Allow-Methods": "POST, OPTIONS",
+      "Access-Control-Allow-Headers":
+        "Content-Type, Authorization, x-revalidate-secret",
+      "Access-Control-Max-Age": "86400",
+    },
+  });
+}
 
 export type RevalidateWebhookPayload = {
   _id?: string;
@@ -97,6 +111,38 @@ export async function POST(req: NextRequest) {
     if (body._type && layoutTypes.includes(body._type)) {
       revalidatePath("/", "layout");
       revalidatedPaths.add("/contents");
+    }
+
+    // 3b. Sync siteSettings maintenance state to Cloudflare KV
+    if (body._type === "siteSettings") {
+      try {
+        const cfContext = await getCloudflareContext({ async: true }).catch(() => null);
+        const kv = cfContext?.env?.NEXT_INC_CACHE_KV;
+        if (kv) {
+          const doc = await client.withConfig({ useCdn: false })
+            .fetch<{
+              maintenanceMode?: boolean;
+              maintenanceTitle?: string;
+              maintenanceMessage?: string;
+            } | null>(
+              `*[_type == "siteSettings"][0]{ maintenanceMode, maintenanceTitle, maintenanceMessage }`
+            ).catch(() => null);
+
+          if (doc) {
+            const maintenancePayload = {
+              enabled: Boolean(doc.maintenanceMode),
+              title: doc.maintenanceTitle || "Undergoing Scholarly Revision",
+              message:
+                doc.maintenanceMessage ||
+                "The compendium is temporarily closed for cataloguing, binding, and archival preservation. Please return shortly.",
+              updatedAt: new Date().toISOString(),
+            };
+            await kv.put("site:ops:maintenance", JSON.stringify(maintenancePayload));
+          }
+        }
+      } catch (err) {
+        console.warn("Failed to synchronize maintenance state to Cloudflare KV:", err);
+      }
     }
 
     // 4. Custom Tags and Types

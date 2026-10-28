@@ -16,6 +16,7 @@
     "check": "npm run typecheck && npm run lint && npm test",
     "verify": "npm run check && npm run test:smoke",
     "cache:purge": "npm --prefix web run cache:purge --",
+    "site:maintenance": "npm --prefix web run site:maintenance --",
     "prepare": "git config core.hooksPath .githooks"
   }
 }

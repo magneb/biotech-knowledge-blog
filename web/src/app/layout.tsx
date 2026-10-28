@@ -5,6 +5,7 @@ import { VisualEditing } from "next-sanity/visual-editing";
 import "./globals.css";
 import GlobalHeader from "@/components/GlobalHeader";
 import SiteFooter from "@/components/SiteFooter";
+import WipBanner from "@/components/WipBanner";
 import { DevPerformancePatch } from "@/components/DevPerformancePatch";
 import { SanityLive } from "@/sanity/live";
 
@@ -33,6 +34,7 @@ export default async function RootLayout({ children }: LayoutProps<"/">) {
       <body className="desk-canvas">
         <div className="parchment-sheet">
           <DevPerformancePatch />
+          <WipBanner />
           <GlobalHeader />
           <main className="sheet-content">{children}</main>
           <SiteFooter />

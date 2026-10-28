@@ -1,0 +1,65 @@
+.bannerContainer {
+  width: 100%;
+  background-color: var(--parchment-dark, #e8d9b8);
+  border-bottom: 1px solid var(--sepia-faint, #8a7560);
+  box-shadow: 0 1px 4px rgba(31, 18, 8, 0.08);
+  position: relative;
+  z-index: 30;
+}
+
+.innerContent {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  padding: 0.45rem 1rem;
+  max-width: var(--paper-max-width, 1180px);
+  margin: 0 auto;
+  position: relative;
+}
+
+.finial {
+  color: var(--gold, #8b6914);
+  display: inline-flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.text {
+  font-family: var(--font-serif, "Cormorant Garamond", Georgia, serif);
+  font-size: var(--text-sm, 0.85rem);
+  font-style: italic;
+  letter-spacing: var(--tracking-normal, 0.03em);
+  color: var(--ink, #110a04);
+  line-height: 1.35;
+  margin: 0;
+  text-align: center;
+}
+
+.dismissButton {
+  background: transparent;
+  border: 1px solid transparent;
+  color: var(--sepia-faint, #8a7560);
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.2rem;
+  margin-left: 0.5rem;
+  border-radius: 2px;
+  transition: color 0.15s ease, border-color 0.15s ease;
+  flex-shrink: 0;
+}
+
+.dismissButton:hover,
+.dismissButton:focus-visible {
+  color: var(--ink, #110a04);
+  border-color: var(--sepia-faint, #8a7560);
+  outline: none;
+}
+
+@media print {
+  .bannerContainer {
+    display: none !important;
+  }
+}

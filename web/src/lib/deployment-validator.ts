@@ -44,6 +44,7 @@ export interface ValidationInput {
     devDependencies?: Record<string, string>;
   };
   eslintConfigSource: string;
+  workerSource?: string;
 }
 
 /**
@@ -58,6 +59,7 @@ export function validateDeploymentConfig(input: ValidationInput): string[] {
     nextConfigSource,
     packageJson,
     eslintConfigSource,
+    workerSource,
   } = input;
 
   // 1. Wrangler core entrypoint and assets contract
@@ -65,10 +67,21 @@ export function validateDeploymentConfig(input: ValidationInput): string[] {
     errors.push("wrangler.jsonc: missing top-level 'name'.");
   }
 
-  if (wranglerConfig.main !== ".open-next/worker.js") {
+  if (
+    wranglerConfig.main !== "worker.ts" &&
+    wranglerConfig.main !== ".open-next/worker.js"
+  ) {
     errors.push(
-      `wrangler.jsonc: 'main' must be '.open-next/worker.js' (found '${wranglerConfig.main ?? "undefined"}').`
+      `wrangler.jsonc: 'main' must be 'worker.ts' (found '${wranglerConfig.main ?? "undefined"}').`
     );
+  }
+
+  if (wranglerConfig.main === "worker.ts" && workerSource !== undefined) {
+    if (!workerSource || workerSource.trim() === "") {
+      errors.push("worker.ts: outer entrypoint file must not be empty.");
+    } else if (!workerSource.includes(".open-next/worker.js")) {
+      errors.push("worker.ts: must import or delegate to '.open-next/worker.js'.");
+    }
   }
 
   if (wranglerConfig.assets?.directory !== ".open-next/assets") {
