@@ -182,6 +182,8 @@ Decisions made during development and the premises behind them. Only revisit a d
 - Because the entire publication is *Oliver's Guide To Everything*, displaying *"Penned by Oliver"* on every web page adds visual noise and cross-page cache coupling without adding reader value, whereas `<head>` metadata, citations, and printed PDFs still benefit from explicit authorship.
 - Browser-based Paged-Media PDF generation ensures crisp vector rendering of Cormorant Garamond typography and copperplate SVG etchings with zero server latency or cold-start overhead.
 
+**Implementation Status:** Completed across WP-8, WP-8B, WP-8C, WP-8E, and WP-8F with verified acceptance criteria (2026-10-28).
+
 ---
 
 ## 016 — Protocol Versioning Architecture: Automated Snapshot Publishing, Studio Onboarding Ergonomics, Archival Routing, and Visual Diff Engine (revised)
@@ -198,6 +200,8 @@ Decisions made during development and the premises behind them. Only revisit a d
 - Editors must be able to manually set or adjust `publishedAt` ("Recorded on") dates and open historical `articleVersion` snapshots directly from the Article editor to fix typos or formatting mistakes without fighting `readOnly` locks or 1-year `immutable` browser caches.
 - Pure TypeScript diffing keeps Cloudflare Worker script bundles well below the 3 MiB free tier limit while delivering instant client-side comparison between any two protocol editions.
 
+**Implementation Status:** Completed in WP-8B and refined in WP-8E (commit `c61b8e4`, 2026-10-28) with tabbed authoring fieldsets, unified Publish action, mutable `publishedAt`, and direct IntentLink snapshot editing in `ArticleHistoryView`.
+
 ---
 
 ## 017 — Two-Lane Asset Architecture: Workers Static Assets for Brand Chrome, Sanity CDN for Editorial Media
@@ -211,6 +215,8 @@ Decisions made during development and the premises behind them. Only revisit a d
 - Hosting brand logos or UI icons in Sanity invites empty fields, aspect-ratio mismatches, and inability to use SVG `currentColor` or CSS design tokens.
 - Conversely, editorial figures and protocol PDFs belong in Sanity Asset CDN so authors can drag-and-drop microscopy plates and bench worksheets inline while writing without developer Git commits, gaining built-in hotspot cropping, LQIP blur, WebP/AVIF negotiation, and content-addressed immutable asset URLs.
 
+**Implementation Status:** Completed in WP-8F (commit `ec82669`, 2026-10-28) with `homePage.logo` removed, duplicate masthead strip removed, filled `olivers-cartouche.svg` + filled utility icons, and visible bylines removed across all web routes.
+
 ---
 
 ## 018 — Unified Site Operations Singleton (`siteSettings`) & Outer Worker 503 Maintenance Interception
@@ -222,6 +228,8 @@ Decisions made during development and the premises behind them. Only revisit a d
 - Dual activation paths — publishing `siteSettings` in Sanity Studio (via webhook) and running a local CLI command (`npm run site:maintenance -- on|off` writing directly to KV) — guarantee operators can pull the emergency brake both from Studio and when Sanity or webhooks are unavailable.
 - Exempting `/api/revalidate`, `/api/draft-mode/*`, static brand assets, and valid Sanity Draft Mode preview sessions (`__prerender_bypass`) from the `503` curtain ensures editors can still preview and verify fixes in Sanity Presentation before reopening public access.
 - Centralizing Maintenance Mode, the session-dismissible WIP top notice (`hidden` in `@media print`), one-click cache purge, and global scholarly metadata into one `siteSettings` singleton eliminates scattered settings across `homePage` and `aboutPage`.
+
+**Implementation Status:** Completed in WP-8D (commit `8579462`, 2026-10-28) with unified `siteSettings` singleton, outer Worker `503` wrapper in `web/worker.ts`, `npm run site:maintenance` CLI, and session-dismissible `WipBanner`.
 
 ---
 

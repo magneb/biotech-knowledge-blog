@@ -314,7 +314,7 @@ Every work package must satisfy the 3-tier verification gate before commit/push:
 
 ---
 
-## WP-8D: Unified Site Operations Hub, Worker 503 Killswitch & Dismissible WIP Banner
+## WP-8D: Unified Site Operations Hub, Worker 503 Killswitch & Dismissible WIP Banner [COMPLETED]
 * **Objective:** Provide a single "Site Settings & Operations" singleton at the top of Sanity Studio featuring an instant Worker-level `503` Maintenance Mode killswitch, one-click cache purge, and a session-dismissible Work-in-Progress top banner (Decision 018).
 * **Key Motivation:** Restores operational confidence with an emergency brake that runs ahead of OpenNext `enableCacheInterception: true` while still allowing editors to preview fixes in Sanity Draft Mode.
 * **Scope:**
@@ -335,14 +335,14 @@ Every work package must satisfy the 3-tier verification gate before commit/push:
   - Enforces singletons strictly via Studio Structure (`S.document().documentId('siteSettings')`) per `sanity-best-practices`.
   - Uses native Worker KV binding directly at the outer fetch handler with zero external REST round-trips (`workers-best-practices`).
 * **Acceptance Criteria:**
-  - [ ] Toggling Maintenance Mode ON in Studio (or running `npm run site:maintenance -- on`) causes all public routes (including previously cached KV pages) to return `503` with the Victorian maintenance folio.
-  - [ ] Sanity Presentation / Draft Mode previews remain accessible to editors while `503` mode is active.
-  - [ ] WIP disclaimer banner stands out at the top of the viewport, dismisses cleanly for the session, and is hidden in `@media print`.
-  - [ ] `npm run typegen && npm run verify` passes all static, schema-sync, and live `workerd` smoke tests.
+  - [x] Toggling Maintenance Mode ON in Studio (or running `npm run site:maintenance -- on`) causes all public routes (including previously cached KV pages) to return `503` with the Victorian maintenance folio.
+  - [x] Sanity Presentation / Draft Mode previews remain accessible to editors while `503` mode is active.
+  - [x] WIP disclaimer banner stands out at the top of the viewport, dismisses cleanly for the session, and is hidden in `@media print`.
+  - [x] `npm run typegen && npm run verify` passes all static, schema-sync, and live `workerd` smoke tests.
 
 ---
 
-## WP-8E: Sanity Studio Onboarding Ergonomics, Editable Dates & Mutable Snapshots
+## WP-8E: Sanity Studio Onboarding Ergonomics, Editable Dates & Mutable Snapshots [COMPLETED]
 * **Objective:** Simplify the Article editing experience in Sanity Studio for Oliver, unlock publication/recording dates, and enable direct editing or deletion of historical `articleVersion` snapshots (Decisions 015, 016).
 * **Key Motivation:** Eliminates the dual-snapshot buttons and top-of-form version toggles that tripped up onboarding and prevented fixing dates or typos in past editions.
 * **Scope:**
@@ -360,14 +360,14 @@ Every work package must satisfy the 3-tier verification gate before commit/push:
 * **Sanity Best Practice Alignment:**
   - Uses field groups (`groups`) to declutter primary authoring workflows (`references/schema.md`).
 * **Acceptance Criteria:**
-  - [ ] Opening an Article in Studio presents core writing fields first, with a single Publish button and version controls tucked in `Versioning & Archival`.
-  - [ ] Editors can freely edit `publishedAt` on both live articles and historical snapshots; minor edits do not overwrite manual dates.
-  - [ ] Editors can open and edit any `articleVersion` directly from the Article's `Version History & Snapshots` tab to fix typos/formatting, and changes propagate to `/[slug]/v{N}` and `/[slug]/versions`.
-  - [ ] `npm run typegen && npm run check` passes.
+  - [x] Opening an Article in Studio presents core writing fields first, with a single Publish button and version controls tucked in `Versioning & Archival`.
+  - [x] Editors can freely edit `publishedAt` on both live articles and historical snapshots; minor edits do not overwrite manual dates.
+  - [x] Editors can open and edit any `articleVersion` directly from the Article's `Version History & Snapshots` tab to fix typos/formatting, and changes propagate to `/[slug]/v{N}` and `/[slug]/versions`.
+  - [x] `npm run typegen && npm run check` passes.
 
 ---
 
-## WP-8F: Two-Lane Asset Cleanup, Filled Cartouche Emblem & Author Byline Removal
+## WP-8F: Two-Lane Asset Cleanup, Filled Cartouche Emblem & Author Byline Removal [COMPLETED]
 * **Objective:** Formalize the Two-Lane Asset Architecture, upgrade the top banner cartouche and utility icons to match the filled copperplate aesthetic of the reference render, and remove visible *"Penned by"* bylines across web pages (Decisions 015, 017).
 * **Key Motivation:** Resolves visual polish gaps in the header banner, removes redundant author text on a single-author compendium, and eliminates confusing empty brand-asset fields in Sanity Studio.
 * **Scope:**
@@ -383,9 +383,9 @@ Every work package must satisfy the 3-tier verification gate before commit/push:
 * **Sanity & Cloudflare Best Practice Alignment:**
   - Serves static brand vectors via Workers Static Assets (`ASSETS`) with zero Worker CPU overhead while reserving Sanity Asset CDN for editorial imagery and PDFs (Decision 017).
 * **Acceptance Criteria:**
-  - [ ] No visible *"Penned by"* text appears on `/[slug]`, `/[slug]/v{N}`, or `/[slug]/versions`, while `<head>` metadata, APA7 citations, and Print/PDF exports still include author attribution.
-  - [ ] Top header displays the richly shaded, curved-text cartouche and filled icons matching the reference render, without a duplicate logo/title strip beneath it on `/`.
-  - [ ] Component tests in `web/tests/components-and-pages.test.tsx` and `npm run typegen && npm run verify` pass.
+  - [x] No visible *"Penned by"* text appears on `/[slug]`, `/[slug]/v{N}`, or `/[slug]/versions`, while `<head>` metadata, APA7 citations, and Print/PDF exports still include author attribution.
+  - [x] Top header displays the richly shaded, curved-text cartouche and filled icons matching the reference render, without a duplicate logo/title strip beneath it on `/`.
+  - [x] Component tests in `web/tests/components-and-pages.test.tsx` and `npm run typegen && npm run verify` pass.
 
 ---
 
