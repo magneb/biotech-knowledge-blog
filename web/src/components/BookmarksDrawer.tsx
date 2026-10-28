@@ -16,7 +16,7 @@ export interface BookmarksDrawerProps {
 
 const emptySubscribe = () => () => {};
 
-function truncateSummary(text?: string | null, maxChars = 20): string {
+function truncateSummary(text?: string | null, maxChars = 80): string {
   if (!text) return "";
   const cleaned = text.trim();
   if (cleaned.length <= maxChars) return cleaned;
@@ -186,7 +186,7 @@ export function BookmarksDrawer({ isOpen, onClose }: BookmarksDrawerProps) {
 
                   {item.summary && (
                     <p className={styles.cardSummary} title={item.summary}>
-                      {truncateSummary(item.summary, 20)}
+                      {truncateSummary(item.summary, 80)}
                     </p>
                   )}
 

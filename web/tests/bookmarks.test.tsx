@@ -213,19 +213,20 @@ describe("Client-Side Bookmarks Engine (WP-10)", () => {
       expect(screen.getByText("Clear Folio")).toBeDefined();
     });
 
-    it("truncates article summary to 20 characters in the drawer list", () => {
+    it("truncates article summary to 80 characters in the drawer list", () => {
+      const longSummary =
+        "Standard protocol for separating DNA fragments by molecular size using an agarose matrix and electric current.";
       saveBookmark({
         ...sampleBookmark,
-        summary: "Standard protocol for separating DNA fragments by molecular size.",
+        summary: longSummary,
       });
 
       render(<BookmarksDrawer isOpen={true} onClose={vi.fn()} />);
 
-      expect(screen.getByText("Standard protocol fo…")).toBeDefined();
-      const summaryEl = screen.getByText("Standard protocol fo…");
-      expect(summaryEl.getAttribute("title")).toBe(
-        "Standard protocol for separating DNA fragments by molecular size."
-      );
+      const expected = `${longSummary.slice(0, 80).trim()}…`;
+      expect(screen.getByText(expected)).toBeDefined();
+      const summaryEl = screen.getByText(expected);
+      expect(summaryEl.getAttribute("title")).toBe(longSummary);
     });
 
     it("closes drawer when clicking close button or pressing Escape", () => {
