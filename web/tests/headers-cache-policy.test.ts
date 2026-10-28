@@ -32,7 +32,7 @@ describe("HTML & ISR Cache Policy Contract (WP-8C)", () => {
       ])
     );
     expect(draftRule?.source).toBe(
-      "/:path((?!api|_next|sprites\\.svg|art|favicon\\.ico).*)"
+      "/:path((?!api(?:/|$)|_next(?:/|$)|sprites\\.svg$|art(?:/|$)|favicon\\.ico$).*)"
     );
 
     // 4. Public HTML emits 10m browser / 7d edge must-revalidate when preview bypass cookie is missing
@@ -48,8 +48,75 @@ describe("HTML & ISR Cache Policy Contract (WP-8C)", () => {
       ])
     );
     expect(publicHtmlRule?.source).toBe(
-      "/:path((?!api|_next|sprites\\.svg|art|favicon\\.ico).*)"
+      "/:path((?!api(?:/|$)|_next(?:/|$)|sprites\\.svg$|art(?:/|$)|favicon\\.ico$).*)"
     );
+  });
+
+  it("verifies headers route regex matches oncology slugs and excludes static assets / API routes", async () => {
+    const headers =
+      typeof nextConfig.headers === "function" ? await nextConfig.headers() : [];
+
+    const draftRule = headers.find(
+      (h) => h.has?.some((has) => has.key === "__prerender_bypass")
+    );
+    const publicHtmlRule = headers.find(
+      (h) => h.missing?.some((m) => m.key === "__prerender_bypass")
+    );
+
+    expect(draftRule?.source).toBeDefined();
+    expect(publicHtmlRule?.source).toBeDefined();
+
+    // Next.js compiles source route patterns of the form `/:path((...))` into
+    // `^(?:/(...))(?:/)?$` in routes-manifest.json
+    const compileRouteRegex = (source: string) => {
+      const pattern = source.replace(/^\/:path\((.*)\)$/, "^(?:/($1))(?:/)?$");
+      return new RegExp(pattern);
+    };
+
+    const draftRegex = compileRouteRegex(draftRule!.source);
+    const publicRegex = compileRouteRegex(publicHtmlRule!.source);
+
+    // Finding 1 regression lock: Must match oncology slugs, standard pages, root, and version permalinks
+    const matchingRoutes = [
+      "/artemisinin-treatment",
+      "/apixaban-protocol",
+      "/articles",
+      "/contents",
+      "/",
+      "/:slug/v1",
+    ];
+
+    // Must exclude static asset directories, API routes, and static root files
+    const excludedRoutes = [
+      "/art",
+      "/art/microscopy.svg",
+      "/api/revalidate",
+      "/_next/static/foo.js",
+      "/sprites.svg",
+      "/favicon.ico",
+    ];
+
+    for (const route of matchingRoutes) {
+      expect(
+        draftRegex.test(route),
+        `Expected draft rule regex to match '${route}'`
+      ).toBe(true);
+      expect(
+        publicRegex.test(route),
+        `Expected public HTML rule regex to match '${route}'`
+      ).toBe(true);
+    }
+
+    for (const route of excludedRoutes) {
+      expect(
+        draftRegex.test(route),
+        `Expected draft rule regex to exclude '${route}'`
+      ).toBe(false);
+      expect(
+        publicRegex.test(route),
+        `Expected public HTML rule regex to exclude '${route}'`
+      ).toBe(false);
+    }
   });
 
   it("enforces 7-day (604800s) upper bound ISR revalidation on layout and all page controllers", () => {
@@ -105,5 +172,11 @@ describe("HTML & ISR Cache Policy Contract (WP-8C)", () => {
     expect(scriptContent).toContain("NEXT_INC_CACHE_KV");
     expect(scriptContent).toContain("NEXT_TAG_CACHE_D1");
     expect(scriptContent).toContain("purgeAll: true");
+
+    // Finding 2 regression lock: Verify non-interactive "-y" flag is present in Wrangler D1 execution command
+    expect(scriptContent).toContain('"-y"');
+    expect(scriptContent).toMatch(
+      /wrangler[\s\S]*?d1[\s\S]*?execute[\s\S]*?["']-y["']/
+    );
   });
 });

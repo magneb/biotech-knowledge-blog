@@ -116,6 +116,7 @@ async function main() {
           "execute",
           "NEXT_TAG_CACHE_D1",
           targetFlag,
+          "-y",
           "--command",
           "CREATE TABLE IF NOT EXISTS revalidations (tag TEXT NOT NULL, revalidatedAt INTEGER NOT NULL, stale INTEGER, expire INTEGER default NULL, UNIQUE(tag) ON CONFLICT REPLACE); DELETE FROM revalidations;",
         ],

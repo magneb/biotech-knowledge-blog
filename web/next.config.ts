@@ -32,7 +32,7 @@ const nextConfig: NextConfig = {
       },
       // 2. Draft Mode: emit private, no-store when preview bypass cookie is active
       {
-        source: "/:path((?!api|_next|sprites\\.svg|art|favicon\\.ico).*)",
+        source: "/:path((?!api(?:/|$)|_next(?:/|$)|sprites\\.svg$|art(?:/|$)|favicon\\.ico$).*)",
         has: [
           {
             type: "cookie",
@@ -48,7 +48,7 @@ const nextConfig: NextConfig = {
       },
       // 3. Public HTML responses: bounded revalidating cache (10m browser, 7d edge)
       {
-        source: "/:path((?!api|_next|sprites\\.svg|art|favicon\\.ico).*)",
+        source: "/:path((?!api(?:/|$)|_next(?:/|$)|sprites\\.svg$|art(?:/|$)|favicon\\.ico$).*)",
         missing: [
           {
             type: "cookie",
