@@ -291,8 +291,8 @@ Every work package must satisfy the 3-tier verification gate before commit/push:
 * **Scope:**
   - **HTML & ISR Cache Policy (`web/next.config.ts`):**
     - Remove `Cache-Control: public, max-age=31536000, immutable` from `/:slug/v:version(\\d+)` routes.
-    - Configure HTML responses to emit `Cache-Control: public, max-age=600, s-maxage=604800, must-revalidate` (`private, no-store` when Draft Mode is active; hashed `/_next/static/*` assets retain immutable caching).
-    - Enforce a 7-day (`604800`s) upper bound on ISR/data caching so no cached entry lives longer than one week.
+    - Configure HTML responses to emit `Cache-Control: public, max-age=600, s-maxage=604800, must-revalidate` (`private, no-store` when Draft Mode is active; hashed `/_next/static/*` assets retain immutable caching; custom headers omitted in dev to preserve Fast Refresh).
+    - Enforce a 7-day (`604800`s / 1-week) ISR revalidation schedule with a 14-day (`1209600`s / 2-week) hard shelf-life cap (`expireTime: 1209600`).
   - **Full-Graph Webhook Revalidation (`web/src/app/api/revalidate/route.ts`):**
     - On `article` publish/update/unpublish: revalidate `/`, `/contents`, `/${slug}`, `/${slug}/versions`, and all `/${slug}/v{1..versionNumber}` routes (including previous slug on slug changes).
     - On `articleVersion` publish/update/delete: resolve parent `article->slug.current` + `versionNumber` and revalidate `/${slug}/v${versionNumber}` and `/${slug}/versions`.
@@ -304,10 +304,10 @@ Every work package must satisfy the 3-tier verification gate before commit/push:
       2. Clears `revalidations` rows in `NEXT_TAG_CACHE_D1` via Wrangler D1 execute.
       3. Triggers `{ purgeAll: true }` against `/api/revalidate` (and calls Cloudflare Zone CDN `purge_everything` if `CLOUDFLARE_ZONE_ID` + `CLOUDFLARE_API_TOKEN` are configured).
 * **Sanity & Cloudflare Best Practice Alignment:**
-  - Separates short client-side `max-age` (`600`s) from edge `s-maxage` (`604800`s) with `must-revalidate`.
+  - Separates short client-side `max-age` (`600`s) from edge `s-maxage` (`604800`s) with `must-revalidate`, paired with a 2-week hard expiry (`expireTime: 1209600`).
   - Uses constant-time Web Crypto secret comparison (`workers-best-practices`).
 * **Acceptance Criteria:**
-  - [x] No HTML route emits `immutable` or browser `max-age > 600`, and no server/edge cache TTL exceeds `604800` (7 days).
+  - [x] No HTML route emits `immutable` or browser `max-age > 600`, and edge revalidation is 7 days (`604800`s) with a 2-week (`1209600`s) hard expiry.
   - [x] Updating an article, archival snapshot, or global singleton invalidates all dependent routes (`/contents`, `/[slug]`, `/[slug]/versions`, `/[slug]/v{N}`).
   - [x] Running `npm run cache:purge` from the dev environment deterministically wipes KV, D1 tag state, and edge cache.
   - [x] Unit tests cover `/api/revalidate` path/layout invalidation and `{ purgeAll: true }`; `npm run verify` passes.

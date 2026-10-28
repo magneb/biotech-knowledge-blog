@@ -1,10 +1,11 @@
 import type { NextConfig } from "next";
 import { initOpenNextCloudflareForDev } from "@opennextjs/cloudflare";
 
-// Server-rendered on Cloudflare Workers via @opennextjs/cloudflare (see DECISIONLOG 004/006/007/015).
-// Pages are prerendered and cached with bounded edge caching (10m browser, 7d edge);
+// Server-rendered on Cloudflare Workers via @opennextjs/cloudflare (see DECISIONLOG 004/006/007/015/019).
+// Pages are prerendered and cached with bounded edge caching (10m browser, 7d edge revalidate, 14d max expire);
 // Sanity webhooks trigger full-graph revalidation on publish.
 const nextConfig: NextConfig = {
+  expireTime: 1209600,
   logging: {
     fetches: {
       fullUrl: true,
@@ -19,6 +20,11 @@ const nextConfig: NextConfig = {
     ],
   },
   async headers() {
+    // In development mode, Next.js handles its own cache headers; custom headers break Fast Refresh and browser caching
+    if (process.env.NODE_ENV === "development") {
+      return [];
+    }
+
     return [
       // 1. Maintain immutable caching for hashed Next.js static assets
       {
@@ -46,7 +52,7 @@ const nextConfig: NextConfig = {
           },
         ],
       },
-      // 3. Public HTML responses: bounded revalidating cache (10m browser, 7d edge)
+      // 3. Public HTML responses: bounded revalidating cache (10m browser, 7d edge revalidate)
       {
         source: "/:path((?!api(?:/|$)|_next(?:/|$)|sprites\\.svg$|art(?:/|$)|favicon\\.ico$).*)",
         missing: [

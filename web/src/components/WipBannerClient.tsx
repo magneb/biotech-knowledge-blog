@@ -13,31 +13,34 @@ function hashText(text: string): string {
   return `wip_dismissed_${Math.abs(hash)}`;
 }
 
-function emptySubscribe(): () => void {
-  return () => {};
-}
+const emptySubscribe = () => () => {};
 
 export function WipBannerClient({ text }: { text: string }) {
   const [manuallyDismissed, setManuallyDismissed] = useState(false);
   const storageKey = hashText(text);
 
-  const getSnapshot = useCallback(() => {
-    try {
-      return sessionStorage.getItem(storageKey) === "1";
-    } catch {
-      return false;
-    }
-  }, [storageKey]);
-
-  const getServerSnapshot = useCallback(() => true, []);
-
-  const isStoredDismissed = useSyncExternalStore(
+  // Returns false during SSR & initial hydration, true once mounted on client
+  const isMounted = useSyncExternalStore(
     emptySubscribe,
-    getSnapshot,
-    getServerSnapshot
+    () => true,
+    () => false
   );
 
-  if (isStoredDismissed || manuallyDismissed) {
+  // Checks sessionStorage on client; defaults to true on server
+  const isDismissed = useSyncExternalStore(
+    emptySubscribe,
+    useCallback(() => {
+      try {
+        return sessionStorage.getItem(storageKey) === "1";
+      } catch {
+        return false;
+      }
+    }, [storageKey]),
+    () => true
+  );
+
+  // Step 3B: Render null on server and initial hydration, or when dismissed
+  if (!isMounted || isDismissed || manuallyDismissed) {
     return null;
   }
 

@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "rm -rf .next/dev/cache/fetch-cache && next dev",
+    "dev": "rm -rf .next/dev && next dev",
     "build": "opennextjs-cloudflare build",
     "build:next": "next build",
     "build:worker": "opennextjs-cloudflare build",

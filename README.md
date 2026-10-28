@@ -24,10 +24,10 @@ Edge routing rules configured in `web/next.config.ts` enforce deterministic cach
 
 | Content Class / Route | Cache-Control Header | Invalidation Mechanism | Rationale |
 | :--- | :--- | :--- | :--- |
-| **Public HTML & Pages** (`/`, `/contents`, `/[slug]`, `/[slug]/versions`, `/[slug]/v[n]`, `/sprites-preview`) | `public, max-age=600, s-maxage=604800, must-revalidate` | Cloudflare Edge 7d TTL; On-demand Webhook Invalidation; Browser 10m TTL | Ensures near-instant global edge delivery from Cloudflare's cache while bounding browser latency to 10 minutes. Edge caches are purged immediately upon content publication. |
+| **Public HTML & Pages** (`/`, `/contents`, `/[slug]`, `/[slug]/versions`, `/[slug]/v[n]`, `/sprites-preview`) | `public, max-age=600, s-maxage=604800, must-revalidate` | Cloudflare Edge 7d Revalidation / 14d Hard Expiry; On-demand Webhook Invalidation; Browser 10m TTL | Ensures near-instant global edge delivery from Cloudflare's cache while bounding browser latency to 10 minutes. Edge caches are purged immediately upon content publication. |
 | **Draft Mode / Visual Editing** (`__prerender_bypass` cookie present) | `private, no-store` | Immediate live bypass | Prevents draft, preview, or unreleased research treatises from persisting in shared edge or browser caches. |
-| **Hashed Static Assets** (`/_next/static/*`) | `public, max-age=31536000, immutable` | Content-hash cache busting | Immutable 1-year cache for fingerprinted CSS, JS, and font chunks. |
-| **ISR Controller Ceiling** | `export const revalidate = 604800;` (7 days) | Next.js ISR Background Revalidation | Declared across root layout (`web/src/app/layout.tsx`) and all dynamic page controllers to enforce a 7-day stale-while-revalidate ceiling. |
+| **Hashed Static Assets** (`/_next/static/*`) | `public, max-age=31536000, immutable` | Content-hash cache busting | Immutable 1-year cache for fingerprinted CSS, JS, and font chunks (disabled in dev to preserve Fast Refresh). |
+| **ISR Revalidate & Expiration Ceiling** | `export const revalidate = 604800;` (7 days) / `expireTime = 1209600;` (14 days) | Next.js ISR Background Revalidation & Hard Expiry | Revalidates in the background after 7 days; completely evicts / expires after 14 days (2 weeks). |
 
 ### 2. Full-Graph Webhook Invalidation (`POST /api/revalidate`)
 

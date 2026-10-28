@@ -1,4 +1,4 @@
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 import fs from "node:fs";
 import path from "node:path";
 import nextConfig from "../next.config";
@@ -50,6 +50,21 @@ describe("HTML & ISR Cache Policy Contract (WP-8C)", () => {
     expect(publicHtmlRule?.source).toBe(
       "/:path((?!api(?:/|$)|_next(?:/|$)|sprites\\.svg$|art(?:/|$)|favicon\\.ico$).*)"
     );
+  });
+
+  it("enforces 2-week (1209600s) max cache expiration (expireTime) in next.config.ts", () => {
+    expect(nextConfig.expireTime).toBe(1209600);
+  });
+
+  it("returns empty headers in development mode to prevent custom cache-control headers from breaking Turbopack", async () => {
+    vi.stubEnv("NODE_ENV", "development");
+    try {
+      const headers =
+        typeof nextConfig.headers === "function" ? await nextConfig.headers() : [];
+      expect(headers).toEqual([]);
+    } finally {
+      vi.unstubAllEnvs();
+    }
   });
 
   it("verifies headers route regex matches oncology slugs and excludes static assets / API routes", async () => {
