@@ -246,3 +246,21 @@ Decisions made during development and the premises behind them. Only revisit a d
 - Monolithic 890+ line route files violate single responsibility, hinder readability, and induce fragile regressions during feature additions.
 - Reading dynamic query parameters directly on the server causes Next.js to classify routes as dynamic SSR (`ƒ`), bypassing Edge KV cache interception and consuming Cloudflare Worker CPU time on every hit, risking 10ms CPU timeouts and 100k daily request caps.
 - Automated architectural test ratchets catch modularity erosion and dependency creep in CI/pre-commit verification before code merges to `main`.
+
+---
+
+## 020 — Client-Side Bookmarks Engine, Reading Folio Slide-Over & Archival Export (WP-10)
+
+**Date:** 2026-10-28
+**Decision:** Implement a zero-backend, privacy-first client-side bookmarking architecture:
+1. **Sync External Store Reactive Storage (`web/src/lib/bookmarks.ts`):** Store personal bookmarks exclusively in browser `localStorage` under `olivers_bookmarks_v1` using React's `useSyncExternalStore`. This eliminates hydration mismatches (server snapshot returns empty `[]`), enables multi-tab synchronization (`window.addEventListener("storage")`), and provides instant in-tab re-renders across all components via custom dispatch events (`olivers:bookmarks-changed`) with zero database, zero cookies, zero user authentication, and zero third-party dependencies.
+2. **Victorian Reading Folio Slide-Over (`BookmarksDrawer.tsx`):** Replace the placeholder button in `HeaderUtilities` with an accessible slide-over drawer panel displaying saved protocols, edition badges, taxonomy pills, and summaries, alongside a live badge counter on the top navigation ribbon icon (`[ 🔖 ]`).
+3. **Pervasive 1-Click Saving (`BookmarkButton.tsx`):** Equip article headers (`TreatiseReader.tsx`), compendium card rows (`ContentsCompendium.tsx`), and recent chronicle feed cards (`HomeFrontispiece.tsx`) with dedicated bookmark toggle buttons. Buttons call `e.preventDefault()` and `e.stopPropagation()` and reside in relative row wrappers outside parent `<Link>` anchors to strictly preserve valid HTML5 DOM semantics without React nesting warnings.
+4. **Scholarly Archival Export:** Provide one-click downloads for "Export MD" (formatted as a clean Victorian Markdown folio document) and "Export JSON" (pretty-printed structured data) utilizing standard client-side Blob and object URLs without server compute costs.
+**Premises:**
+- Wet-lab researchers, students, and bench scientists require quick offline access to their favorite protocols and references without creating accounts or risking session timeouts at the lab bench.
+- Browser-only storage avoids GDPR/cookie banner mandates, external auth services (Patreon/social auth is reserved for WP-12), and database storage costs on Cloudflare D1/KV.
+- Clean separation between anchor links and bookmark action buttons eliminates invalid DOM nesting (`<button>` inside `<a>`), preserving keyboard accessibility and screen-reader usability.
+
+**Implementation Status:** Completed in WP-10 with 22 new unit/contract tests, 161 total passing tests across the monorepo, and verified workerd live smoke test.
+

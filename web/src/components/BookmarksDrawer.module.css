@@ -1,0 +1,305 @@
+.backdrop {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(30, 20, 10, 0.55);
+  backdrop-filter: blur(2px);
+  z-index: var(--z-modal);
+  display: flex;
+  justify-content: flex-end;
+  animation: fadeIn 200ms ease-out;
+}
+
+.panel {
+  width: 100%;
+  max-width: 440px;
+  height: 100vh;
+  background-color: var(--parchment);
+  border-left: 2px solid var(--leather-gold);
+  box-shadow: -4px 0 24px rgba(44, 24, 16, 0.35);
+  display: flex;
+  flex-direction: column;
+  animation: slideInRight 220ms ease-out;
+  overflow: hidden;
+}
+
+.header {
+  padding: 1.25rem 1.5rem;
+  border-bottom: 1px solid var(--parchment-border);
+  background-color: var(--parchment-light);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.headerTitleGroup {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.title {
+  font-family: var(--font-cormorant), Georgia, serif;
+  font-size: 1.45rem;
+  font-weight: 700;
+  color: var(--ink);
+  letter-spacing: var(--tracking-wide);
+  margin: 0;
+}
+
+.closeButton {
+  background: transparent;
+  border: 1px solid var(--parchment-border);
+  color: var(--sepia);
+  width: 2rem;
+  height: 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 2px;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.closeButton:hover {
+  background-color: var(--parchment);
+  color: var(--rust);
+  border-color: var(--gold-muted);
+}
+
+.subtitle {
+  font-family: var(--font-garamond), Georgia, serif;
+  font-size: var(--text-xs);
+  color: var(--sepia-faint);
+  font-style: italic;
+  padding: 0.4rem 1.5rem;
+  background-color: rgba(235, 225, 207, 0.4);
+  border-bottom: 1px solid var(--parchment-shadow);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.actionBar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  padding: 0.65rem 1.5rem;
+  background: var(--parchment-light);
+  border-bottom: 1px solid var(--parchment-border);
+  flex-wrap: wrap;
+}
+
+.exportButtons {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.actionBtn {
+  font-family: var(--font-garamond), Georgia, serif;
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-wider);
+  padding: 0.35rem 0.65rem;
+  background: var(--parchment);
+  border: 1px solid var(--sepia-faint);
+  color: var(--ink);
+  border-radius: 2px;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.actionBtn:hover {
+  background: #fffdf9;
+  border-color: var(--rust);
+  color: var(--rust);
+}
+
+.clearBtn {
+  font-family: var(--font-garamond), Georgia, serif;
+  font-size: 0.78rem;
+  padding: 0.35rem 0.55rem;
+  background: transparent;
+  border: 1px dashed var(--sepia-faint);
+  color: var(--sepia);
+  border-radius: 2px;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.clearBtn:hover {
+  border-color: var(--rust);
+  color: var(--rust);
+  background: rgba(139, 38, 20, 0.05);
+}
+
+.body {
+  flex: 1;
+  overflow-y: auto;
+  padding: 1rem 1.5rem;
+  background-color: var(--parchment);
+}
+
+.list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+}
+
+.card {
+  position: relative;
+  background: var(--parchment-light);
+  border: 1px solid var(--parchment-border);
+  border-radius: 2px;
+  padding: 0.85rem 1rem;
+  transition: all var(--transition-fast);
+  box-shadow: 0 1px 3px rgba(44, 24, 16, 0.04);
+}
+
+.card:hover {
+  border-color: var(--gold-muted);
+  box-shadow: 0 2px 8px rgba(139, 105, 20, 0.12);
+}
+
+.cardTop {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.65rem;
+  margin-bottom: 0.35rem;
+}
+
+.cardTitle {
+  font-family: var(--font-cormorant), Georgia, serif;
+  font-size: 1.12rem;
+  font-weight: 700;
+  color: var(--ink);
+  line-height: 1.25;
+  text-decoration: none;
+  transition: color var(--transition-fast);
+}
+
+.cardTitle:hover {
+  color: var(--rust);
+  text-decoration: underline;
+}
+
+.removeBtn {
+  background: transparent;
+  border: none;
+  color: var(--sepia-faint);
+  cursor: pointer;
+  padding: 0.2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 2px;
+  transition: color var(--transition-fast);
+  flex-shrink: 0;
+}
+
+.removeBtn:hover {
+  color: var(--rust);
+}
+
+.cardMeta {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+  font-size: var(--text-xs);
+  color: var(--sepia);
+  margin-bottom: 0.35rem;
+}
+
+.categoryBadge {
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: var(--rust);
+  letter-spacing: var(--tracking-wide);
+}
+
+.versionBadge {
+  font-size: 0.72rem;
+  padding: 0.1rem 0.35rem;
+  background: rgba(139, 105, 20, 0.1);
+  border: 1px solid var(--gold-muted);
+  color: var(--ink);
+  border-radius: 2px;
+}
+
+.cardSummary {
+  font-size: 0.85rem;
+  color: var(--ink-faint);
+  line-height: 1.35;
+  margin: 0.3rem 0 0;
+}
+
+.cardFooter {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 0.5rem;
+  padding-top: 0.4rem;
+  border-top: 1px dotted var(--parchment-border);
+  font-size: 0.75rem;
+  color: var(--sepia-faint);
+}
+
+.emptyState {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 3.5rem 1.5rem;
+  color: var(--sepia);
+}
+
+.emptyIcon {
+  color: var(--gold-muted);
+  margin-bottom: 1rem;
+}
+
+.emptyTitle {
+  font-family: var(--font-cormorant), Georgia, serif;
+  font-size: 1.35rem;
+  font-weight: 600;
+  color: var(--ink);
+  margin: 0 0 0.5rem;
+}
+
+.emptyText {
+  font-size: 0.9rem;
+  line-height: 1.45;
+  color: var(--sepia-faint);
+  max-width: 300px;
+  margin: 0;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideInRight {
+  from {
+    transform: translateX(100%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}

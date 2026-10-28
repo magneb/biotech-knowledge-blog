@@ -619,6 +619,28 @@
   padding: 0.25rem 0.5rem;
 }
 
+.chronicleItem {
+  position: relative;
+  border-top: 1px solid var(--parchment-shadow);
+}
+
+.chronicleItem:first-child {
+  border-top: none;
+}
+
+.chronicleItem .chronicleRow {
+  border-top: none !important;
+  padding-right: 3.25rem !important;
+}
+
+.chronicleBookmark {
+  position: absolute;
+  top: 50%;
+  right: 0.75rem;
+  transform: translateY(-50%);
+  z-index: 2;
+}
+
 .chronicleRow {
   display: grid !important;
   grid-template-columns: 112px 1fr auto;

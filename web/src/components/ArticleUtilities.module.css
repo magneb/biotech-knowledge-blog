@@ -143,6 +143,19 @@
   border-color: #3b2e21;
 }
 
+.actionButtonActive {
+  background: rgba(139, 38, 20, 0.08);
+  border-color: var(--rust, #8b2614);
+  color: var(--rust, #8b2614);
+  font-weight: 600;
+}
+
+.actionButtonActive:hover {
+  background: var(--rust, #8b2614);
+  border-color: #5c180b;
+  color: #fff;
+}
+
 .metaRow {
   display: flex;
   justify-content: space-between;

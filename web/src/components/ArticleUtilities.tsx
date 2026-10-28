@@ -7,6 +7,7 @@ import { ElementalPill } from "@/components/ui/ElementalPill";
 import { NoticeToast, type NoticeToastData } from "@/components/ui/NoticeToast";
 import { CitationModal } from "@/components/CitationModal";
 import { formatDate } from "@/lib/format";
+import { useBookmarks } from "@/lib/bookmarks";
 import styles from "./ArticleUtilities.module.css";
 
 export interface PdfAttachment {
@@ -41,6 +42,7 @@ export interface ArticleUtilitiesProps {
   chapter?: ChapterInfo | null;
   topics?: TopicInfo[] | null;
   downloadablePdfs?: PdfAttachment[] | null;
+  summary?: string | null;
 }
 
 function formatFileSize(bytes?: number | null): string {
@@ -60,18 +62,31 @@ export function ArticleUtilities({
   chapter,
   topics,
   downloadablePdfs,
+  summary,
 }: ArticleUtilitiesProps) {
   const [isCitationOpen, setIsCitationOpen] = useState(false);
   const [notice, setNotice] = useState<NoticeToastData | null>(null);
+  const { isBookmarked, toggleBookmark } = useBookmarks();
+  const isSaved = isBookmarked(slug);
 
   const handlePrint = () => {
     window.print();
   };
 
   const handleBookmark = () => {
+    const result = toggleBookmark({
+      slug,
+      title,
+      summary,
+      publishedAt,
+      versionNumber,
+      topics,
+    });
     setNotice({
-      title: "Protocol Bookmarked",
-      message: `"${title}" has been saved to your browser reading folio.`,
+      title: result.isSaved ? "Protocol Bookmarked" : "Bookmark Removed",
+      message: result.isSaved
+        ? `"${title}" has been saved to your browser reading folio.`
+        : `"${title}" has been removed from your reading folio.`,
     });
   };
 
@@ -152,11 +167,16 @@ export function ArticleUtilities({
 
             <button
               type="button"
-              className={styles.actionButton}
+              className={`${styles.actionButton} ${isSaved ? styles.actionButtonActive : ""}`}
               onClick={handleBookmark}
+              aria-pressed={isSaved}
             >
-              <Icon name="cartouche-oval" size={14} />
-              Bookmark Protocol
+              <Icon
+                name={isSaved ? "bookmark-ribbon" : "cartouche-oval"}
+                size={14}
+                style={isSaved ? { color: "var(--rust)" } : undefined}
+              />
+              {isSaved ? "Remove from Folio" : "Bookmark Protocol"}
             </button>
 
             <Link

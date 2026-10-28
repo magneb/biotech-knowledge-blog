@@ -217,6 +217,31 @@
   outline-offset: 1px;
 }
 
+.utilityBtnBookmark {
+  position: relative;
+}
+
+.badgeCount {
+  position: absolute;
+  top: -4px;
+  right: -4px;
+  background-color: var(--rust);
+  color: #fff;
+  font-family: var(--font-cormorant), Georgia, serif;
+  font-size: 0.7rem;
+  font-weight: 700;
+  min-width: 16px;
+  height: 16px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 3px;
+  line-height: 1;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+  pointer-events: none;
+}
+
 .authDivider {
   width: 1px;
   height: 20px;

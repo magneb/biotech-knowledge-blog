@@ -160,6 +160,23 @@
   margin: 1.25rem 0 0;
 }
 
+.articleItem {
+  position: relative;
+  margin-bottom: 0.5rem;
+}
+
+.articleItem .articleRow {
+  margin-bottom: 0;
+  padding-right: 3.25rem;
+}
+
+.rowBookmarkBtn {
+  position: absolute;
+  top: 0.85rem;
+  right: 1.15rem;
+  z-index: 2;
+}
+
 .articleRow {
   display: block;
   padding: 1rem 1.25rem;

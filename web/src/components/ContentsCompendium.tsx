@@ -11,6 +11,7 @@ import { getChapterVignette } from "@/sanity/image";
 import { StarDivider } from "@/components/ui/StarDivider";
 import { HandDrawnArrow } from "@/components/ui/Icon";
 import { ElementalPill } from "@/components/ui/ElementalPill";
+import { BookmarkButton } from "@/components/BookmarkButton";
 import { formatCategory, formatDate, formatRomanNumeral } from "@/lib/format";
 import styles from "@/app/contents/contents.module.css";
 
@@ -187,7 +188,7 @@ export function ContentsCompendiumView({
             {chapter.articles && chapter.articles.length > 0 ? (
               <ul className={styles.articlesList}>
                 {chapter.articles.map((article, index) => (
-                  <li key={article._id}>
+                  <li key={article._id} className={styles.articleItem}>
                     <Link
                       href={`/${stegaClean(article.slug?.current)}`}
                       className={styles.articleRow}
@@ -242,6 +243,19 @@ export function ContentsCompendiumView({
                         <p className={styles.articleSummary}>{article.summary}</p>
                       )}
                     </Link>
+                    <div className={styles.rowBookmarkBtn}>
+                      <BookmarkButton
+                        variant="row"
+                        article={{
+                          slug: stegaClean(article.slug?.current) || "",
+                          title: article.title || "Untitled",
+                          summary: article.summary,
+                          contentType: stegaClean(article.contentType),
+                          publishedAt: stegaClean(article.publishedAt),
+                          topics: article.topics,
+                        }}
+                      />
+                    </div>
                   </li>
                 ))}
               </ul>
@@ -280,7 +294,7 @@ export function ContentsCompendiumView({
 
           <ul className={styles.articlesList}>
             {filteredStandalone.map((article, index) => (
-              <li key={article._id}>
+              <li key={article._id} className={styles.articleItem}>
                 <Link
                   href={`/${stegaClean(article.slug?.current)}`}
                   className={styles.articleRow}
@@ -309,6 +323,18 @@ export function ContentsCompendiumView({
                     <p className={styles.articleSummary}>{article.summary}</p>
                   )}
                 </Link>
+                <div className={styles.rowBookmarkBtn}>
+                  <BookmarkButton
+                    variant="row"
+                    article={{
+                      slug: stegaClean(article.slug?.current) || "",
+                      title: article.title || "Untitled",
+                      summary: article.summary,
+                      contentType: stegaClean(article.contentType),
+                      publishedAt: stegaClean(article.publishedAt),
+                    }}
+                  />
+                </div>
               </li>
             ))}
           </ul>

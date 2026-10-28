@@ -1,0 +1,88 @@
+/* ── Bookmark Button Base ── */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  font-family: var(--font-garamond), Georgia, serif;
+  background: var(--parchment-light);
+  border: 1px solid var(--parchment-border);
+  color: var(--sepia-mid);
+  cursor: pointer;
+  border-radius: 2px;
+  transition: all var(--transition-fast);
+  text-decoration: none;
+  line-height: 1;
+}
+
+.btn:hover {
+  background: #fffdfa;
+  border-color: var(--gold-muted);
+  color: var(--ink);
+}
+
+.btn:focus-visible {
+  outline: 2px solid var(--gold);
+  outline-offset: 1px;
+}
+
+/* ── Active (Bookmarked) State ── */
+.btnActive {
+  background: rgba(139, 38, 20, 0.08);
+  border-color: var(--rust);
+  color: var(--rust);
+}
+
+.btnActive:hover {
+  background: rgba(139, 38, 20, 0.14);
+  border-color: var(--rust);
+  color: var(--rust);
+}
+
+/* ── Variant: Header ── */
+.variantHeader {
+  padding: 0.35rem 0.75rem;
+  font-size: 0.82rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-wide);
+  box-shadow: 0 1px 2px rgba(31, 18, 8, 0.04);
+}
+
+.variantHeader.btnActive {
+  background: rgba(139, 38, 20, 0.1);
+  color: var(--rust);
+}
+
+/* ── Variant: Row (Compendium & Table of Contents) ── */
+.variantRow {
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  flex-shrink: 0;
+  border-radius: 2px;
+}
+
+.variantRow:hover {
+  transform: scale(1.08);
+}
+
+/* ── Variant: Compact ── */
+.variantCompact {
+  width: 24px;
+  height: 24px;
+  padding: 0;
+  flex-shrink: 0;
+  border: 1px solid transparent;
+  background: transparent;
+}
+
+.variantCompact:hover {
+  background: rgba(139, 105, 20, 0.08);
+  border-color: var(--parchment-border);
+}
+
+.variantCompact.btnActive {
+  background: rgba(139, 38, 20, 0.1);
+  border-color: var(--rust);
+}

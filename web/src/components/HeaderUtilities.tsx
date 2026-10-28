@@ -4,10 +4,14 @@ import { useState } from "react";
 import Link from "next/link";
 import { Icon } from "@/components/ui/Icon";
 import { NoticeToast, type NoticeToastData } from "@/components/ui/NoticeToast";
+import { BookmarksDrawer } from "@/components/BookmarksDrawer";
+import { useBookmarks } from "@/lib/bookmarks";
 import styles from "./GlobalHeader.module.css";
 
 export function HeaderUtilities() {
   const [notice, setNotice] = useState<NoticeToastData | null>(null);
+  const [isBookmarksOpen, setIsBookmarksOpen] = useState(false);
+  const { count } = useBookmarks();
 
   const showNotice = (title: string, message: string) => {
     setNotice({ title, message });
@@ -22,17 +26,21 @@ export function HeaderUtilities() {
 
         <button
           type="button"
-          className={styles.utilityBtn}
-          title="Saved Bookmarks (Work Package WP-10)"
-          aria-label="Saved Bookmarks"
-          onClick={() =>
-            showNotice(
-              "Personal Bookmarks Tray",
-              "Client-side protocol and guide saving is staged for implementation in Work Package WP-10."
-            )
-          }
+          className={`${styles.utilityBtn} ${styles.utilityBtnBookmark}`}
+          title={count > 0 ? `Saved Bookmarks (${count})` : "Saved Bookmarks (Reading Folio)"}
+          aria-label={count > 0 ? `Saved Bookmarks (${count})` : "Saved Bookmarks"}
+          onClick={() => setIsBookmarksOpen(true)}
         >
-          <Icon name="bookmark-ribbon" size={16} />
+          <Icon
+            name="bookmark-ribbon"
+            size={16}
+            style={count > 0 ? { color: "var(--rust)" } : undefined}
+          />
+          {count > 0 && (
+            <span className={styles.badgeCount} aria-hidden="true">
+              {count > 99 ? "99+" : count}
+            </span>
+          )}
         </button>
 
         <button
@@ -65,6 +73,11 @@ export function HeaderUtilities() {
           Log in
         </button>
       </div>
+
+      <BookmarksDrawer
+        isOpen={isBookmarksOpen}
+        onClose={() => setIsBookmarksOpen(false)}
+      />
 
       <NoticeToast notice={notice} onDismiss={() => setNotice(null)} />
     </>

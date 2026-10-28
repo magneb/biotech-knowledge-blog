@@ -29,7 +29,7 @@ The previously listed items have been consolidated into formal work packages:
 - **Cache Policy, Site Operations Killswitch, Studio Ergonomics & Asset Cleanup:** Migrated to **WP-8C**, **WP-8D**, **WP-8E** & **WP-8F**.
 - **EndNote / BibTeX Ingestion, Citation Table & APA References:** Migrated to **WP-9**.
 - **Cloudflare Workers SSR / OpenNext Runtime & Revalidation:** Migrated to **WP-1** & **WP-2**.
-- **Browser-Only Bookmarks Tray:** Migrated to **WP-10**.
+- **Browser-Only Bookmarks Tray & Reading Folio:** Completed in **WP-10** (2026-10-28).
 - **Word `.docx` Ingestion Tool:** Migrated to **WP-11 (Future)**.
 - **Social / Patreon Authentication & Content Gating:** Migrated to **WP-12 (Future)**.
 
@@ -51,3 +51,4 @@ The previously listed items have been consolidated into formal work packages:
 - [x] **Editable "Recorded on" / Publish Date Fields:** Formalized into **WP-8E**. Unlocks `publishedAt` in Sanity Studio on both `article` and `articleVersion`, preserving manual dates across minor edits and updating automatically only when publishing a New Official Edition.
 - [x] **Work-in-Progress Disclaimer Banner:** Formalized into **WP-8D**. High-visibility, session-dismissible Victorian notice bar at the top of the viewport (hidden in `@media print`), toggled and edited via the `siteSettings` singleton.
 - [x] **Filled Banner Cartouche Emblem & Two-Lane Asset Cleanup:** Formalized into **WP-8F** (Decision 017). Establishes the Two-Lane Asset Architecture (brand SVGs/chrome in `web/public/` via Workers Static Assets; editorial figures & PDFs in Sanity CDN), removes the redundant `homePage.logo` field and duplicate masthead strip, and re-illustrates `olivers-cartouche.svg` + filled header icons to match the reference render.
+- [x] **Client-Side Bookmarks, Local Storage Tray & Archival Export:** Completed in **WP-10** (Decision 020). Reactive `useSyncExternalStore` engine storing saved protocols in browser `localStorage` (`olivers_bookmarks_v1`), top ribbon slide-over folio with live count badge, 1-click bookmark toggles on headers and card rows, and client-side Markdown / JSON export.

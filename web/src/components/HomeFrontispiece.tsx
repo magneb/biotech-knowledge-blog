@@ -8,6 +8,7 @@ import { PortableText, stegaClean } from "next-sanity";
 
 import type { HOME_PAGE_QUERY_RESULT } from "../../sanity.types";
 import { HomeCarousel } from "@/components/HomeCarousel";
+import { BookmarkButton } from "@/components/BookmarkButton";
 import {
   CopperplateButton,
   ElementalPill,
@@ -395,76 +396,91 @@ export function HomeFrontispieceView({ data, activeTopic = "" }: HomeFrontispiec
               );
 
               return (
-                <Link
-                  key={article._id}
-                  href={`/${stegaClean(article.slug?.current)}`}
-                  className={`article-card ${styles.chronicleRow}`}
-                >
-                  <div className={styles.chronicleThumb}>
-                    <Image
-                      src={thumb.src}
-                      alt={thumb.alt}
-                      width={112}
-                      height={68}
-                      className={styles.chronicleThumbImg}
-                      unoptimized={thumb.src.endsWith(".svg")}
-                    />
-                  </div>
+                <div key={article._id} className={styles.chronicleItem}>
+                  <Link
+                    href={`/${stegaClean(article.slug?.current)}`}
+                    className={`article-card ${styles.chronicleRow}`}
+                  >
+                    <div className={styles.chronicleThumb}>
+                      <Image
+                        src={thumb.src}
+                        alt={thumb.alt}
+                        width={112}
+                        height={68}
+                        className={styles.chronicleThumbImg}
+                        unoptimized={thumb.src.endsWith(".svg")}
+                      />
+                    </div>
 
-                  <div className={styles.chronicleMain}>
-                    <span
-                      className={`article-card-title ${styles.chronicleTitle}`}
-                    >
-                      {article.title}
-                    </span>
-
-                    {article.summary && (
+                    <div className={styles.chronicleMain}>
                       <span
-                        className={`article-card-summary ${styles.chronicleSummary}`}
+                        className={`article-card-title ${styles.chronicleTitle}`}
                       >
-                        {article.summary}
+                        {article.title}
                       </span>
-                    )}
 
-                    {article.topics && article.topics.length > 0 && (
-                      <div className={styles.chronicleTopics}>
-                        {article.topics.map((t) =>
-                          t?.symbol ? (
-                            <ElementalPill
-                              key={t._id}
-                              symbol={t.symbol}
-                              size="sm"
-                            />
-                          ) : null
-                        )}
-                      </div>
-                    )}
-                  </div>
-
-                  <span className={`article-card-meta ${styles.chronicleMeta}`}>
-                    {article.contentType && (
-                      <span
-                        className={`article-card-category ${styles.chronicleTypeBadge}`}
-                      >
+                      {article.summary && (
                         <span
-                          className={styles.chronicleDocGlyph}
-                          aria-hidden="true"
-                        />
-                        {formatCategory(stegaClean(article.contentType))}
-                      </span>
-                    )}
-                    {article.publishedAt && (
-                      <span className={styles.chronicleDate}>
-                        {formatDate(stegaClean(article.publishedAt))}
-                      </span>
-                    )}
-                    <HandDrawnArrow
-                      index={index}
-                      size={15}
-                      style={{ color: "var(--rust)" }}
+                          className={`article-card-summary ${styles.chronicleSummary}`}
+                        >
+                          {article.summary}
+                        </span>
+                      )}
+
+                      {article.topics && article.topics.length > 0 && (
+                        <div className={styles.chronicleTopics}>
+                          {article.topics.map((t) =>
+                            t?.symbol ? (
+                              <ElementalPill
+                                key={t._id}
+                                symbol={t.symbol}
+                                size="sm"
+                              />
+                            ) : null
+                          )}
+                        </div>
+                      )}
+                    </div>
+
+                    <span className={`article-card-meta ${styles.chronicleMeta}`}>
+                      {article.contentType && (
+                        <span
+                          className={`article-card-category ${styles.chronicleTypeBadge}`}
+                        >
+                          <span
+                            className={styles.chronicleDocGlyph}
+                            aria-hidden="true"
+                          />
+                          {formatCategory(stegaClean(article.contentType))}
+                        </span>
+                      )}
+                      {article.publishedAt && (
+                        <span className={styles.chronicleDate}>
+                          {formatDate(stegaClean(article.publishedAt))}
+                        </span>
+                      )}
+                      <HandDrawnArrow
+                        index={index}
+                        size={15}
+                        style={{ color: "var(--rust)" }}
+                      />
+                    </span>
+                  </Link>
+
+                  <div className={styles.chronicleBookmark}>
+                    <BookmarkButton
+                      variant="row"
+                      article={{
+                        slug: stegaClean(article.slug?.current) || "",
+                        title: article.title || "Untitled",
+                        summary: article.summary,
+                        contentType: stegaClean(article.contentType),
+                        publishedAt: stegaClean(article.publishedAt),
+                        topics: article.topics,
+                      }}
                     />
-                  </span>
-                </Link>
+                  </div>
+                </div>
               );
             })}
           </nav>

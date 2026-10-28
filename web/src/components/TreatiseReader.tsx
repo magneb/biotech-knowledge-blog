@@ -17,6 +17,7 @@ import {
 } from "@/components/ArticleUtilities";
 import { scholarlyPortableTextComponents } from "@/components/PortableTextComponents";
 import { PrintHeader, PrintFooter } from "@/components/PrintFolio";
+import { BookmarkButton } from "@/components/BookmarkButton";
 import styles from "@/app/[slug]/article.module.css";
 
 export interface TreatiseReaderProps {
@@ -194,6 +195,19 @@ export function TreatiseReader({
                       </time>
                     </span>
                   )}
+                  <span className={styles.glyphFlourish}>✦</span>
+                  <BookmarkButton
+                    variant="header"
+                    article={{
+                      slug,
+                      title: articleTitle,
+                      summary,
+                      contentType: stegaClean(contentType),
+                      publishedAt: stegaClean(publishedAt),
+                      versionNumber,
+                      topics: cleanedTopics,
+                    }}
+                  />
                 </div>
 
                 <div className={styles.headerRule} />
@@ -218,6 +232,7 @@ export function TreatiseReader({
                 chapter={chapter}
                 topics={cleanedTopics}
                 downloadablePdfs={cleanedPdfs}
+                summary={summary}
               />
             </div>
           </section>

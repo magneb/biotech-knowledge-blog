@@ -424,13 +424,17 @@ Every work package must satisfy the 3-tier verification gate before commit/push:
 ## WP-10: Client-Side Bookmarks, Local Storage & Utilities
 * **Objective:** Provide personal saving/bookmarking of guides and protocols without requiring a backend user account.
 * **Scope:**
-  - Top navigation ribbon icon (`[ 🔖 ]`) opens a slide-over panel of saved articles.
-  - "Bookmark this Guide" button on article headers and card rows.
-  - Bookmarks stored in browser `localStorage`.
+  - Top navigation ribbon icon (`[ 🔖 ]`) opens a slide-over panel of saved articles with live counter badge.
+  - "Bookmark this Guide" button on article headers (`TreatiseReader.tsx`, `ArticleUtilities.tsx`) and card rows (`ContentsCompendium.tsx`, `HomeFrontispiece.tsx`).
+  - Bookmarks stored in browser `localStorage` under `olivers_bookmarks_v1` using React `useSyncExternalStore` for multi-tab and zero-hydration-mismatch synchronization.
   - Export bookmarks list as Markdown / JSON for Oliver's personal archival.
-* **Acceptance Criteria:**
-  - Bookmarks persist across sessions and page reloads.
-  - No user accounts, database tables, or cookies required.
+* **Acceptance Criteria (Verified 2026-10-28):**
+  - [x] Bookmarks persist across sessions and page reloads via `localStorage`.
+  - [x] No user accounts, database tables, or cookies required.
+  - [x] Top navigation ribbon icon displays live count badge and opens slide-over reading folio.
+  - [x] Article headers and card rows provide 1-click saving and active state toggles without nested anchor warnings.
+  - [x] Export to Victorian Markdown and structured JSON files download client-side.
+  - [x] 22 dedicated Vitest unit/contract tests passing; 161 total test suite passing.
 
 ---
 
