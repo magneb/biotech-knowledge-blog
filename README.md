@@ -14,6 +14,81 @@ A personal knowledge base for biotech and cancer research protocols.
 - `/[slug]` — **Article & Protocol Reader**: Renders individual research papers, guides, and laboratory protocols.
 - `/sprites-preview` — **Living Victorian Design Folio**: Interactive catalog of all 28 `/sprites.svg` vector glyphs, copperplate etching plates (`/art/brand/`, `/art/chapters/`, `/art/media/`), typography tokens, and `@/components/ui` specimens.
 
+## Caching Architecture, Invalidation & Purge Tooling
+
+The application operates as a deterministic, edge-rendered publishing instrument designed for high-availability knowledge distribution within Cloudflare Free Tier budget limits. Pages and dispatches are served from Cloudflare Workers using a multi-tiered caching topology: Cloudflare Edge CDN, OpenNext KV incremental cache (`NEXT_INC_CACHE_KV`), D1 tag revalidations (`NEXT_TAG_CACHE_D1`), and downstream browser HTTP caches.
+
+### 1. Deterministic HTML & ISR Cache Policy
+
+Edge routing rules configured in `web/next.config.ts` enforce deterministic caching boundaries across all page responses while safeguarding live editorial previews:
+
+| Content Class / Route | Cache-Control Header | Invalidation Mechanism | Rationale |
+| :--- | :--- | :--- | :--- |
+| **Public HTML & Pages** (`/`, `/contents`, `/[slug]`, `/[slug]/versions`, `/[slug]/v[n]`, `/sprites-preview`) | `public, max-age=600, s-maxage=604800, must-revalidate` | Cloudflare Edge 7d TTL; On-demand Webhook Invalidation; Browser 10m TTL | Ensures near-instant global edge delivery from Cloudflare's cache while bounding browser latency to 10 minutes. Edge caches are purged immediately upon content publication. |
+| **Draft Mode / Visual Editing** (`__prerender_bypass` cookie present) | `private, no-store` | Immediate live bypass | Prevents draft, preview, or unreleased research treatises from persisting in shared edge or browser caches. |
+| **Hashed Static Assets** (`/_next/static/*`) | `public, max-age=31536000, immutable` | Content-hash cache busting | Immutable 1-year cache for fingerprinted CSS, JS, and font chunks. |
+| **ISR Controller Ceiling** | `export const revalidate = 604800;` (7 days) | Next.js ISR Background Revalidation | Declared across root layout (`web/src/app/layout.tsx`) and all dynamic page controllers to enforce a 7-day stale-while-revalidate ceiling. |
+
+### 2. Full-Graph Webhook Invalidation (`POST /api/revalidate`)
+
+Content published or mutated in Sanity Studio triggers atomic cache invalidations via `web/src/app/api/revalidate/route.ts`. The endpoint models the full publication dependency graph, reconciling references and invalidating all connected routes and cache tags.
+
+#### Supported Triggers & Cascades
+
+- **Articles (`_type: "article"`)**:
+  - Automatically evicts Frontispiece (`/`) and Master Table of Contents (`/contents`).
+  - Purges canonical dispatch reader (`/${slug}`) and version index (`/${slug}/versions`).
+  - Purges all historical archival editions (`/${slug}/v1` through `/${slug}/v${versionNumber}`, bounded to 50 editions).
+  - Handles slug alterations: invalidates both old (`previousSlug`) and newly assigned (`slug`) paths to prevent stale 404s.
+  - Evicts tag `article:${slug}` and master tag `article`.
+- **Archival Versions (`_type: "articleVersion"`)**:
+  - Resolves parent article via payload reference (`articleSlug`, `article.slug`, or query via `articleRef`).
+  - Invalidates parent dispatch reader (`/${slug}`), version index (`/${slug}/versions`), and specific snapshot route (`/${slug}/v${versionNumber}`).
+  - Evicts tags `article:${slug}` and `articleVersion:${versionNumber}`.
+- **Global Singletons & Taxonomies (`siteSettings`, `homePage`, `aboutPage`, `chapter`, `topic`)**:
+  - Triggers site-wide layout flush via `revalidatePath("/", "layout")`.
+  - Revalidates `/contents` and evicts taxonomy and layout cache tags (`chapter`, `topic`, `homePage`, `siteSettings`).
+- **Master Flush (`{ purgeAll: true }`)**:
+  - Evicts all registered tags (`sanity`, `article`, `articleVersion`, `chapter`, `topic`, `homePage`, `aboutPage`, `siteSettings`).
+  - Flushes root layout (`/`, `"layout"`), frontispiece (`/`), and table of contents (`/contents`).
+
+#### Authentication & Timing-Safe Security
+
+All invalidation requests undergo constant-time verification using the Web Crypto API (`crypto.subtle.digest("SHA-256", ...)`) to eliminate side-channel length-leak and timing attacks:
+- **Sanity HMAC Webhooks**: Validates `sanity-webhook-signature` using `parseBody()` with `SANITY_REVALIDATE_SECRET`.
+- **Direct Bearer / Header Token**: Authenticates manual or CLI operations via `Authorization: Bearer <secret>` or `x-revalidate-secret`.
+- **Runtime Adaptability**: Employs `crypto.subtle.timingSafeEqual` in `workerd` (Cloudflare Workers runtime) with an automatic constant-time XOR bitwise fallback in Node.js / Vitest test environments.
+
+### 3. Developer CLI Cache Purge Tooling (`npm run cache:purge`)
+
+A zero-dependency developer utility (`web/scripts/purge-cache.mjs`) provides unified, multi-tiered cache eviction across local development and live Cloudflare production environments.
+
+#### Commands
+
+```bash
+# Purge all remote production cache tiers (KV, D1, Next.js /api/revalidate, and Cloudflare Zone CDN)
+npm run cache:purge
+
+# Purge local development cache bindings
+npm run cache:purge -- --local
+
+# Dry-run: simulate all purge actions without executing deletions
+npm run cache:purge -- --dry-run
+```
+
+#### Multi-Tier Purge Topology
+
+The purge tool sequentially executes four cache clearance layers:
+
+1. **Cloudflare KV Incremental Cache (`NEXT_INC_CACHE_KV`)**:
+   Lists and bulk-deletes cached HTML and fetch fragments via Wrangler CLI (`wrangler kv key list` and `wrangler kv bulk delete`).
+2. **Cloudflare D1 Tag Cache (`NEXT_TAG_CACHE_D1`)**:
+   Truncates the revalidation index via Wrangler D1 (`DELETE FROM revalidations`) using non-interactive execution (`-y`).
+3. **Next.js In-Memory & Tag Invalidation**:
+   Dispatches an authenticated `{ purgeAll: true }` POST payload to `/api/revalidate`, resetting Next.js page controller layouts and master tags.
+4. **Cloudflare Zone Edge CDN (Optional)**:
+   Triggers a global `purge_everything` call against the Cloudflare Cache Purge API when `CLOUDFLARE_ZONE_ID` and `CLOUDFLARE_API_TOKEN` are configured.
+
 ## Development & Environment Setup
 
 ```bash
