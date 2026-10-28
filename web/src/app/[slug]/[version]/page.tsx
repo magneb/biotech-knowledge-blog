@@ -9,6 +9,8 @@ import { HISTORICAL_ARTICLE_QUERY, HISTORICAL_PARAMS_QUERY } from "@/sanity/quer
 
 export { HISTORICAL_ARTICLE_QUERY, HISTORICAL_PARAMS_QUERY };
 
+export const revalidate = 604800;
+
 function parseVersionParam(param: string): number | null {
   const match = /^v(\d+)$/.exec(param);
   if (!match) return null;

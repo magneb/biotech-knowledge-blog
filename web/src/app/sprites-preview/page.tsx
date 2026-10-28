@@ -17,6 +17,8 @@ export const metadata: Metadata = {
     "Comprehensive living design specimen showcasing copperplate etching illustrations, typography tokens, vector sprite sheet glyphs, and Victorian UI components.",
 };
 
+export const revalidate = 604800;
+
 const ARROW_CUTS = [
   { variant: 1 as const, name: "Dip-Pen Feather", id: "arrow-right-1", desc: "Quill shaft with angled fletching and sharp barb." },
   { variant: 2 as const, name: "Arched Dart", id: "arrow-right-2", desc: "Arched trajectory with solid triangular head." },

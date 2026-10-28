@@ -16,7 +16,8 @@
     "test:watch": "vitest --config vitest.config.mts",
     "test:smoke": "node scripts/smoke-test-worker.mjs",
     "check": "npm run typecheck && npm run lint && npm test",
-    "verify": "npm run check && npm run test:smoke"
+    "verify": "npm run check && npm run test:smoke",
+    "cache:purge": "node scripts/purge-cache.mjs"
   },
   "dependencies": {
     "@opennextjs/cloudflare": "^1.20.13",

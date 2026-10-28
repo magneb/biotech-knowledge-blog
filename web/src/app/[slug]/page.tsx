@@ -9,6 +9,8 @@ import { ARTICLE_QUERY, ARTICLES_SLUGS_QUERY } from "@/sanity/queries";
 
 export { ARTICLE_QUERY, ARTICLES_SLUGS_QUERY };
 
+export const revalidate = 604800;
+
 export async function generateStaticParams() {
   try {
     const { data: articles } = await sanityFetch({

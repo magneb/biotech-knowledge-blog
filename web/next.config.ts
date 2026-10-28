@@ -1,9 +1,9 @@
 import type { NextConfig } from "next";
 import { initOpenNextCloudflareForDev } from "@opennextjs/cloudflare";
 
-// Server-rendered on Cloudflare Workers via @opennextjs/cloudflare (see DECISIONLOG 004/006/015).
-// Pages are still prerendered and cached; Sanity webhooks revalidate them on publish.
-// Historical archival versions (/[slug]/v{N}/) receive permanent immutable edge caching.
+// Server-rendered on Cloudflare Workers via @opennextjs/cloudflare (see DECISIONLOG 004/006/007/015).
+// Pages are prerendered and cached with bounded edge caching (10m browser, 7d edge);
+// Sanity webhooks trigger full-graph revalidation on publish.
 const nextConfig: NextConfig = {
   logging: {
     fetches: {
@@ -20,8 +20,9 @@ const nextConfig: NextConfig = {
   },
   async headers() {
     return [
+      // 1. Maintain immutable caching for hashed Next.js static assets
       {
-        source: "/:slug/v:version(\\d+)",
+        source: "/_next/static/:path*",
         headers: [
           {
             key: "Cache-Control",
@@ -29,12 +30,35 @@ const nextConfig: NextConfig = {
           },
         ],
       },
+      // 2. Draft Mode: emit private, no-store when preview bypass cookie is active
       {
-        source: "/:slug/v:version(\\d+)/:path*",
+        source: "/:path((?!api(?:/|$)|_next(?:/|$)|sprites\\.svg$|art(?:/|$)|favicon\\.ico$).*)",
+        has: [
+          {
+            type: "cookie",
+            key: "__prerender_bypass",
+          },
+        ],
         headers: [
           {
             key: "Cache-Control",
-            value: "public, max-age=31536000, immutable",
+            value: "private, no-store",
+          },
+        ],
+      },
+      // 3. Public HTML responses: bounded revalidating cache (10m browser, 7d edge)
+      {
+        source: "/:path((?!api(?:/|$)|_next(?:/|$)|sprites\\.svg$|art(?:/|$)|favicon\\.ico$).*)",
+        missing: [
+          {
+            type: "cookie",
+            key: "__prerender_bypass",
+          },
+        ],
+        headers: [
+          {
+            key: "Cache-Control",
+            value: "public, max-age=600, s-maxage=604800, must-revalidate",
           },
         ],
       },

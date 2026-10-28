@@ -7,17 +7,28 @@ const {
   mockDraftModeDisable,
   mockDraftModeEnable,
   mockValidatePreviewUrl,
+  mockClientFetch,
 } = vi.hoisted(() => ({
   mockRevalidateTag: vi.fn(),
   mockRevalidatePath: vi.fn(),
   mockDraftModeDisable: vi.fn(),
   mockDraftModeEnable: vi.fn(),
   mockValidatePreviewUrl: vi.fn(),
+  mockClientFetch: vi.fn(),
 }));
 
 vi.mock("next/cache", () => ({
   revalidateTag: mockRevalidateTag,
   revalidatePath: mockRevalidatePath,
+}));
+
+vi.mock("@/sanity/client", () => ({
+  client: {
+    withConfig: vi.fn(() => ({
+      fetch: mockClientFetch,
+    })),
+    fetch: mockClientFetch,
+  },
 }));
 
 vi.mock("next/headers", () => ({
@@ -37,7 +48,7 @@ vi.mock("@sanity/preview-url-secret", () => ({
   validatePreviewUrl: mockValidatePreviewUrl,
 }));
 
-import { POST as revalidatePOST } from "@/app/api/revalidate/route";
+import { POST as revalidatePOST, verifySecret } from "@/app/api/revalidate/route";
 import { GET as disableDraftModeGET } from "@/app/api/draft-mode/disable/route";
 import { GET as enableDraftModeGET } from "@/app/api/draft-mode/enable/route";
 
@@ -70,13 +81,33 @@ async function signWebhookPayload(
   return `t=${timestamp},v1=${base64Url}`;
 }
 
-describe("POST /api/revalidate (Sanity GROQ Webhook)", () => {
+describe("verifySecret (Constant-Time Token Verification)", () => {
+  it("returns true for matching secrets", async () => {
+    expect(await verifySecret(TEST_SECRET, TEST_SECRET)).toBe(true);
+    expect(await verifySecret("short", "short")).toBe(true);
+  });
+
+  it("returns false for mismatching secrets", async () => {
+    expect(await verifySecret("wrong-secret", TEST_SECRET)).toBe(false);
+  });
+
+  it("returns false for empty, whitespace, or invalid types without throwing", async () => {
+    expect(await verifySecret("", TEST_SECRET)).toBe(false);
+    expect(await verifySecret("   ", TEST_SECRET)).toBe(false);
+    expect(await verifySecret("short", "much-longer-expected-secret")).toBe(false);
+    expect(await verifySecret(null as unknown as string, TEST_SECRET)).toBe(false);
+    expect(await verifySecret(undefined as unknown as string, TEST_SECRET)).toBe(false);
+  });
+});
+
+describe("POST /api/revalidate (Sanity GROQ Webhook & CLI Invalidation)", () => {
   const originalEnv = process.env.SANITY_REVALIDATE_SECRET;
 
   beforeEach(() => {
     process.env.SANITY_REVALIDATE_SECRET = TEST_SECRET;
     mockRevalidateTag.mockClear();
     mockRevalidatePath.mockClear();
+    mockClientFetch.mockReset();
   });
 
   afterEach(() => {
@@ -126,7 +157,22 @@ describe("POST /api/revalidate (Sanity GROQ Webhook)", () => {
     expect(mockRevalidateTag).not.toHaveBeenCalled();
   });
 
-  it("returns 400 when signed payload lacks _type, path, and tags", async () => {
+  it("authenticates via Bearer token and returns 401 on invalid token", async () => {
+    const body = JSON.stringify({ _type: "siteSettings" });
+    const req = new NextRequest("http://localhost:3000/api/revalidate", {
+      method: "POST",
+      headers: {
+        "content-type": "application/json",
+        authorization: "Bearer wrong-token",
+      },
+      body,
+    });
+
+    const res = await revalidatePOST(req);
+    expect(res.status).toBe(401);
+  });
+
+  it("returns 400 when signed payload lacks _type, path, tags, and purgeAll", async () => {
     const body = JSON.stringify({ foo: "bar" });
     const signature = await signWebhookPayload(body, TEST_SECRET);
     const req = new NextRequest("http://localhost:3000/api/revalidate", {
@@ -140,11 +186,75 @@ describe("POST /api/revalidate (Sanity GROQ Webhook)", () => {
     expect(mockRevalidateTag).not.toHaveBeenCalled();
   });
 
-  it("verifies valid HMAC-SHA256 signature and invalidates document tags and paths", async () => {
+  it("handles authenticated { purgeAll: true } with full layout and master tag purge", async () => {
+    const req = new NextRequest("http://localhost:3000/api/revalidate", {
+      method: "POST",
+      headers: {
+        "content-type": "application/json",
+        authorization: `Bearer ${TEST_SECRET}`,
+      },
+      body: JSON.stringify({ purgeAll: true }),
+    });
+
+    const res = await revalidatePOST(req);
+    expect(res.status).toBe(200);
+    const json = (await res.json()) as {
+      revalidated: boolean;
+      purgedAll: boolean;
+      tags: string[];
+      paths: string[];
+    };
+
+    expect(json.revalidated).toBe(true);
+    expect(json.purgedAll).toBe(true);
+    expect(json.paths).toEqual(["/", "/contents", "/* (layout)"]);
+    expect(mockRevalidatePath).toHaveBeenCalledWith("/", "layout");
+    expect(mockRevalidatePath).toHaveBeenCalledWith("/");
+    expect(mockRevalidatePath).toHaveBeenCalledWith("/contents");
+
+    const expectedMasterTags = [
+      "sanity",
+      "article",
+      "articleVersion",
+      "chapter",
+      "topic",
+      "homePage",
+      "aboutPage",
+      "siteSettings",
+    ];
+    for (const tag of expectedMasterTags) {
+      expect(mockRevalidateTag).toHaveBeenCalledWith(tag, "max");
+    }
+  });
+
+  it("triggers layout invalidation on singletons and taxonomies", async () => {
+    for (const singleType of ["siteSettings", "homePage", "aboutPage", "chapter", "topic"]) {
+      mockRevalidatePath.mockClear();
+      mockRevalidateTag.mockClear();
+
+      const req = new NextRequest("http://localhost:3000/api/revalidate", {
+        method: "POST",
+        headers: {
+          "content-type": "application/json",
+          "x-revalidate-secret": TEST_SECRET,
+        },
+        body: JSON.stringify({ _type: singleType }),
+      });
+
+      const res = await revalidatePOST(req);
+      expect(res.status).toBe(200);
+      expect(mockRevalidatePath).toHaveBeenCalledWith("/", "layout");
+      expect(mockRevalidatePath).toHaveBeenCalledWith("/contents");
+      expect(mockRevalidateTag).toHaveBeenCalledWith(singleType, "max");
+    }
+  });
+
+  it("revalidates full article graph including permalinks and contents", async () => {
     const body = JSON.stringify({
       _id: "art-123",
       _type: "article",
       slug: { current: "western-blot-guide" },
+      versionNumber: 3,
       tags: ["s1:syncTagA"],
     });
     const signature = await signWebhookPayload(body, TEST_SECRET);
@@ -175,18 +285,131 @@ describe("POST /api/revalidate (Sanity GROQ Webhook)", () => {
         "s1:syncTagA",
       ])
     );
-    expect(json.paths).toEqual(
-      expect.arrayContaining(["/", "/western-blot-guide"])
-    );
 
-    expect(mockRevalidateTag).toHaveBeenCalledWith("sanity", "max");
-    expect(mockRevalidateTag).toHaveBeenCalledWith("article", "max");
-    expect(mockRevalidateTag).toHaveBeenCalledWith(
-      "article:western-blot-guide",
-      "max"
+    // Full graph paths
+    expect(json.paths).toEqual(
+      expect.arrayContaining([
+        "/",
+        "/contents",
+        "/western-blot-guide",
+        "/western-blot-guide/versions",
+        "/western-blot-guide/v1",
+        "/western-blot-guide/v2",
+        "/western-blot-guide/v3",
+      ])
     );
-    expect(mockRevalidatePath).toHaveBeenCalledWith("/");
+    expect(mockRevalidatePath).toHaveBeenCalledWith("/contents");
     expect(mockRevalidatePath).toHaveBeenCalledWith("/western-blot-guide");
+    expect(mockRevalidatePath).toHaveBeenCalledWith("/western-blot-guide/versions");
+    expect(mockRevalidatePath).toHaveBeenCalledWith("/western-blot-guide/v1");
+    expect(mockRevalidatePath).toHaveBeenCalledWith("/western-blot-guide/v2");
+    expect(mockRevalidatePath).toHaveBeenCalledWith("/western-blot-guide/v3");
+  });
+
+  it("handles article slug mutation by revalidating previousSlug and current slug", async () => {
+    const req = new NextRequest("http://localhost:3000/api/revalidate", {
+      method: "POST",
+      headers: {
+        "content-type": "application/json",
+        authorization: `Bearer ${TEST_SECRET}`,
+      },
+      body: JSON.stringify({
+        _type: "article",
+        slug: { current: "new-pcr-protocol" },
+        previousSlug: { current: "old-pcr-protocol" },
+        versionNumber: 2,
+      }),
+    });
+
+    const res = await revalidatePOST(req);
+    expect(res.status).toBe(200);
+    const json = (await res.json()) as { paths: string[]; tags: string[] };
+
+    expect(json.paths).toEqual(
+      expect.arrayContaining([
+        "/new-pcr-protocol",
+        "/new-pcr-protocol/versions",
+        "/new-pcr-protocol/v1",
+        "/new-pcr-protocol/v2",
+        "/old-pcr-protocol",
+        "/old-pcr-protocol/versions",
+        "/old-pcr-protocol/v1",
+        "/old-pcr-protocol/v2",
+      ])
+    );
+    expect(json.tags).toEqual(
+      expect.arrayContaining([
+        "article:new-pcr-protocol",
+        "article:old-pcr-protocol",
+      ])
+    );
+  });
+
+  it("handles articleVersion revalidation with direct articleSlug in payload", async () => {
+    const req = new NextRequest("http://localhost:3000/api/revalidate", {
+      method: "POST",
+      headers: {
+        "content-type": "application/json",
+        authorization: `Bearer ${TEST_SECRET}`,
+      },
+      body: JSON.stringify({
+        _type: "articleVersion",
+        articleSlug: "crispr-cas9",
+        versionNumber: 4,
+      }),
+    });
+
+    const res = await revalidatePOST(req);
+    expect(res.status).toBe(200);
+    const json = (await res.json()) as { paths: string[]; tags: string[] };
+
+    expect(json.paths).toEqual(
+      expect.arrayContaining([
+        "/contents",
+        "/crispr-cas9",
+        "/crispr-cas9/versions",
+        "/crispr-cas9/v4",
+      ])
+    );
+    expect(json.tags).toEqual(
+      expect.arrayContaining(["article:crispr-cas9", "articleVersion:4"])
+    );
+  });
+
+  it("handles articleVersion revalidation by resolving parent slug via Sanity client", async () => {
+    mockClientFetch.mockResolvedValueOnce({
+      slug: "crispr-cas9-lake",
+      versionNumber: 5,
+    });
+
+    const req = new NextRequest("http://localhost:3000/api/revalidate", {
+      method: "POST",
+      headers: {
+        "content-type": "application/json",
+        authorization: `Bearer ${TEST_SECRET}`,
+      },
+      body: JSON.stringify({
+        _type: "articleVersion",
+        articleRef: "parent-article-id-999",
+      }),
+    });
+
+    const res = await revalidatePOST(req);
+    expect(res.status).toBe(200);
+    const json = (await res.json()) as { paths: string[]; tags: string[] };
+
+    expect(mockClientFetch).toHaveBeenCalledTimes(1);
+    expect(json.paths).toEqual(
+      expect.arrayContaining([
+        "/contents",
+        "/crispr-cas9-lake",
+        "/crispr-cas9-lake/versions",
+        "/crispr-cas9-lake/v5",
+      ])
+    );
+    expect(json.tags).toEqual(
+      expect.arrayContaining(["article:crispr-cas9-lake", "articleVersion:5"])
+    );
   });
 });
 

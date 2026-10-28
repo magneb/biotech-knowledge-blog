@@ -16,6 +16,8 @@ export const metadata: Metadata = {
 
 export { CONTENTS_PAGE_QUERY };
 
+export const revalidate = 604800;
+
 export interface ContentsPageProps {
   searchParams?: Promise<ContentsFilterParams>;
   initialParams?: ContentsFilterParams;

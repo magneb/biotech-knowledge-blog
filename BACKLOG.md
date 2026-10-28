@@ -285,7 +285,7 @@ Every work package must satisfy the 3-tier verification gate before commit/push:
 
 ---
 
-## WP-8C: Deterministic Cache Policy, Full-Graph Revalidation & Manual Cache Purge
+## WP-8C: Deterministic Cache Policy, Full-Graph Revalidation & Manual Cache Purge [COMPLETED]
 * **Objective:** Eliminate stuck edge/browser caches, bound maximum cache lifetime to 7 days (10 minutes in browser), fix cross-document webhook invalidation, and give operators a one-command full-cache nuke (Decisions 007, 015, 016).
 * **Key Motivation:** Directly resolves the root cause of the caching incident where 1-year `immutable` headers and partial path revalidation prevented edits and global metadata changes from propagating.
 * **Scope:**
@@ -307,10 +307,10 @@ Every work package must satisfy the 3-tier verification gate before commit/push:
   - Separates short client-side `max-age` (`600`s) from edge `s-maxage` (`604800`s) with `must-revalidate`.
   - Uses constant-time Web Crypto secret comparison (`workers-best-practices`).
 * **Acceptance Criteria:**
-  - [ ] No HTML route emits `immutable` or browser `max-age > 600`, and no server/edge cache TTL exceeds `604800` (7 days).
-  - [ ] Updating an article, archival snapshot, or global singleton invalidates all dependent routes (`/contents`, `/[slug]`, `/[slug]/versions`, `/[slug]/v{N}`).
-  - [ ] Running `npm run cache:purge` from the dev environment deterministically wipes KV, D1 tag state, and edge cache.
-  - [ ] Unit tests cover `/api/revalidate` path/layout invalidation and `{ purgeAll: true }`; `npm run verify` passes.
+  - [x] No HTML route emits `immutable` or browser `max-age > 600`, and no server/edge cache TTL exceeds `604800` (7 days).
+  - [x] Updating an article, archival snapshot, or global singleton invalidates all dependent routes (`/contents`, `/[slug]`, `/[slug]/versions`, `/[slug]/v{N}`).
+  - [x] Running `npm run cache:purge` from the dev environment deterministically wipes KV, D1 tag state, and edge cache.
+  - [x] Unit tests cover `/api/revalidate` path/layout invalidation and `{ purgeAll: true }`; `npm run verify` passes.
 
 ---
 
