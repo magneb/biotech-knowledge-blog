@@ -213,6 +213,21 @@ describe("Client-Side Bookmarks Engine (WP-10)", () => {
       expect(screen.getByText("Clear Folio")).toBeDefined();
     });
 
+    it("truncates article summary to 20 characters in the drawer list", () => {
+      saveBookmark({
+        ...sampleBookmark,
+        summary: "Standard protocol for separating DNA fragments by molecular size.",
+      });
+
+      render(<BookmarksDrawer isOpen={true} onClose={vi.fn()} />);
+
+      expect(screen.getByText("Standard protocol fo…")).toBeDefined();
+      const summaryEl = screen.getByText("Standard protocol fo…");
+      expect(summaryEl.getAttribute("title")).toBe(
+        "Standard protocol for separating DNA fragments by molecular size."
+      );
+    });
+
     it("closes drawer when clicking close button or pressing Escape", () => {
       const onClose = vi.fn();
       render(<BookmarksDrawer isOpen={true} onClose={onClose} />);

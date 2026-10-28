@@ -90,5 +90,12 @@
     /* ─── Transitions ─── */
     --transition-fast:    0.15s ease;
     --transition-medium:  0.25s ease;
+
+    /* ─── Z-Index Scale ─── */
+    --z-header:           20;
+    --z-banner:           30;
+    --z-drawer:           100;
+    --z-toast:            120;
+    --z-modal:            1000;
   }
 }

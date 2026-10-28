@@ -1,6 +1,7 @@
 "use client";
 
-import { useEffect, useCallback } from "react";
+import { useEffect, useCallback, useSyncExternalStore } from "react";
+import { createPortal } from "react-dom";
 import Link from "next/link";
 import { Icon } from "@/components/ui/Icon";
 import { ElementalPill } from "@/components/ui/ElementalPill";
@@ -13,7 +14,18 @@ export interface BookmarksDrawerProps {
   onClose: () => void;
 }
 
+const emptySubscribe = () => () => {};
+
+function truncateSummary(text?: string | null, maxChars = 20): string {
+  if (!text) return "";
+  const cleaned = text.trim();
+  if (cleaned.length <= maxChars) return cleaned;
+  return `${cleaned.slice(0, maxChars).trim()}…`;
+}
+
 export function BookmarksDrawer({ isOpen, onClose }: BookmarksDrawerProps) {
+  const isClient = useSyncExternalStore(emptySubscribe, () => true, () => false);
+
   const {
     bookmarks,
     count,
@@ -42,7 +54,7 @@ export function BookmarksDrawer({ isOpen, onClose }: BookmarksDrawerProps) {
     };
   }, [isOpen, handleKeyDown]);
 
-  if (!isOpen) return null;
+  if (!isOpen || !isClient) return null;
 
   const handleClear = () => {
     if (window.confirm("Are you sure you wish to clear all saved protocols from your reading folio?")) {
@@ -50,7 +62,7 @@ export function BookmarksDrawer({ isOpen, onClose }: BookmarksDrawerProps) {
     }
   };
 
-  return (
+  return createPortal(
     <div
       className={styles.backdrop}
       onClick={(e) => {
@@ -173,7 +185,9 @@ export function BookmarksDrawer({ isOpen, onClose }: BookmarksDrawerProps) {
                   </div>
 
                   {item.summary && (
-                    <p className={styles.cardSummary}>{item.summary}</p>
+                    <p className={styles.cardSummary} title={item.summary}>
+                      {truncateSummary(item.summary, 20)}
+                    </p>
                   )}
 
                   <div className={styles.cardFooter}>
@@ -196,6 +210,7 @@ export function BookmarksDrawer({ isOpen, onClose }: BookmarksDrawerProps) {
           )}
         </div>
       </div>
-    </div>
+    </div>,
+    document.body
   );
 }

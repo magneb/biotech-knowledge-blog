@@ -1,6 +1,7 @@
 "use client";
 
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState, useCallback, useSyncExternalStore } from "react";
+import { createPortal } from "react-dom";
 import Link from "next/link";
 import { Icon } from "@/components/ui/Icon";
 import { CopperplateButton } from "@/components/ui/CopperplateButton";
@@ -29,8 +30,11 @@ interface HeaderDrawerProps {
   topics?: TopicItem[];
 }
 
+const emptySubscribe = () => () => {};
+
 export function HeaderDrawer({ chapters = [], topics = [] }: HeaderDrawerProps) {
   const [isOpen, setIsOpen] = useState(false);
+  const isClient = useSyncExternalStore(emptySubscribe, () => true, () => false);
 
   const closeDrawer = useCallback(() => {
     setIsOpen(false);
@@ -79,7 +83,7 @@ export function HeaderDrawer({ chapters = [], topics = [] }: HeaderDrawerProps) 
         <Icon name="menu" size={18} />
       </button>
 
-      {isOpen && (
+      {isOpen && isClient && createPortal(
         <div
           id="book-navigation-drawer"
           className={styles.drawerBackdrop}
@@ -199,7 +203,8 @@ export function HeaderDrawer({ chapters = [], topics = [] }: HeaderDrawerProps) 
               </div>
             </footer>
           </div>
-        </div>
+        </div>,
+        document.body
       )}
     </>
   );
