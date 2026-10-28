@@ -16,13 +16,12 @@ export type { EditionRecord };
 
 export interface VersionHistoryDiffViewerProps {
   slug: string;
-  author: string;
+  author?: string;
   editions: EditionRecord[];
 }
 
 export function VersionHistoryDiffViewer({
   slug,
-  author,
   editions,
 }: VersionHistoryDiffViewerProps) {
   // Sort editions descending by versionNumber
@@ -111,8 +110,7 @@ export function VersionHistoryDiffViewer({
                         &bull; Recorded on{" "}
                         {ed.publishedAt
                           ? formatDate(ed.publishedAt, "long")
-                          : "Archival record"}{" "}
-                        by <strong>{author}</strong>
+                          : "Archival record"}
                       </span>
                     </div>
 

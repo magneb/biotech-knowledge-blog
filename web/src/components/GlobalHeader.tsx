@@ -33,6 +33,7 @@ export default async function GlobalHeader() {
               width={240}
               height={100}
               className={styles.logoImage}
+              unoptimized
               priority
             />
           </Link>

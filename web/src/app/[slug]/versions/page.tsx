@@ -121,9 +121,6 @@ export default async function ArticleVersionsPage({
           <span className={styles.versionCountBadge}>
             {editions.length} Recorded {editions.length === 1 ? "Edition" : "Editions"}
           </span>
-          <span className={styles.authorBadge}>
-            — Penned by <strong>{siteMeta.authorName}</strong>
-          </span>
         </div>
 
         <h1 className={styles.title}>Version History &amp; Archival Diffs</h1>

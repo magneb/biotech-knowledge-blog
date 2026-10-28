@@ -25,7 +25,7 @@ import {
   type HomeDocument,
   type MediaChannelEntry,
 } from "@/lib/frontispiece";
-import { buildSanityImageUrl, getArticleEtching, getMediaVignette } from "@/sanity/image";
+import { getArticleEtching, getMediaVignette } from "@/sanity/image";
 import styles from "@/app/home.module.css";
 
 export interface HomeFrontispieceProps {
@@ -61,7 +61,6 @@ export function HomeFrontispieceView({ data, activeTopic = "" }: HomeFrontispiec
   const mediaItems =
     configuredMedia.length > 0 ? configuredMedia : DEFAULT_MEDIA_CHANNELS;
 
-  const logoUrl = buildSanityImageUrl(home?.logo, { width: 480, quality: 85 });
   const mottoHeading =
     home?.mottoBanner || "Knowledge for a More Curious World";
   const mottoSubtitle =
@@ -70,29 +69,13 @@ export function HomeFrontispieceView({ data, activeTopic = "" }: HomeFrontispiec
 
   return (
     <div className={styles.homePage}>
-      {/* ── Masthead Strip (Maintains Semantic h1 & Tagline) ── */}
-      <header className={styles.mastheadBar}>
-        {logoUrl && (
-          <Image
-            src={logoUrl}
-            alt={
-              stegaClean(home?.heading) ||
-              "Oliver's Guide To Everything emblem"
-            }
-            className={styles.mastheadLogo}
-            width={240}
-            height={120}
-            unoptimized={logoUrl.endsWith(".svg")}
-            priority
-          />
-        )}
-        <h1 className={styles.mastheadTitle}>
-          {home?.heading || "Oliver\u2019s Guide To Everything"}
-        </h1>
-        <p className={`landing-tagline ${styles.mastheadTagline}`}>
-          {home?.subheading || "Biotech & cancer research protocols"}
-        </p>
-      </header>
+      {/* ── Accessible Semantic Heading (Visual header provided by GlobalHeader Cartouche) ── */}
+      <h1 className="sr-only">
+        {home?.heading || "Oliver\u2019s Guide To Everything"}
+      </h1>
+      <p className="sr-only">
+        {home?.subheading || "Biotech & cancer research protocols"}
+      </p>
 
       {/* ── Active Topic Filter Status Ribbon ── */}
       {cleanActiveTopic && (

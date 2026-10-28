@@ -57,18 +57,6 @@ export const HOME_PAGE_QUERY = defineQuery(/* groq */ `{
     heading,
     subheading,
     intro,
-    logo {
-      asset->{
-        _id,
-        url,
-        metadata {
-          lqip,
-          dimensions
-        }
-      },
-      hotspot,
-      crop
-    },
     mottoBanner,
     featuredArticles[]->{
       _id,

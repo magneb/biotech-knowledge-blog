@@ -1,72 +1,163 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 200" width="100%" height="100%">
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 480 200" width="100%" height="100%">
   <defs>
+    <!-- Parchment Gradient Fill -->
     <radialGradient id="cartoucheParchment" cx="50%" cy="50%" r="50%">
       <stop offset="0%" stop-color="#fffdfa"/>
       <stop offset="70%" stop-color="#f4ead5"/>
       <stop offset="100%" stop-color="#e8d9b8"/>
     </radialGradient>
+
+    <!-- Wing Parchment Gradient -->
+    <linearGradient id="wingGradLeft" x1="100%" y1="50%" x2="0%" y2="50%">
+      <stop offset="0%" stop-color="#f4ead5"/>
+      <stop offset="100%" stop-color="#e2d0ab"/>
+    </linearGradient>
+    <linearGradient id="wingGradRight" x1="0%" y1="50%" x2="100%" y2="50%">
+      <stop offset="0%" stop-color="#f4ead5"/>
+      <stop offset="100%" stop-color="#e2d0ab"/>
+    </linearGradient>
+
+    <!-- Curved Text Paths -->
+    <!-- Top Arc: Oliver's Guide -->
+    <path id="textArcTop" d="M 98 94 C 144 40 336 40 382 94" fill="none" />
+    <!-- Bottom Arc: Everything -->
+    <path id="textArcBottom" d="M 112 108 C 158 160 322 160 368 108" fill="none" />
   </defs>
 
-  <g stroke="#110a04" stroke-linecap="round" stroke-linejoin="round" fill="none">
-    <!-- Outer Wing Flourishes Left & Right -->
-    <path d="M 50 100 C 15 100 8 70 30 50 C 45 35 70 55 60 75" stroke="#8b6914" stroke-width="1.6"/>
-    <circle cx="30" cy="50" r="3" fill="#8b6914"/>
-    <path d="M 50 100 C 15 100 8 130 30 150 C 45 165 70 145 60 125" stroke="#8b6914" stroke-width="1.6"/>
-    <circle cx="30" cy="150" r="3" fill="#8b6914"/>
-
-    <path d="M 430 100 C 465 100 472 70 450 50 C 435 35 410 55 420 75" stroke="#8b6914" stroke-width="1.6"/>
-    <circle cx="450" cy="50" r="3" fill="#8b6914"/>
-    <path d="M 430 100 C 465 100 472 130 450 150 C 435 165 410 145 420 125" stroke="#8b6914" stroke-width="1.6"/>
-    <circle cx="450" cy="150" r="3" fill="#8b6914"/>
-
-    <!-- Master Oval Cartouche Rim -->
-    <!-- Heavy Outer Oval -->
-    <ellipse cx="240" cy="100" rx="180" ry="76" fill="url(#cartoucheParchment)" stroke-width="3" stroke="#110a04"/>
-    <!-- Concentric Hairline Bevel Rings -->
-    <ellipse cx="240" cy="100" rx="173" ry="69" stroke="#8b6914" stroke-width="1.2"/>
-    <ellipse cx="240" cy="100" rx="170" ry="66" stroke="#352214" stroke-width="0.8" stroke-dasharray="4 2"/>
-    <ellipse cx="240" cy="100" rx="164" ry="60" stroke="#8a7560" stroke-width="0.6"/>
-
-    <!-- Top & Bottom Crown Flourishes -->
-    <!-- Top Crown -->
-    <path d="M 220 24 C 230 12 250 12 260 24" stroke="#8b6914" stroke-width="1.6"/>
-    <polygon points="240,8 244,16 236,16" fill="#8b6914"/>
-    <!-- Bottom Crown -->
-    <path d="M 220 176 C 230 188 250 188 260 176" stroke="#8b6914" stroke-width="1.6"/>
-    <polygon points="240,192 244,184 236,184" fill="#8b6914"/>
-
-    <!-- Concentric Sunburst Engraving Rays (Top & Bottom Interior) -->
-    <g stroke="#8a7560" stroke-width="0.7" opacity="0.65">
-      <line x1="240" y1="24" x2="240" y2="40"/>
-      <line x1="220" y1="27" x2="223" y2="42"/>
-      <line x1="260" y1="27" x2="257" y2="42"/>
-      <line x1="200" y1="33" x2="206" y2="46"/>
-      <line x1="280" y1="33" x2="274" y2="46"/>
-      <line x1="180" y1="42" x2="188" y2="52"/>
-      <line x1="300" y1="42" x2="292" y2="52"/>
-
-      <line x1="240" y1="176" x2="240" y2="160"/>
-      <line x1="220" y1="173" x2="223" y2="158"/>
-      <line x1="260" y1="173" x2="257" y2="158"/>
-      <line x1="200" y1="167" x2="206" y2="154"/>
-      <line x1="280" y1="167" x2="274" y2="154"/>
+  <g stroke-linecap="round" stroke-linejoin="round">
+    <!-- ═══════════════════════════════════════════════════════════════════
+         1. FILLED POINTED SIDE WINGS (LEFT & RIGHT)
+         ═══════════════════════════════════════════════════════════════════ -->
+    <!-- Left Filled Wing -->
+    <path
+      d="M 95 72 C 60 70 30 86 16 100 C 30 114 60 130 95 128 C 80 112 80 88 95 72 Z"
+      fill="url(#wingGradLeft)"
+      stroke="#110a04"
+      stroke-width="1.8"
+    />
+    <!-- Left Wing Copperplate Shading Lines -->
+    <g stroke="#8a7560" stroke-width="0.8" opacity="0.85">
+      <line x1="28" y1="96" x2="28" y2="104" />
+      <line x1="40" y1="91" x2="40" y2="109" />
+      <line x1="54" y1="85" x2="54" y2="115" />
+      <line x1="68" y1="80" x2="68" y2="120" />
+      <line x1="82" y1="76" x2="82" y2="124" />
+      <!-- Horizontal Spine -->
+      <line x1="16" y1="100" x2="90" y2="100" stroke="#8b6914" stroke-width="1.2" />
     </g>
 
-    <!-- Typography Elements -->
-    <!-- Top Arc Line: Oliver's Guide -->
-    <text x="240" y="82" font-family="'Cormorant Garamond', Georgia, serif" font-size="34" font-weight="700" letter-spacing="0.04em" fill="#110a04" text-anchor="middle">Oliver&rsquo;s Guide</text>
-
-    <!-- Centered Mini Oval for "to" -->
-    <ellipse cx="240" cy="98" rx="16" ry="10" fill="#faf6ed" stroke="#8b6914" stroke-width="1.2"/>
-    <text x="240" y="102" font-family="'Cormorant Garamond', Georgia, serif" font-size="13" font-style="italic" font-weight="600" fill="#6e3610" text-anchor="middle">to</text>
-
-    <!-- Bottom Line: Everything -->
-    <text x="240" y="136" font-family="'Cormorant Garamond', Georgia, serif" font-size="36" font-weight="700" letter-spacing="0.06em" fill="#110a04" text-anchor="middle">Everything</text>
-
-    <!-- Flank Stars (✦) -->
-    <g fill="#8b6914">
-      <path d="M 125 100 Q 128 100 128 97 Q 128 100 131 100 Q 128 100 128 103 Q 128 100 125 100 Z"/>
-      <path d="M 349 100 Q 352 100 352 97 Q 352 100 355 100 Q 352 100 352 103 Q 352 100 349 100 Z"/>
+    <!-- Right Filled Wing -->
+    <path
+      d="M 385 72 C 420 70 450 86 464 100 C 450 114 420 130 385 128 C 400 112 400 88 385 72 Z"
+      fill="url(#wingGradRight)"
+      stroke="#110a04"
+      stroke-width="1.8"
+    />
+    <!-- Right Wing Copperplate Shading Lines -->
+    <g stroke="#8a7560" stroke-width="0.8" opacity="0.85">
+      <line x1="452" y1="96" x2="452" y2="104" />
+      <line x1="440" y1="91" x2="440" y2="109" />
+      <line x1="426" y1="85" x2="426" y2="115" />
+      <line x1="412" y1="80" x2="412" y2="120" />
+      <line x1="398" y1="76" x2="398" y2="124" />
+      <!-- Horizontal Spine -->
+      <line x1="390" y1="100" x2="464" y2="100" stroke="#8b6914" stroke-width="1.2" />
     </g>
+
+    <!-- ═══════════════════════════════════════════════════════════════════
+         2. MASTER OVAL RIM & COPPERPLATE BEVEL RINGS
+         ═══════════════════════════════════════════════════════════════════ -->
+    <!-- Heavy Outer Oval Rim -->
+    <ellipse cx="240" cy="100" rx="176" ry="76" fill="url(#cartoucheParchment)" stroke="#110a04" stroke-width="3" />
+    <!-- Inner Concentric Copperplate Bevels -->
+    <ellipse cx="240" cy="100" rx="169" ry="69" fill="none" stroke="#8b6914" stroke-width="1.2" />
+    <ellipse cx="240" cy="100" rx="166" ry="66" fill="none" stroke="#352214" stroke-width="0.8" stroke-dasharray="3 2" />
+    <ellipse cx="240" cy="100" rx="160" ry="60" fill="none" stroke="#8a7560" stroke-width="0.6" />
+
+    <!-- ═══════════════════════════════════════════════════════════════════
+         3. FOUR-POINT STAR FINIALS (APEX & WING TIPS)
+         ═══════════════════════════════════════════════════════════════════ -->
+    <!-- Top Finial (✦) -->
+    <path d="M 240 6 L 243 15 L 252 18 L 243 21 L 240 30 L 237 21 L 228 18 L 237 15 Z" fill="#8b6914" stroke="#110a04" stroke-width="0.8" />
+    <!-- Bottom Finial (✦) -->
+    <path d="M 240 170 L 243 179 L 252 182 L 243 185 L 240 194 L 237 185 L 228 182 L 237 179 Z" fill="#8b6914" stroke="#110a04" stroke-width="0.8" />
+    <!-- Left Wing Star Finial (✦) -->
+    <path d="M 16 93 L 18 98 L 23 100 L 18 102 L 16 107 L 14 102 L 9 100 L 14 98 Z" fill="#8b6914" stroke="#110a04" stroke-width="0.6" />
+    <!-- Right Wing Star Finial (✦) -->
+    <path d="M 464 93 L 466 98 L 471 100 L 466 102 L 464 107 L 462 102 L 457 100 L 462 98 Z" fill="#8b6914" stroke="#110a04" stroke-width="0.6" />
+
+    <!-- ═══════════════════════════════════════════════════════════════════
+         4. SHADED COPPERPLATE IRIS / EYE CENTER MEDALLION ("to")
+         ═══════════════════════════════════════════════════════════════════ -->
+    <!-- Radiating Iris Engraving Rays -->
+    <g stroke="#8a7560" stroke-width="0.75" opacity="0.75">
+      <line x1="240" y1="78" x2="240" y2="83" />
+      <line x1="248" y1="79" x2="246" y2="84" />
+      <line x1="256" y1="83" x2="252" y2="87" />
+      <line x1="262" y1="89" x2="257" y2="92" />
+      <line x1="265" y1="96" x2="260" y2="98" />
+      <line x1="265" y1="104" x2="260" y2="102" />
+      <line x1="262" y1="111" x2="257" y2="108" />
+      <line x1="256" y1="117" x2="252" y2="113" />
+      <line x1="248" y1="121" x2="246" y2="116" />
+      <line x1="240" y1="122" x2="240" y2="117" />
+      <line x1="232" y1="121" x2="234" y2="116" />
+      <line x1="224" y1="117" x2="228" y2="113" />
+      <line x1="218" y1="111" x2="223" y2="108" />
+      <line x1="215" y1="104" x2="220" y2="102" />
+      <line x1="215" y1="96" x2="220" y2="98" />
+      <line x1="218" y1="89" x2="223" y2="92" />
+      <line x1="224" y1="83" x2="228" y2="87" />
+      <line x1="232" y1="79" x2="234" y2="84" />
+    </g>
+
+    <!-- Outer Iris Rim -->
+    <ellipse cx="240" cy="100" rx="25" ry="16" fill="#f4ead5" stroke="#8b6914" stroke-width="1.2" />
+    <!-- Inner Medallion Frame -->
+    <ellipse cx="240" cy="100" rx="21" ry="12.5" fill="#fffdfa" stroke="#110a04" stroke-width="1.2" />
+    <ellipse cx="240" cy="100" rx="19" ry="10.5" fill="none" stroke="#8a7560" stroke-width="0.5" stroke-dasharray="1.5 1.5" />
+
+    <!-- Flank Flourishes & Small Stars Left & Right of "to" -->
+    <path d="M 195 100 L 214 100" stroke="#8b6914" stroke-width="1" />
+    <path d="M 190 98 L 192 100 L 190 102 L 188 100 Z" fill="#8b6914" />
+    <path d="M 266 100 L 285 100" stroke="#8b6914" stroke-width="1" />
+    <path d="M 290 98 L 292 100 L 290 102 L 288 100 Z" fill="#8b6914" />
+
+    <!-- Center "to" Text -->
+    <text
+      x="240"
+      y="104.5"
+      font-family="'Cormorant Garamond', Georgia, 'Times New Roman', serif"
+      font-size="14"
+      font-style="italic"
+      font-weight="600"
+      fill="#6e3610"
+      text-anchor="middle"
+    >to</text>
+
+    <!-- ═══════════════════════════════════════════════════════════════════
+         5. CURVED <textPath> TYPOGRAPHY
+         ═══════════════════════════════════════════════════════════════════ -->
+    <!-- Curved Top: "Oliver's Guide" -->
+    <text
+      font-family="'Cormorant Garamond', Georgia, 'Times New Roman', serif"
+      font-size="33"
+      font-weight="700"
+      letter-spacing="0.04em"
+      fill="#110a04"
+    >
+      <textPath href="#textArcTop" xlink:href="#textArcTop" startOffset="50%" text-anchor="middle">Oliver&rsquo;s Guide</textPath>
+    </text>
+
+    <!-- Curved Bottom: "Everything" -->
+    <text
+      font-family="'Cormorant Garamond', Georgia, 'Times New Roman', serif"
+      font-size="35"
+      font-weight="700"
+      letter-spacing="0.05em"
+      fill="#110a04"
+    >
+      <textPath href="#textArcBottom" xlink:href="#textArcBottom" startOffset="50%" text-anchor="middle">Everything</textPath>
+    </text>
   </g>
 </svg>

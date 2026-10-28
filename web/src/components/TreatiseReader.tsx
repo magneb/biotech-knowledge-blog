@@ -186,9 +186,6 @@ export function TreatiseReader({
                     Edition v{versionNumber}
                     {isArchival ? " (Archival)" : ""}
                   </span>
-                  <span className={styles.metaAuthor}>
-                    — Penned by <strong>{siteMeta.authorName}</strong>
-                  </span>
                   {publishedAt && (
                     <span className={styles.metaDate}>
                       &bull; Recorded on{" "}
@@ -272,7 +269,7 @@ export function TreatiseReader({
                     ? formatDate(stegaClean(publishedAt), "long")
                     : "Archival edition"}
                 </strong>
-                <span> &bull; Penned by {siteMeta.authorName} &bull; Edition v{versionNumber}</span>
+                <span> &bull; Edition v{versionNumber}</span>
               </div>
               <div style={{ display: "flex", gap: "1rem", flexWrap: "wrap" }}>
                 <Link

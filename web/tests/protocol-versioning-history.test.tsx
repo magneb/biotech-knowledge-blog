@@ -214,6 +214,9 @@ describe("Protocol Versioning History & Archival Pages (WP-8B)", () => {
       // Verify breadcrumb back link
       const backLink = container.querySelector("a[href='/crispr-knockout']");
       expect(backLink).toBeDefined();
+
+      // Verify absence of visible "Penned by" byline
+      expect(container.textContent).not.toContain("Penned by");
     });
 
     it("gracefully renders active edition when accessing its edition permalink (v2)", async () => {
@@ -272,6 +275,9 @@ describe("Protocol Versioning History & Archival Pages (WP-8B)", () => {
       expect(container.textContent).toContain("Edition v1");
       expect(container.textContent).toContain("Initial wet-lab formulation.");
       expect(container.textContent).toContain("Updated annealing temperature to 58°C and added DMSO control step.");
+
+      // Verify absence of visible "Penned by" byline
+      expect(container.textContent).not.toContain("Penned by");
     });
   });
 
@@ -331,6 +337,10 @@ describe("Protocol Versioning History & Archival Pages (WP-8B)", () => {
       const delElements = container.querySelectorAll("del");
       expect(delElements.length).toBeGreaterThan(0);
       expect(Array.from(delElements).some((el) => el.textContent?.includes("30"))).toBe(true);
+
+      // Verify absence of visible byline
+      expect(container.textContent).not.toContain("by Oliver");
+      expect(container.textContent).not.toContain("Penned by");
     });
 
     it("toggles between Inline Diff and Side by Side mode", () => {

@@ -9,13 +9,6 @@ export const homePage = defineType({
   icon: HomeIcon,
   fields: [
     defineField({
-      name: 'logo',
-      title: 'Logo / Emblem',
-      type: 'image',
-      description: 'The main emblem displayed at the center of the landing page',
-      options: {hotspot: true},
-    }),
-    defineField({
       name: 'heading',
       title: 'Heading',
       type: 'string',

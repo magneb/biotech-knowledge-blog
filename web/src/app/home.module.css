@@ -6,43 +6,7 @@
   z-index: 1;
 }
 
-/* ─── Masthead & Active Topic Filter Strip ─── */
-.mastheadBar {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  margin-bottom: 1rem;
-  padding: 0.25rem 0.5rem;
-}
-
-.mastheadLogo {
-  width: 100%;
-  max-width: 240px;
-  height: auto;
-  margin-bottom: 0.5rem;
-  filter: sepia(0.2) contrast(1.05);
-}
-
-.mastheadTitle {
-  font-family: var(--font-main);
-  font-size: var(--text-xs);
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: var(--tracking-widest);
-  color: var(--sepia-faint);
-  margin: 0;
-}
-
-.mastheadTagline {
-  margin: 0.15rem 0 0;
-  font-size: var(--text-xs);
-  font-style: italic;
-  color: var(--sepia-muted);
-  letter-spacing: var(--tracking-normal);
-}
-
+/* ─── Active Topic Filter Strip ─── */
 .filterRibbon {
   display: flex;
   align-items: center;

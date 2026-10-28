@@ -191,7 +191,6 @@ describe("Sanity Studio Schemas, Client Config & Dynamic TypeGen Sync", () => {
     expect(homeSchema).toBeDefined();
     expect(homeSchema?.fields).toEqual(
       expect.arrayContaining([
-        "logo",
         "heading",
         "subheading",
         "intro",
