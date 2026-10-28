@@ -22,6 +22,8 @@ export const metadata: Metadata = {
     "A personal knowledge base for biotech and cancer research protocols",
 };
 
+export const revalidate = 604800;
+
 export default async function RootLayout({ children }: LayoutProps<"/">) {
   const { isEnabled: isDraftMode } = await draftMode();
   const isDev = process.env.NODE_ENV === "development";

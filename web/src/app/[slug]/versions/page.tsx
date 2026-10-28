@@ -15,6 +15,8 @@ import styles from "./versions.module.css";
 
 export { ARTICLE_VERSIONS_QUERY, VERSIONS_SLUGS_QUERY };
 
+export const revalidate = 604800;
+
 export async function generateStaticParams() {
   try {
     const { data: articles } = await sanityFetch({
@@ -146,7 +148,7 @@ export default async function ArticleVersionsPage({
         <div className={styles.footerAudit}>
           <span>Permanent Archival Record</span>
           <span>&bull;</span>
-          <span>Immutable Permanent Edge Archival</span>
+          <span>Official Versioned Record</span>
           <span>&bull;</span>
           <Link href={`/${slug}`} className={styles.footerLink}>
             Return to Active Treatise &rarr;

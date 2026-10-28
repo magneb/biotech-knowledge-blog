@@ -5,6 +5,8 @@ import { HomeFrontispiece } from "@/components/HomeFrontispiece";
 
 export { HOME_PAGE_QUERY };
 
+export const revalidate = 604800;
+
 export interface HomePageProps {
   searchParams?: Promise<{
     topic?: string;
